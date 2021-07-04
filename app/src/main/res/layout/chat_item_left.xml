@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <data>
+
+        <variable
+            name="chatMessage"
+            type="com.android.testproject1.model.Chat" />
+
+        <variable
+            name="listener"
+            type="com.android.testproject1.IMainActivity" />
+
+    </data>
+
+    <RelativeLayout
+        android:layout_width="300dp"
+        android:padding="1dp"
+        android:layout_height="wrap_content">
+
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:src="@drawable/person3"
+            android:id="@+id/profile_image" />
+
+        <ImageView
+            android:id="@+id/Delivered"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:visibility="invisible" />
+
+        <ImageView
+            android:id="@+id/Seen"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:visibility="gone" />
+
+        <TextView
+            android:id="@+id/time"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@{chatMessage.name}"
+            android:layout_below="@+id/show_message"
+            android:layout_marginStart="5dp"
+            android:layout_toEndOf="@+id/profile_image" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toEndOf="@id/profile_image"
+            android:layout_marginStart="5dp"
+            android:text="@{chatMessage.message}"
+            android:hint="Hello"
+            android:textIsSelectable="true"
+            android:id="@+id/show_message"
+            android:textSize="18sp"
+            android:padding="8dp"
+            android:textColor="#fff"
+            android:background="@drawable/background_left" />
+
+
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/txt_seen"
+            android:layout_below="@id/show_message"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true" />
+    </RelativeLayout>
+</layout>

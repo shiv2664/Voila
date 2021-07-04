@@ -1,0 +1,400 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="postItem"
+            type="com.android.testproject1.model.Post" />
+
+        <variable
+            name="listener"
+            type="com.android.testproject1.IMainActivity" />
+
+    </data>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="10dp"
+        android:background="@color/greyprofile"
+        android:layout_marginEnd="10dp"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="10dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:orientation="vertical">
+
+            <RelativeLayout
+                android:layout_marginBottom="5dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+
+                <com.google.android.material.imageview.ShapeableImageView
+                    android:id="@+id/image"
+                    android:layout_gravity="center"
+                    android:layout_width="match_parent"
+                    app:backgroundImage="@{postItem.image_url_0}"
+                    android:onClick="@{()->listener.onRecyclerViewItemClick(postItem)}"
+                    app:shapeAppearanceOverlay="@style/roundimageview"
+                    android:scaleType="fitXY"
+                    android:layout_height="360dp"
+                    android:adjustViewBounds="true"/>
+
+                <RelativeLayout
+                    android:paddingTop="5dp"
+                    android:paddingBottom="5dp"
+                    android:paddingStart="10dp"
+                    android:paddingEnd="10dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/image_text_shadow">
+
+
+                    <de.hdodenhof.circleimageview.CircleImageView
+                        android:id="@+id/profile_image"
+                        android:layout_width="40dp"
+                        android:layout_height="40dp"
+                        android:layout_marginStart="4dp"
+                        android:elevation="3dp"
+                        android:src="@drawable/person3" />
+<!--                    android:layout_centerVertical="true"-->
+
+
+                    <LinearLayout
+                        android:layout_toEndOf="@id/profile_image"
+                        android:layout_marginStart="10dp"
+                        android:layout_centerHorizontal="true"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:padding="1dp"
+                            android:maxLines="1"
+                            android:text="@{postItem.name}"
+                            android:textColor="@color/colorTextWhite"
+                            android:textSize="16sp"
+                            android:fontFamily="@font/pacifico"
+                            android:textStyle="bold"/>
+
+                        <RelativeLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content">
+
+<!--                            <TextView-->
+<!--                                android:layout_width="wrap_content"-->
+<!--                                android:layout_height="wrap_content"-->
+<!--                                android:padding="1dp"-->
+<!--                                android:text="3+ Per/Group"-->
+<!--                                android:textSize="16sp"-->
+<!--                                android:textColor="@color/colorTextWhite"-->
+<!--                                android:fontFamily="@font/pacifico"-->
+<!--                                android:textStyle="bold"/>-->
+
+<!--                            <TextView-->
+<!--                                android:layout_width="wrap_content"-->
+<!--                                android:layout_height="wrap_content"-->
+<!--                                android:layout_alignParentEnd="true"-->
+<!--                                android:padding="1dp"-->
+<!--                                android:textSize="16sp"-->
+<!--                                android:text="6000"-->
+<!--                                android:textColor="@color/colorTextWhite"-->
+<!--                                android:fontFamily="@font/pacifico"-->
+<!--                                android:textStyle="bold"/>-->
+
+
+                        </RelativeLayout>
+
+                    </LinearLayout>
+
+                </RelativeLayout>
+
+
+
+
+                <RelativeLayout
+                    android:id="@+id/react_layout"
+                    android:background="@drawable/image_text_shadow_bottom"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_alignBottom="@+id/image">
+
+                    <com.github.ivbaranov.mfb.MaterialFavoriteButton
+                        android:id="@+id/like_button"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        app:mfb_not_favorite_image="@drawable/ic_baseline_favorite_border_white_24"
+                        app:mfb_favorite_image="@drawable/ic_favorite_red_24dp" />
+
+                    <TextView
+                        android:visibility="gone"
+                        android:textSize="17sp"
+                        android:id="@+id/like_count"
+                        android:layout_toEndOf="@id/like_button"
+                        android:layout_width="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:maxLines="6"
+                        android:layout_height="wrap_content" />
+
+                    <com.github.ivbaranov.mfb.MaterialFavoriteButton
+                        android:id="@+id/comment_button"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_toEndOf="@+id/like_count"
+                        app:mfb_favorite_image="@drawable/ic_baseline_comment_24"
+                        app:mfb_not_favorite_image="@drawable/ic_baseline_comment_24" />
+
+<!--                    <com.github.ivbaranov.mfb.MaterialFavoriteButton-->
+<!--                        android:id="@+id/stat_button"-->
+<!--                        android:layout_width="wrap_content"-->
+<!--                        android:tint="?android:textColorPrimary"-->
+<!--                        android:layout_height="wrap_content"-->
+<!--                        android:layout_toEndOf="@+id/comment_button"-->
+<!--                        app:mfb_favorite_image="@drawable/ic_show_chart_24dp"-->
+<!--                        app:mfb_not_favorite_image="@drawable/ic_show_chart_24dp" />-->
+
+
+                    <com.github.ivbaranov.mfb.MaterialFavoriteButton
+                        android:id="@+id/save_button"
+                        android:layout_toStartOf="@+id/share_button"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        app:mfb_not_favorite_image="@drawable/ic_baseline_bookmark_border_24"
+                        app:mfb_favorite_image="@drawable/ic_baseline_bookmark_24" />
+
+                    <com.github.ivbaranov.mfb.MaterialFavoriteButton
+                        android:id="@+id/share_button"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentEnd="true"
+                        android:layout_marginEnd="10dp"
+                        app:mfb_favorite_image="@drawable/ic_share_liked"
+                        app:mfb_not_favorite_image="@drawable/ic_share_liked" />
+
+                </RelativeLayout>
+
+
+
+
+<!--                <RelativeLayout-->
+<!--                    android:layout_width="match_parent"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    android:layout_alignBottom="@+id/image"-->
+<!--                    android:background="@drawable/image_text_shadow_bottom">-->
+
+<!--                    <TextView-->
+<!--                        android:paddingStart="10dp"-->
+<!--                        android:paddingEnd="10dp"-->
+<!--                        android:layout_marginStart="4dp"-->
+<!--                        android:layout_marginEnd="4dp"-->
+<!--                        android:layout_marginTop="20dp"-->
+<!--                        android:id="@+id/post_desc"-->
+<!--                        android:layout_width="match_parent"-->
+<!--                        android:textSize="16sp"-->
+<!--                        android:maxLines="1"-->
+<!--                        android:layout_height="wrap_content"-->
+<!--                        android:text="@{postItem.description}"-->
+<!--                        android:textColor="@color/colorTextWhite"-->
+<!--                        android:fontFamily="@font/pacifico"-->
+<!--                        android:textStyle="bold" />-->
+
+<!--                </RelativeLayout>-->
+
+
+            </RelativeLayout>
+
+
+
+<!--            <androidx.cardview.widget.CardView-->
+<!--                android:id="@+id/child_cardview"-->
+<!--                android:layout_width="300dp"-->
+<!--                android:layout_height="70dp"-->
+<!--                android:layout_marginTop="-50dp"-->
+<!--                app:cardElevation="7dp"-->
+<!--                app:cardCornerRadius="30dp"-->
+<!--                android:layout_marginBottom="10dp">-->
+
+<!--                <LinearLayout-->
+<!--                    android:layout_width="match_parent"-->
+<!--                    android:layout_height="match_parent"-->
+<!--                    android:weightSum="3"-->
+<!--                    android:paddingTop="5dp"-->
+<!--                    android:paddingBottom="5dp"-->
+<!--                    android:paddingStart="20dp"-->
+<!--                    android:orientation="horizontal">-->
+
+<!--                    <RelativeLayout-->
+<!--                        android:layout_width="0dp"-->
+<!--                        android:layout_height="match_parent"-->
+<!--                        android:layout_weight="1">-->
+
+<!--                        <ImageView-->
+<!--                            android:id="@+id/likesimage"-->
+<!--                            android:layout_width="30dp"-->
+<!--                            android:layout_height="30dp"-->
+<!--                            android:background="@drawable/like"-->
+<!--                            android:layout_centerVertical="true" />-->
+
+<!--                        <com.google.android.material.textview.MaterialTextView-->
+<!--                            android:layout_width="wrap_content"-->
+<!--                            android:layout_height="wrap_content"-->
+<!--                            android:text="24.5K"-->
+<!--                            android:textStyle="bold"-->
+<!--                            android:layout_toEndOf="@+id/likesimage"-->
+<!--                            android:layout_centerVertical="true"-->
+<!--                            android:layout_marginStart="5dp" />-->
+
+<!--                    </RelativeLayout>-->
+
+<!--                    <RelativeLayout-->
+<!--                        android:layout_width="0dp"-->
+<!--                        android:layout_height="match_parent"-->
+<!--                        android:layout_weight="1">-->
+
+<!--                        <ImageView-->
+<!--                            android:id="@+id/commentimage"-->
+<!--                            android:layout_width="30dp"-->
+<!--                            android:layout_height="30dp"-->
+<!--                            android:layout_marginStart="6dp"-->
+<!--                            android:background="@drawable/comment"-->
+<!--                            android:layout_centerVertical="true" />-->
+
+<!--                        <com.google.android.material.textview.MaterialTextView-->
+<!--                            android:layout_width="wrap_content"-->
+<!--                            android:layout_height="wrap_content"-->
+<!--                            android:text="24.5K"-->
+<!--                            android:textStyle="bold"-->
+<!--                            android:layout_toEndOf="@+id/commentimage"-->
+<!--                            android:layout_centerVertical="true"-->
+<!--                            android:layout_marginStart="5dp" />-->
+
+<!--                    </RelativeLayout>-->
+
+<!--                    <RelativeLayout-->
+<!--                        android:layout_width="0dp"-->
+<!--                        android:layout_height="match_parent"-->
+<!--                        android:layout_weight="1">-->
+
+<!--                        <ImageView-->
+<!--                            android:id="@+id/shareimage"-->
+<!--                            android:layout_width="30dp"-->
+<!--                            android:layout_height="30dp"-->
+<!--                            android:background="@drawable/share"-->
+<!--                            android:layout_centerVertical="true" />-->
+
+<!--                        <com.google.android.material.textview.MaterialTextView-->
+<!--                            android:layout_width="wrap_content"-->
+<!--                            android:layout_height="wrap_content"-->
+<!--                            android:text="24.5K"-->
+<!--                            android:textStyle="bold"-->
+<!--                            android:layout_toEndOf="@+id/shareimage"-->
+<!--                            android:layout_centerVertical="true"-->
+<!--                            android:layout_marginStart="2dp" />-->
+
+<!--                    </RelativeLayout>-->
+
+<!--                </LinearLayout>-->
+<!--            </androidx.cardview.widget.CardView>-->
+
+            <TextView
+                android:id="@+id/post_desc"
+                android:layout_width="match_parent"
+                android:maxLines="3"
+                android:layout_height="wrap_content"
+                android:text="@{postItem.description}"
+                android:padding="5dp"
+                android:textColor="?android:textColorPrimary"/>
+
+
+
+<!--            <RelativeLayout-->
+<!--                android:id="@+id/react_layout"-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:orientation="horizontal">-->
+
+<!--                <com.github.ivbaranov.mfb.MaterialFavoriteButton-->
+<!--                    android:id="@+id/like_button"-->
+<!--                    android:layout_width="wrap_content"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    app:mfb_not_favorite_image="@drawable/ic_favorite_border_black_24dp"-->
+<!--                    app:mfb_favorite_image="@drawable/ic_favorite_red_24dp" />-->
+
+<!--                <TextView-->
+<!--                    android:visibility="gone"-->
+<!--                    android:textSize="17sp"-->
+<!--                    android:id="@+id/like_count"-->
+<!--                    android:layout_toEndOf="@id/like_button"-->
+<!--                    android:layout_width="wrap_content"-->
+<!--                    android:layout_centerVertical="true"-->
+<!--                    android:maxLines="6"-->
+<!--                    android:layout_height="wrap_content" />-->
+
+<!--                <com.github.ivbaranov.mfb.MaterialFavoriteButton-->
+<!--                    android:id="@+id/comment_button"-->
+<!--                    android:layout_width="wrap_content"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    android:tint="?android:textColorPrimary"-->
+<!--                    android:layout_toEndOf="@+id/like_count"-->
+<!--                    app:mfb_favorite_image="@drawable/ic_comment_liked"-->
+<!--                    app:mfb_not_favorite_image="@drawable/ic_comment_liked" />-->
+
+<!--                <com.github.ivbaranov.mfb.MaterialFavoriteButton-->
+<!--                    android:id="@+id/stat_button"-->
+<!--                    android:layout_width="wrap_content"-->
+<!--                    android:tint="?android:textColorPrimary"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    android:layout_toEndOf="@+id/comment_button"-->
+<!--                    app:mfb_favorite_image="@drawable/ic_show_chart_24dp"-->
+<!--                    app:mfb_not_favorite_image="@drawable/ic_show_chart_24dp" />-->
+
+
+<!--                <com.github.ivbaranov.mfb.MaterialFavoriteButton-->
+<!--                    android:id="@+id/save_button"-->
+<!--                    android:layout_toStartOf="@+id/share_button"-->
+<!--                    android:layout_width="wrap_content"-->
+<!--                    android:tint="?android:textColorPrimary"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    app:mfb_not_favorite_image="@drawable/ic_bookmark_border_black_24dp"-->
+<!--                    app:mfb_favorite_image="@drawable/ic_bookmark_black_24dp" />-->
+
+<!--                <com.github.ivbaranov.mfb.MaterialFavoriteButton-->
+<!--                    android:id="@+id/share_button"-->
+<!--                    android:layout_width="wrap_content"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    android:layout_alignParentEnd="true"-->
+<!--                    android:tint="?android:textColorPrimary"-->
+<!--                    android:layout_marginEnd="10dp"-->
+<!--                    app:mfb_favorite_image="@drawable/ic_share_liked"-->
+<!--                    app:mfb_not_favorite_image="@drawable/ic_share_liked" />-->
+
+<!--            </RelativeLayout>-->
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@color/lightgrey"/>
+
+<!--            <TextView-->
+<!--                android:id="@+id/post_desc"-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:text="@{postItem.description}"-->
+<!--                android:padding="5dp"-->
+<!--                android:textColor="?android:textColorPrimary"/>-->
+
+        </LinearLayout>
+
+<!--    </androidx.cardview.widget.CardView>-->
+
+    </RelativeLayout>
+</layout>

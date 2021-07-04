@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+
+        <variable
+            name="listener"
+            type="com.android.testproject1.IMainActivity" />
+
+        <import type="java.util.List"/>
+        <import type="com.android.testproject1.model.Post"/>
+
+        <variable
+            name="dataList"
+            type="List&lt;Post>"/>
+
+    </data>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <!--    android:paddingLeft="20dp"-->
+        <!--    android:paddingTop="10dp"-->
+        <!--    android:paddingRight="20dp"-->
+        <!--    android:paddingBottom="10dp"-->
+        <!--    android:background="@color/greyprofile"-->
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/postRecyclerview"
+            android:layout_width="match_parent"
+            app:bindprofilepostrecyclerview="@{dataList}"
+            android:layout_height="match_parent" />
+
+    </LinearLayout>
+</layout>

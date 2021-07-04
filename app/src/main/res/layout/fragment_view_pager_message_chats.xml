@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+
+        <variable
+            name="listener"
+            type="com.android.testproject1.IMainActivity" />
+
+        <import type="java.util.List"/>
+        <import type="com.android.testproject1.model.Users"/>
+
+        <variable
+            name="userChatList"
+            type="List&lt;Users>"/>
+
+    </data>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/ChatMessageRecyclerview"
+            android:layout_width="match_parent"
+            app:bindUserChatList="@{userChatList}"
+            android:layout_height="match_parent"/>
+
+    </RelativeLayout>
+
+</layout>
