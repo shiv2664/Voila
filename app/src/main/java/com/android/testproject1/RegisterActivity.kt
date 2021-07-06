@@ -40,8 +40,8 @@ class RegisterActivity : AppCompatActivity(),IMainActivity {
     private fun textAnim(){
         val view=findViewById<View>(R.id.textView1)
         ObjectAnimator.ofFloat(view,View.ALPHA,0f,1f).apply { duration=2000 }.start()
-        val view2=findViewById<View>(R.id.textView2)
-        ObjectAnimator.ofFloat(view2,View.ALPHA,0f,1f).apply { duration=2000 }.start()
+//        val view2=findViewById<View>(R.id.textView2)
+//        ObjectAnimator.ofFloat(view2,View.ALPHA,0f,1f).apply { duration=2000 }.start()
 
     }
 
