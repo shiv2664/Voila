@@ -7,6 +7,7 @@ import androidx.lifecycle.MutableLiveData
 import com.android.testproject1.model.Chat
 import com.android.testproject1.model.Post
 import com.android.testproject1.model.Users
+import com.android.testproject1.room.enteties.PostRoomEntity
 import com.google.android.gms.tasks.OnFailureListener
 import com.google.android.gms.tasks.OnSuccessListener
 import com.google.firebase.auth.*
@@ -23,6 +24,7 @@ class Repository(private val application: Application)
     private val db: FirebaseFirestore = FirebaseFirestore.getInstance()
 
     private val postList: MutableLiveData<MutableList<Post>> = MutableLiveData()
+    private val postListRoom: MutableLiveData<MutableList<PostRoomEntity>> = MutableLiveData()
     private val userPostList: MutableLiveData<MutableList<Post>> = MutableLiveData()
     private val userList: MutableLiveData<MutableList<Users>> = MutableLiveData()
     private val groupList: MutableLiveData<MutableList<Users>> = MutableLiveData()
@@ -42,20 +44,6 @@ class Repository(private val application: Application)
     private var checkduplicate:String?=null
     private var checkduplicate2:String?=null
     private val currentUserID= firebaseAuth.currentUser?.uid
-//    private var bitmap: Bitmap? = null
-//    var resized: Bitmap? = null
-//
-//    private var count: Int = 0
-//    private var postID :String?=null
-
-    private var mChatMessageEventListener: ListenerRegistration? = null
-    private var mUserListEventListener:ListenerRegistration? = null
-    private val mMessageIds: Set<String> = HashSet()
-
-
-//    private var arr:ArrayList<String> = ArrayList()
-//    private var arr2:ArrayList<String> = ArrayList()
-//    private var arr3:ArrayList<String> = ArrayList()
 
 
     init {
@@ -310,6 +298,8 @@ class Repository(private val application: Application)
                                 list2.add(it)
                             }
                             postList.postValue(list2)
+//                            val postRoom:PostsDao
+//                            postRoom.insertPost(postListEntity)
                         }
                         DocumentChange.Type.MODIFIED ->{
 
@@ -426,14 +416,6 @@ class Repository(private val application: Application)
     fun getDetailsRegisteredData(): MutableLiveData<Boolean> {
         return detailsRegisteredData
     }
-
-
-
-
-
-
-
-
 
 }
 
