@@ -1,21 +1,20 @@
 package com.android.testproject1
 
 import android.app.Application
-import android.graphics.Bitmap
 import android.util.Log
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.android.testproject1.model.Chat
 import com.android.testproject1.model.Post
 import com.android.testproject1.model.Users
+import com.android.testproject1.room.enteties.AppDatabase
 import com.android.testproject1.room.enteties.PostRoomEntity
-import com.google.android.gms.tasks.OnFailureListener
-import com.google.android.gms.tasks.OnSuccessListener
+import com.android.testproject1.room.enteties.AppDao
+import com.android.testproject1.services.App
 import com.google.firebase.auth.*
 import com.google.firebase.firestore.*
-import com.google.firebase.messaging.FirebaseMessaging
 import kotlinx.android.synthetic.main.activity_main.*
 import java.util.*
-import kotlin.collections.ArrayList
 
 
 class Repository(private val application: Application)
@@ -24,7 +23,6 @@ class Repository(private val application: Application)
     private val db: FirebaseFirestore = FirebaseFirestore.getInstance()
 
     private val postList: MutableLiveData<MutableList<Post>> = MutableLiveData()
-    private val postListRoom: MutableLiveData<MutableList<PostRoomEntity>> = MutableLiveData()
     private val userPostList: MutableLiveData<MutableList<Post>> = MutableLiveData()
     private val userList: MutableLiveData<MutableList<Users>> = MutableLiveData()
     private val groupList: MutableLiveData<MutableList<Users>> = MutableLiveData()
@@ -44,6 +42,20 @@ class Repository(private val application: Application)
     private var checkduplicate:String?=null
     private var checkduplicate2:String?=null
     private val currentUserID= firebaseAuth.currentUser?.uid
+//    private var bitmap: Bitmap? = null
+//    var resized: Bitmap? = null
+//
+//    private var count: Int = 0
+//    private var postID :String?=null
+
+    private var mChatMessageEventListener: ListenerRegistration? = null
+    private var mUserListEventListener:ListenerRegistration? = null
+    private val mMessageIds: Set<String> = HashSet()
+
+
+//    private var arr:ArrayList<String> = ArrayList()
+//    private var arr2:ArrayList<String> = ArrayList()
+//    private var arr3:ArrayList<String> = ArrayList()
 
 
     init {
@@ -51,7 +63,7 @@ class Repository(private val application: Application)
             userLiveData.postValue(firebaseAuth.currentUser)
             loggedOutLiveData.postValue(false)
             loadDataPost()
-            loadUserChatList()
+//            loadUserChatList()
         }
     }
 
@@ -202,7 +214,7 @@ class Repository(private val application: Application)
                                                 it.result?.toObjects(Users::class.java) as List<Users>
                                             list2.addAll(objects2)
                                             Log.d(myTAG, "Removed city: ${list2}")
-                    //                                    userList.value = list2
+                                            //                                    userList.value = list2
                                             groupList.postValue(list2)
 
                                         }
@@ -298,8 +310,6 @@ class Repository(private val application: Application)
                                 list2.add(it)
                             }
                             postList.postValue(list2)
-//                            val postRoom:PostsDao
-//                            postRoom.insertPost(postListEntity)
                         }
                         DocumentChange.Type.MODIFIED ->{
 
@@ -416,6 +426,7 @@ class Repository(private val application: Application)
     fun getDetailsRegisteredData(): MutableLiveData<Boolean> {
         return detailsRegisteredData
     }
+
 
 }
 

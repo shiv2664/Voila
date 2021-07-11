@@ -9,6 +9,10 @@
             name="postItem"
             type="com.android.testproject1.model.Post" />
 
+<!--        <variable-->
+<!--            name="postItem"-->
+<!--            type="com.android.testproject1.room.enteties.PostRoomEntity" />-->
+
         <variable
             name="listener"
             type="com.android.testproject1.IMainActivity" />

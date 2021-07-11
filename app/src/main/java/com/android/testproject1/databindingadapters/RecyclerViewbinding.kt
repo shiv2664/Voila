@@ -10,6 +10,8 @@ import com.android.testproject1.model.Chat
 import com.android.testproject1.model.Post
 import com.android.testproject1.model.ProductExplore
 import com.android.testproject1.model.Users
+import com.android.testproject1.room.enteties.PostRoomEntity
+import com.android.testproject1.room.enteties.UsersRoomEntity
 
 
 @BindingAdapter("bindhomerecyclerview")
@@ -140,7 +142,7 @@ fun bind(view: RecyclerView,usersList: List<Users>?){
 
 
 @BindingAdapter("bindUserChatList")
-fun bindUserChatList(view: RecyclerView,usersList: List<Users>?){
+fun bindUserChatList(view: RecyclerView,usersList: List<UsersRoomEntity>?){
 
     if (usersList != null) {
         if (usersList.isEmpty())

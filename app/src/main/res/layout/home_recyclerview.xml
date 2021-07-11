@@ -71,9 +71,9 @@
             android:layout_height="250dp"
             android:adjustViewBounds="true"
             app:backgroundImage="@{postItem.image_url_0}"
-            android:onClick="@{()->listener.onRecyclerViewItemClick(postItem)}"
             android:scaleType="fitXY"
             app:shapeAppearanceOverlay="@style/roundimageview" />
+<!--        android:onClick="@{()->listener.onRecyclerViewItemClick(postItem)}"-->
 
         <androidx.cardview.widget.CardView
             android:id="@+id/child_cardview"
