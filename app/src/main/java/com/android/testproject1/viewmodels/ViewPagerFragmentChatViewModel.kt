@@ -17,16 +17,10 @@ import kotlinx.coroutines.launch
 class ViewPagerFragmentChatViewModel(application: Application) :AndroidViewModel(application) {
 
     private val authAppRepository: Repository = Repository(application)
-//    private val userChatList: MutableLiveData<MutableList<Users>> = authAppRepository.getUserChatsList()
-
-    //    private val userChatList: MutableLiveData<MutableList<Users>> = MutableLiveData()
     private val localDatabase: AppDatabase = AppDatabase.getInstance(application)!!
     private val firebaseAuth: FirebaseAuth = FirebaseAuth.getInstance()
     private val db: FirebaseFirestore = FirebaseFirestore.getInstance()
-//    private val userChatList: MutableLiveData<List<UsersRoomEntity>>()
-
     private val userChatList = MutableLiveData<List<UsersRoomEntity>>()
-
     private val myTAG:String="MyTag"
     private var checkduplicate2:String?=null
     private val currentUserID= firebaseAuth.currentUser?.uid
@@ -37,10 +31,6 @@ class ViewPagerFragmentChatViewModel(application: Application) :AndroidViewModel
     fun getUserChatsList(): LiveData<MutableList<UsersRoomEntity>>? {
         return localDatabase.appDao()?.getUserChats()
     }
-
-//    fun loadUserChatList(){
-//        authAppRepository.loadUserChatList()
-//    }
 
     fun loadUserChatList(){
 

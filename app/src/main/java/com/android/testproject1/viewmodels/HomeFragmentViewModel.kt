@@ -21,15 +21,10 @@ import kotlinx.coroutines.launch
 class HomeFragmentViewModel(application: Application): AndroidViewModel(application) {
 
     private val myTAG: String = "MyTag"
-
     private val db: FirebaseFirestore = FirebaseFirestore.getInstance()
-
     private var lastResult: DocumentSnapshot? = null
     private val authAppRepository: Repository = Repository(application)
-//    private val postList: MutableLiveData<MutableList<Post>> = authAppRepository.getPostList()
-
     private val postList: MutableLiveData<MutableList<Post>> = MutableLiveData()
-
     private val list2 = mutableListOf<Post>()
 
     @JvmName("getPostList")
