@@ -13,6 +13,7 @@ import com.android.testproject1.databinding.HomeRecyclerview2Binding
 import com.android.testproject1.databinding.HomeRecyclerviewBinding
 import com.android.testproject1.model.MultipleImage
 import com.android.testproject1.model.Post
+import com.android.testproject1.room.enteties.PostRoomEntity
 import java.util.*
 
 class PostsAdapter2(private val context: Context, private var postList: MutableList<Post>):
@@ -33,6 +34,7 @@ class PostsAdapter2(private val context: Context, private var postList: MutableL
         holder.itemBinding.executePendingBindings()
     }
     override fun getItemCount(): Int {
+//        Log.d("MyTag","PostList Size is "+postList.size)
         return postList.size
     }
 

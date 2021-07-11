@@ -9,11 +9,11 @@
             type="com.android.testproject1.IMainActivity" />
 
         <import type="java.util.List"/>
-        <import type="com.android.testproject1.model.Users"/>
+        <import type="com.android.testproject1.room.enteties.UsersRoomEntity"/>
 
         <variable
             name="userChatList"
-            type="List&lt;Users>"/>
+            type="List&lt;UsersRoomEntity>"/>
 
     </data>
 

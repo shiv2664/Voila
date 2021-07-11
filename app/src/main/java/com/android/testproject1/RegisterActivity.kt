@@ -15,6 +15,8 @@ import com.android.testproject1.fragments.LoginFragment
 import com.android.testproject1.fragments.SignUpFragment
 import com.android.testproject1.model.Post
 import com.android.testproject1.model.Users
+import com.android.testproject1.room.enteties.PostRoomEntity
+import com.android.testproject1.room.enteties.UsersRoomEntity
 import kotlinx.android.synthetic.main.activity_register.*
 import kotlinx.android.synthetic.main.fragment_login.*
 import kotlinx.android.synthetic.main.fragment_sign_up.*
@@ -65,6 +67,9 @@ class RegisterActivity : AppCompatActivity(),IMainActivity {
 
     override fun onJoinItemClick(userItem: Users) {
         TODO("Not yet implemented")
+    }
+
+    override fun onGroupItemClick(userItem: UsersRoomEntity) {
     }
 
     override fun onGroupItemClick(userItem: Users) {

@@ -15,7 +15,11 @@ import com.android.testproject1.fragments.CreatePost
 import com.android.testproject1.fragments.*
 import com.android.testproject1.model.Post
 import com.android.testproject1.model.Users
+import com.android.testproject1.room.enteties.AppDatabase
+import com.android.testproject1.room.enteties.PostRoomEntity
+import com.android.testproject1.room.enteties.UsersRoomEntity
 import com.android.testproject1.viewmodels.MainActivityViewModel
+import com.google.android.gms.common.api.internal.ActivityLifecycleObserver.of
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FieldValue
@@ -47,10 +51,10 @@ class MainActivity : AppCompatActivity() ,IMainActivity {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        mViewModel = ViewModelProvider(
-            this, ViewModelProvider.AndroidViewModelFactory
-                .getInstance(this.application)
-        ).get(MainActivityViewModel::class.java)
+        mViewModel = ViewModelProvider(this, ViewModelProvider.AndroidViewModelFactory
+            .getInstance(this.application))
+            .get(MainActivityViewModel::class.java)
+
 
 
         val bottomNavigationView = bottomNav
@@ -181,6 +185,9 @@ class MainActivity : AppCompatActivity() ,IMainActivity {
                     .commit()
             }
 
+    }
+
+    override fun onGroupItemClick(userItem: UsersRoomEntity) {
     }
 
     override fun onGroupItemClick(userItem: Users) {

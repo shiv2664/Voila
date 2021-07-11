@@ -31,7 +31,7 @@ class ViewPagerFragmentMessageChats : Fragment() {
 
         mViewModel.loadUserChatList()
 
-        mViewModel.getUserChatsList().observe(viewLifecycleOwner, {
+        mViewModel.getUserChatsList()?.observe(viewLifecycleOwner, {
             binding.userChatList = it
         })
 

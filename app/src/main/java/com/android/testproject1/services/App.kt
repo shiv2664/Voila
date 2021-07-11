@@ -3,6 +3,7 @@ package com.android.testproject1.services
 import android.app.Application
 import android.app.NotificationChannel
 import android.app.NotificationManager
+import android.content.Context
 import android.os.Build
 
 
@@ -10,11 +11,17 @@ class App : Application() {
 
     companion object{
         val CHANNEL_ID = "exampleServiceChannel"
+
+        private var appContext: Context? = null
+        fun getAppContext(): Context? {
+            return appContext
+        }
     }
 
 
     override fun onCreate() {
         super.onCreate()
+        appContext = applicationContext
         createNotificationChannel()
     }
 

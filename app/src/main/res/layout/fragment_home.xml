@@ -10,6 +10,7 @@
 
         <import type="java.util.List"/>
         <import type="com.android.testproject1.model.Post"/>
+        <import type="com.android.testproject1.room.enteties.PostRoomEntity"/>
 
         <variable
             name="dataList"

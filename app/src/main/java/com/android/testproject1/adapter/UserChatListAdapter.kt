@@ -10,8 +10,9 @@ import com.android.testproject1.BR
 import com.android.testproject1.IMainActivity
 import com.android.testproject1.databinding.UserChatlistRecyclerviewLayoutBinding
 import com.android.testproject1.model.Users
+import com.android.testproject1.room.enteties.UsersRoomEntity
 
-class UserChatListAdapter(private val context: Context, private var userList: MutableList<Users>): RecyclerView
+class UserChatListAdapter(private val context: Context, private var userList: MutableList<UsersRoomEntity>): RecyclerView
 .Adapter<UserChatListAdapter.BindingViewHolder>() {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BindingViewHolder {
 
@@ -34,7 +35,7 @@ class UserChatListAdapter(private val context: Context, private var userList: Mu
 
     }
 
-    fun updateData(newUserList: List<Users>) {
+    fun updateData(newUserList: List<UsersRoomEntity>) {
         Log.d("MyTag size before ", userList.size.toString())
         userList.clear()
         Log.d("MyTag ", userList.size.toString())
