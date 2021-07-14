@@ -56,7 +56,6 @@ class MainActivity : AppCompatActivity() ,IMainActivity {
             .get(MainActivityViewModel::class.java)
 
 
-
         val bottomNavigationView = bottomNav
         bottomNavigationView.background = null
         loadFragment(HomeFragment())
@@ -205,6 +204,10 @@ class MainActivity : AppCompatActivity() ,IMainActivity {
             .addToBackStack("Groups Fragment")
             .replace(R.id.container, fragment)
             .commit()
+    }
+
+    override fun onLocationClick() {
+        TODO("Not yet implemented")
     }
 
     fun hideProgressBar(){

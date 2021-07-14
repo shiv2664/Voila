@@ -21,7 +21,7 @@ class SearchFragment : Fragment() {
         val binding= FragmentSearchBinding.inflate(inflater,container,false)
         binding.productExploreList = DataProvider.productExploreList
 
-        requireActivity().bottomNav.menu.getItem(1).isChecked=true
+//        requireActivity().bottomNav.menu.getItem(1).isChecked=true
 
         val toolbar = binding.toolbarSearch
         (activity as AppCompatActivity).setSupportActionBar(toolbar)

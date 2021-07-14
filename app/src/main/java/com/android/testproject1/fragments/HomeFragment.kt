@@ -47,7 +47,7 @@ class HomeFragment : Fragment() {
         context?.theme?.applyStyle(R.style.AppTheme, true);
         binding = FragmentHomeBinding.inflate(inflater, container, false)
 
-        requireActivity().bottomNav.menu.getItem(0).isChecked=true
+//        requireActivity().bottomNav.menu.getItem(0).isChecked=true
 
         firebaseAuth = FirebaseAuth.getInstance()
         mViewModel = ViewModelProvider(

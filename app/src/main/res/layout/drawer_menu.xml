@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="16dp">
+
+    <LinearLayout
+        android:layout_marginTop="200dp"
+        android:layout_alignParentStart="true"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical"
+        android:orientation="vertical">
+
+<!--        <de.hdodenhof.circleimageview.CircleImageView-->
+<!--            android:id="@+id/avatarImage"-->
+<!--            android:layout_width="80dp"-->
+<!--            android:layout_height="80dp"-->
+<!--            android:layout_marginStart="24dp"-->
+<!--            android:layout_marginTop="48dp"-->
+<!--            app:civ_border_color="?attr/colorSecondary"-->
+<!--            app:civ_border_width="3dp"-->
+<!--            app:layout_constraintStart_toStartOf="parent"-->
+<!--            app:layout_constraintTop_toTopOf="parent"-->
+<!--            tools:src="@tools:sample/avatars" />-->
+
+
+<!--        <TextView-->
+<!--            android:id="@+id/userNameText"-->
+<!--            android:layout_width="wrap_content"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:layout_marginTop="24dp"-->
+<!--            android:textColor="@color/white"-->
+<!--            app:layout_constraintStart_toStartOf="parent"-->
+<!--            app:layout_constraintTop_toBottomOf="@+id/avatarImage"-->
+<!--            tools:text="User Name" />-->
+
+<!--        <TextView-->
+<!--            android:id="@+id/userEmailText"-->
+<!--            android:layout_width="wrap_content"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:layout_marginTop="4dp"-->
+<!--            android:textColor="@color/colorBlack"-->
+<!--            app:layout_constraintStart_toStartOf="@+id/userNameText"-->
+<!--            app:layout_constraintTop_toBottomOf="@+id/userNameText"-->
+<!--            tools:text="User Email" />-->
+
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_marginBottom="48dp"
+            android:orientation="vertical">
+
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/homeItem"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="16dp"
+                android:background="@android:color/transparent"
+                android:drawableStart="@drawable/ic_dashboard_black_24dp"
+                android:drawablePadding="16dp"
+                android:fontFamily="@font/segoe_ui_regular"
+                android:gravity="center_vertical"
+                android:includeFontPadding="false"
+                android:paddingHorizontal="16dp"
+                android:text="Dashboard" />
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/forumItem"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="16dp"
+                android:fontFamily="@font/segoe_ui_regular"
+                android:background="@android:color/transparent"
+                android:drawableStart="@drawable/ic_forum_black_24dp"
+                android:drawablePadding="16dp"
+                android:gravity="center_vertical"
+                android:includeFontPadding="false"
+                android:paddingHorizontal="16dp"
+                android:text="Forums"/>
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/profileItem"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="16dp"
+                android:fontFamily="@font/segoe_ui_regular"
+                android:background="@android:color/transparent"
+                android:drawableStart="@drawable/ic_flash_on_black_24dp"
+                android:drawablePadding="16dp"
+                android:gravity="center_vertical"
+                android:includeFontPadding="false"
+                android:paddingHorizontal="16dp"
+                android:text="Messages" />
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/aboutItem"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/segoe_ui_regular"
+                android:background="@android:color/transparent"
+                android:drawableStart="@drawable/ic_friend"
+                android:drawablePadding="16dp"
+                android:gravity="center_vertical"
+                android:includeFontPadding="false"
+                android:paddingHorizontal="16dp"
+                android:text="About" />
+
+
+        </LinearLayout>
+
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/logoutBtn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/segoe_ui_regular"
+            android:background="@android:color/transparent"
+            android:drawableStart="@drawable/ic_exit_to_app_black_24dp"
+            android:drawablePadding="16dp"
+            android:gravity="center_vertical"
+            android:includeFontPadding="false"
+            android:paddingHorizontal="16dp"
+            android:text="Sign Out"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
+
+    </LinearLayout>
+
+
+</RelativeLayout>

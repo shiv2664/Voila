@@ -6,14 +6,17 @@ import android.view.ViewGroup
 import androidx.databinding.ViewDataBinding
 import androidx.recyclerview.widget.RecyclerView
 import com.android.testproject1.BR
+import com.android.testproject1.IMainActivity
+import com.android.testproject1.databinding.ItemDiscoverBinding
 import com.android.testproject1.databinding.SearchRecyclerviewGridBinding
 import com.android.testproject1.model.ProductExplore
 
-class SearchAdapter2(private val context: Context, private var productExploreList:MutableList<ProductExplore>): RecyclerView
-.Adapter<SearchAdapter2.BindingViewHolder>() {
+class SearchAdapter2(private val context: Context,
+                     private var productExploreList:MutableList<ProductExplore>): RecyclerView.
+                     Adapter<SearchAdapter2.BindingViewHolder>() {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BindingViewHolder {
 
-        val rooView: ViewDataBinding = SearchRecyclerviewGridBinding.inflate(LayoutInflater.from(context),parent,false)
+        val rooView: ViewDataBinding = ItemDiscoverBinding.inflate(LayoutInflater.from(context),parent,false)
         return BindingViewHolder(rooView)
     }
 
@@ -22,7 +25,7 @@ class SearchAdapter2(private val context: Context, private var productExploreLis
         val exploreProduct = productExploreList[position]
 
         holder.itemBinding.setVariable(BR.productitem2,exploreProduct)
-//        holder.itemBinding.setVariable(BR.listener, context as IMainActivity)
+        holder.itemBinding.setVariable(BR.listener, context as IMainActivity)
         holder.itemBinding.executePendingBindings()
 
 

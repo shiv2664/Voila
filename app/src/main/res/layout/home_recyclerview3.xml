@@ -1,0 +1,198 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="postItem"
+            type="com.android.testproject1.model.Post" />
+
+        <!--        <variable-->
+        <!--            name="postItem"-->
+        <!--            type="com.android.testproject1.room.enteties.PostRoomEntity" />-->
+
+        <variable
+            name="listener"
+            type="com.android.testproject1.IMainActivity" />
+
+    </data>
+
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <androidx.cardview.widget.CardView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="11dp"
+            android:layout_marginRight="11dp"
+            android:layout_marginTop="7dp"
+            android:layout_marginBottom="7dp"
+            app:cardElevation="@dimen/cardview_default_elevation"
+            app:cardCornerRadius="10dp">
+
+            <RelativeLayout
+                android:background="?android:attr/selectableItemBackground"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <com.google.android.material.imageview.ShapeableImageView
+                    android:id="@+id/img"
+                    android:onClick="@{()->listener.onRecyclerViewItemClick(postItem)}"
+                    app:backgroundImage="@{postItem.image_url_0}"
+                    android:transitionName="img"
+                    android:layout_width="match_parent"
+                    android:layout_height="280dp"
+                    android:scaleType="centerCrop"
+                    tools:ignore="UnusedAttribute" />
+
+                <ImageView
+                    android:id="@+id/shadow_bottom"
+                    android:background="@drawable/bottom_shadow"
+                    android:layout_alignBottom="@id/img"
+                    android:layout_width="match_parent"
+                    android:layout_height="80dp" />
+
+                <ProgressBar
+                    android:visibility="gone"
+                    android:id="@+id/prograss_load_photo"
+                    style="@android:style/Widget.DeviceDefault.Light.ProgressBar.Small"
+                    android:layout_marginTop="70dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
+
+                <RelativeLayout
+                    android:paddingBottom="5dp"
+                    android:layout_alignStart="@+id/detailsLayout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_alignBottom="@id/img">
+
+                    <de.hdodenhof.circleimageview.CircleImageView
+                        android:id="@+id/profileImage"
+                        android:layout_width="50dp"
+                        android:layout_height="50dp"
+                        android:src="@drawable/person3" />
+
+                    <TextView
+                        android:layout_marginStart="10dp"
+                        android:layout_marginEnd="10dp"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:fontFamily="@font/pacifico"
+                        android:layout_toEndOf="@+id/profileImage"
+                        android:layout_toStartOf="@+id/like_button"
+                        android:textColor="@color/colorTextWhite"
+                        android:textStyle="bold"
+                        android:text="@{postItem.name}"
+                        android:paddingStart="1dp"
+                        android:paddingEnd="1dp"
+                        android:textSize="18sp"
+                        android:id="@+id/title" />
+
+
+                    <com.github.ivbaranov.mfb.MaterialFavoriteButton
+                        android:id="@+id/like_button"
+                        android:layout_toStartOf="@+id/comment_button"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        app:mfb_not_favorite_image="@drawable/ic_baseline_favorite_border_white_24"
+                        app:mfb_favorite_image="@drawable/ic_favorite_red_24dp" />
+
+
+                    <com.github.ivbaranov.mfb.MaterialFavoriteButton
+                        android:id="@+id/comment_button"
+                        android:layout_toStartOf="@+id/share_button"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        app:mfb_favorite_image="@drawable/ic_baseline_comment_24"
+                        app:mfb_not_favorite_image="@drawable/ic_baseline_comment_24" />
+
+
+<!--                    <com.github.ivbaranov.mfb.MaterialFavoriteButton-->
+<!--                        android:id="@+id/save_button"-->
+<!--                        android:layout_toStartOf="@+id/share_button"-->
+<!--                        android:layout_width="wrap_content"-->
+<!--                        android:layout_height="wrap_content"-->
+<!--                        app:mfb_not_favorite_image="@drawable/ic_baseline_bookmark_border_24"-->
+<!--                        app:mfb_favorite_image="@drawable/ic_baseline_bookmark_24" />-->
+
+                    <com.github.ivbaranov.mfb.MaterialFavoriteButton
+                        android:id="@+id/share_button"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentEnd="true"
+                        android:layout_marginEnd="10dp"
+                        app:mfb_favorite_image="@drawable/ic_share_liked"
+                        app:mfb_not_favorite_image="@drawable/ic_share_liked" />
+
+
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:id="@+id/detailsLayout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="16dp"
+                    android:layout_marginRight="16dp"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginBottom="15dp"
+                    android:layout_below="@id/img">
+
+
+                    <com.borjabravo.readmoretextview.ReadMoreTextView
+                        android:id="@+id/desc"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="5dp"
+                        app:trimMode="trimModeLine"
+                        app:trimLines="5"
+                        android:text="@{postItem.description}"/>
+                    <!--                    <TextView-->
+                    <!--                        android:visibility="invisible"-->
+                    <!--                        android:id="@+id/source"-->
+                    <!--                        android:layout_width="wrap_content"-->
+                    <!--                        android:layout_height="20dp"-->
+                    <!--                        android:layout_below="@id/desc"-->
+                    <!--                        android:layout_marginTop="10dp"-->
+                    <!--                        android:layout_marginBottom="20dp"-->
+                    <!--                        android:fontFamily="sans-serif-light"-->
+                    <!--                        android:textStyle="bold"-->
+                    <!--                        android:maxLines="1"-->
+                    <!--                        android:drawablePadding="10dp"-->
+                    <!--                        android:singleLine="true"-->
+                    <!--                        android:ellipsize="end"-->
+                    <!--                        android:text="Book Now" />-->
+
+
+                    <!--                    <TextView-->
+                    <!--                        android:visibility="invisible"-->
+                    <!--                        android:layout_alignParentEnd="true"-->
+                    <!--                        android:id="@+id/time"-->
+                    <!--                        android:layout_width="wrap_content"-->
+                    <!--                        android:fontFamily="sans-serif-light"-->
+                    <!--                        android:layout_height="20dp"-->
+                    <!--                        android:layout_below="@id/desc"-->
+                    <!--                        android:textStyle="bold"-->
+                    <!--                        android:layout_marginTop="10dp"-->
+                    <!--                        android:layout_marginBottom="10dp"-->
+                    <!--                        android:maxLines="1"-->
+                    <!--                        android:drawablePadding="10dp"-->
+                    <!--                        android:singleLine="true"-->
+                    <!--                        android:ellipsize="end"-->
+                    <!--                        android:text="Join/Create group" />-->
+
+
+                </RelativeLayout>
+
+            </RelativeLayout>
+
+        </androidx.cardview.widget.CardView>
+
+    </FrameLayout>
+
+</layout>

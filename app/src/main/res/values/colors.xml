@@ -34,9 +34,10 @@
     <color name="colorTextSubtitle">#4e4e4e</color>
     <color name="colorTextTitle">#262626</color>
 
-
-    <color name="colorPrimary">#316bff</color>
-    <color name="colorPrimaryDark">#0045f5</color>
+<!--    #316bff-->
+    <color name="colorPrimary">#FFFFFF</color>
+<!--    #0045f5-->
+    <color name="colorPrimaryDark">#FFFFFF</color>
     <color name="colorAccent">#536DFE</color>
 
 

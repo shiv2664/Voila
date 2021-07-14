@@ -76,6 +76,10 @@ class RegisterActivity : AppCompatActivity(),IMainActivity {
         TODO("Not yet implemented")
     }
 
+    override fun onLocationClick() {
+        TODO("Not yet implemented")
+    }
+
     private fun replaceLoginFragment() {
         fragmentmanager!!.popBackStack()
         fragmentmanager!!

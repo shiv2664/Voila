@@ -21,27 +21,31 @@
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
+        android:requestLegacyExternalStorage="true"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/AppTheme"
-        android:requestLegacyExternalStorage="true">
-        <activity android:name=".SplashActivity">
+        android:theme="@style/AppTheme">
+        <activity android:name=".MainActivity2">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".MainActivity">
+        <activity android:name=".SplashActivity">
 
         </activity>
-        <activity android:name=".RegisterActivity"
+        <activity android:name=".MainActivity">
+        </activity>
+        <activity
+            android:name=".RegisterActivity"
             android:theme="@style/LoginAppTheme">
         </activity>
-        <service android:name=".services.UploadService"
-            android:enabled="true"
-            android:exported="true"/>
 
+        <service
+            android:name=".services.UploadService"
+            android:enabled="true"
+            android:exported="true" />
     </application>
 
 </manifest>

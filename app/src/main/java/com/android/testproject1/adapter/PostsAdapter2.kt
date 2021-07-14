@@ -10,6 +10,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.android.testproject1.BR
 import com.android.testproject1.IMainActivity
 import com.android.testproject1.databinding.HomeRecyclerview2Binding
+import com.android.testproject1.databinding.HomeRecyclerview3Binding
 import com.android.testproject1.databinding.HomeRecyclerviewBinding
 import com.android.testproject1.model.MultipleImage
 import com.android.testproject1.model.Post
@@ -21,7 +22,7 @@ class PostsAdapter2(private val context: Context, private var postList: MutableL
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BindingViewHolder {
 
-        val rooView: ViewDataBinding = HomeRecyclerview2Binding.inflate(LayoutInflater.from(context),parent,false)
+        val rooView: ViewDataBinding = HomeRecyclerview3Binding.inflate(LayoutInflater.from(context),parent,false)
         return BindingViewHolder(rooView)
     }
 

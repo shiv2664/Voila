@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    android:layout_marginTop="60dp"
+    android:orientation="horizontal"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <de.hdodenhof.circleimageview.CircleImageView
+        android:id="@+id/duo_view_header_image"
+        android:layout_width="80dp"
+        android:layout_height="80dp"
+        android:layout_marginStart="32dp"
+        android:src="@drawable/person3"
+        android:layout_marginTop="32dp"
+        app:civ_border_color="?attr/colorSecondary"
+        app:civ_border_width="3dp"
+        tools:src="@tools:sample/avatars"/>
+
+    <LinearLayout
+
+        android:layout_marginTop="44dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <TextView
+            android:fontFamily="@font/segoe_ui_regular"
+            android:id="@+id/duo_view_header_text_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="32dp"
+            android:text="Kristina"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:textSize="24sp"/>
+
+        <TextView
+            android:fontFamily="@font/segoe_ui_regular"
+            android:id="@+id/duo_view_header_text_sub_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="32dp"
+            android:text="kyc@gmail.com"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:textStyle="italic"/>
+
+
+    </LinearLayout>
+
+
+
+<!--    <View-->
+<!--        android:id="@+id/duo_view_header_border"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="0.1dp"-->
+<!--        android:layout_below="@+id/duo_view_header_text_sub_title"-->
+<!--        android:layout_marginTop="50dp"-->
+<!--        android:background="@android:color/white"/>-->
+
+
+
+</LinearLayout>
+

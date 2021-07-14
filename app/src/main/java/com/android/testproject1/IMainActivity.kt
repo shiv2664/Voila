@@ -12,6 +12,7 @@ interface IMainActivity {
     fun onJoinItemClick(userItem:Users)
     fun onGroupItemClick(userItem: UsersRoomEntity)
     fun onGroupItemClick(userItem: Users)
+    fun onLocationClick()
 //    fun onSignUpButtonClick()
 
 }

@@ -166,6 +166,7 @@
 
 
                 <androidx.appcompat.widget.Toolbar
+                    android:visibility="gone"
                     android:id="@+id/toolbar_search"
                     android:layout_width="match_parent"
                     android:layout_height="?attr/actionBarSize"
