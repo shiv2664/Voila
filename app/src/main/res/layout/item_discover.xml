@@ -225,24 +225,23 @@
                         android:fontFamily="sans-serif-light"
                         android:textStyle="bold"
                         android:maxLines="1"
+                        android:textSize="16sp"
                         android:drawablePadding="10dp"
                         android:singleLine="true"
                         android:ellipsize="end"
                         android:text="Pay" />
 
 
-
-
-
                     <TextView
-                        android:visibility="invisible"
                         android:layout_alignParentEnd="true"
-                        android:id="@+id/time"
+                        android:id="@+id/JoinGroupRecyclerView"
                         android:layout_width="wrap_content"
                         android:fontFamily="sans-serif-light"
                         android:layout_height="20dp"
                         android:layout_below="@id/desc"
                         android:textStyle="bold"
+                        android:textSize="16sp"
+                        android:onClick="@{()->listener.onLocationClick()}"
                         android:layout_marginTop="10dp"
                         android:layout_marginBottom="10dp"
                         android:maxLines="1"

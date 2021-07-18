@@ -47,7 +47,6 @@ class HomeFragment : Fragment() {
         context?.theme?.applyStyle(R.style.AppTheme, true);
         binding = FragmentHomeBinding.inflate(inflater, container, false)
 
-//        requireActivity().bottomNav.menu.getItem(0).isChecked=true
 
         firebaseAuth = FirebaseAuth.getInstance()
         mViewModel = ViewModelProvider(
@@ -65,10 +64,10 @@ class HomeFragment : Fragment() {
             binding.dataList = it
         })
 
-        val toolbar = binding.toolbarHome
-        (activity as AppCompatActivity).setSupportActionBar(toolbar)
-        (activity as AppCompatActivity).supportActionBar?.title = "Home"
-        setHasOptionsMenu(true)
+//        val toolbar = binding.toolbarHome
+//        (activity as AppCompatActivity).setSupportActionBar(toolbar)
+//        (activity as AppCompatActivity).supportActionBar?.title = "Home"
+//        setHasOptionsMenu(true)
 
 
         binding.rvPosts.addOnScrollListener(object : RecyclerView.OnScrollListener() {
@@ -99,43 +98,8 @@ class HomeFragment : Fragment() {
             }
         })
 
-
-
         return binding.root
     }
 
-//    private fun setRecyclerViewScrollListener() {
-//
-//        scrollListener = object : RecyclerView.OnScrollListener() {
-//            override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
-//                super.onScrollStateChanged(recyclerView, newState)
-//                val totalItemCount = recyclerView.layoutManager.itemCount
-//                if (totalItemCount == lastVisibleItemPosition + 1) {
-//                    Log.d("MyTAG", "Load new list")
-//                    recycler.removeOnScrollListener(scrollListener)
-//                }
-//            }
-//        }
-//        recycler.addOnScrollListener(scrollListener)
-//    }
-
-    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-        inflater.inflate(R.menu.menuhome, menu)
-        super.onCreateOptionsMenu(menu, inflater)
-
-    }
-
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        val id = item.itemId
-        if (id == R.id.SignOut) {
-            firebaseAuth.signOut()
-            activity?.finish()
-            val intent = Intent(activity, RegisterActivity::class.java)
-            startActivity(intent)
-            Toast.makeText(activity, "Sign Out", Toast.LENGTH_SHORT).show()
-        }
-
-        return super.onOptionsItemSelected(item)
-    }
 
 }

@@ -38,8 +38,6 @@ class MainActivity : AppCompatActivity() ,IMainActivity {
         private var GROUP_USER_ID:String?=null
     }
 
-    var db: FirebaseFirestore = FirebaseFirestore.getInstance()
-
     private lateinit var mViewModel: MainActivityViewModel
     private lateinit var firebaseFirestore: FirebaseFirestore
     private lateinit var firebaseAuth:FirebaseAuth
@@ -134,55 +132,55 @@ class MainActivity : AppCompatActivity() ,IMainActivity {
     }
 
     override fun onRecyclerViewItemClick(postItem: Post) {
-
-        val fragment = DetailsFragment()
-
-        postId=postItem.postId
-
-        val bundle = Bundle()
-        bundle.putParcelable("PostItem",postItem)
-        fragment.arguments=bundle
-
-
-        supportFragmentManager
-            .beginTransaction()
-            .addToBackStack("Detail Fragment")
-            .replace(R.id.container, fragment, "Details Fragment")
-            .commit()
+        TODO("Not yet implemented")
+//        val fragment = DetailsFragment()
+//
+//        postId=postItem.postId
+//
+//        val bundle = Bundle()
+//        bundle.putParcelable("PostItem",postItem)
+//        fragment.arguments=bundle
+//
+//
+//        supportFragmentManager
+//            .beginTransaction()
+//            .addToBackStack("Detail Fragment")
+//            .replace(R.id.container, fragment, "Details Fragment")
+//            .commit()
 
 
     }
 
     override fun onJoinItemClick(userItem: Users) {
+        TODO("Not yet implemented")
 
-
-        val userId: String = userItem.id
-        val currentUserId: String = firebaseAuth.currentUser.uid
-
-        val postMap: MutableMap<String, Any?> = HashMap()
-        postMap[currentUserId]=true
-
-        val fragment=GroupFragment()
-
-        val bundle = Bundle()
-        bundle.putParcelable("userItem",userItem)
-        fragment.arguments=bundle
-
-
-
-        firebaseFirestore.collection("Posts")
-            .document(postId)
-            .collection("Groups")
-            .document(userId)
-            .update("Members", FieldValue.arrayUnion(currentUserId))
-            .addOnSuccessListener {
-
-                supportFragmentManager
-                    .beginTransaction()
-                    .addToBackStack("Groups Fragment")
-                    .replace(R.id.container, fragment)
-                    .commit()
-            }
+//        val userId: String = userItem.id
+//        val currentUserId: String = firebaseAuth.currentUser.uid
+//
+//        val postMap: MutableMap<String, Any?> = HashMap()
+//        postMap[currentUserId]=true
+//
+//        val fragment=GroupFragment()
+//
+//        val bundle = Bundle()
+//        bundle.putParcelable("userItem",userItem)
+//        fragment.arguments=bundle
+//
+//
+//
+//        firebaseFirestore.collection("Posts")
+//            .document(postId)
+//            .collection("Groups")
+//            .document(userId)
+//            .update("Members", FieldValue.arrayUnion(currentUserId))
+//            .addOnSuccessListener {
+//
+//                supportFragmentManager
+//                    .beginTransaction()
+//                    .addToBackStack("Groups Fragment")
+//                    .replace(R.id.container, fragment)
+//                    .commit()
+//            }
 
     }
 
@@ -191,19 +189,19 @@ class MainActivity : AppCompatActivity() ,IMainActivity {
 
     override fun onGroupItemClick(userItem: Users) {
 
-        GROUP_USER_ID=userItem.id
-
-        val fragment=ChatFragment()
-
-        val bundle = Bundle()
-        bundle.putParcelable("userItem",userItem)
-        fragment.arguments=bundle
-
-        supportFragmentManager
-            .beginTransaction()
-            .addToBackStack("Groups Fragment")
-            .replace(R.id.container, fragment)
-            .commit()
+//        GROUP_USER_ID=userItem.id
+//
+//        val fragment=ChatFragment()
+//
+//        val bundle = Bundle()
+//        bundle.putParcelable("userItem",userItem)
+//        fragment.arguments=bundle
+//
+//        supportFragmentManager
+//            .beginTransaction()
+//            .addToBackStack("Groups Fragment")
+//            .replace(R.id.container, fragment)
+//            .commit()
     }
 
     override fun onLocationClick() {

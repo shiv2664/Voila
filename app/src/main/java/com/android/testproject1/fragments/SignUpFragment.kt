@@ -12,6 +12,7 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.android.testproject1.IMainActivity
 import com.android.testproject1.MainActivity
+import com.android.testproject1.MainActivity2
 import com.android.testproject1.databinding.FragmentSignUpBinding
 import com.android.testproject1.viewmodels.LoginViewModel
 import com.android.testproject1.viewmodels.SignUpViewModel
@@ -40,7 +41,7 @@ class SignUpFragment : Fragment() {
 
         mViewModel.getUserLiveData().observe(viewLifecycleOwner, Observer {
             if (it != null) {
-                val intent = Intent(activity, MainActivity::class.java)
+                val intent = Intent(activity, MainActivity2::class.java)
                 startActivity(intent)
             }
         })

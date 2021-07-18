@@ -15,39 +15,6 @@
         android:layout_gravity="center_vertical"
         android:orientation="vertical">
 
-<!--        <de.hdodenhof.circleimageview.CircleImageView-->
-<!--            android:id="@+id/avatarImage"-->
-<!--            android:layout_width="80dp"-->
-<!--            android:layout_height="80dp"-->
-<!--            android:layout_marginStart="24dp"-->
-<!--            android:layout_marginTop="48dp"-->
-<!--            app:civ_border_color="?attr/colorSecondary"-->
-<!--            app:civ_border_width="3dp"-->
-<!--            app:layout_constraintStart_toStartOf="parent"-->
-<!--            app:layout_constraintTop_toTopOf="parent"-->
-<!--            tools:src="@tools:sample/avatars" />-->
-
-
-<!--        <TextView-->
-<!--            android:id="@+id/userNameText"-->
-<!--            android:layout_width="wrap_content"-->
-<!--            android:layout_height="wrap_content"-->
-<!--            android:layout_marginTop="24dp"-->
-<!--            android:textColor="@color/white"-->
-<!--            app:layout_constraintStart_toStartOf="parent"-->
-<!--            app:layout_constraintTop_toBottomOf="@+id/avatarImage"-->
-<!--            tools:text="User Name" />-->
-
-<!--        <TextView-->
-<!--            android:id="@+id/userEmailText"-->
-<!--            android:layout_width="wrap_content"-->
-<!--            android:layout_height="wrap_content"-->
-<!--            android:layout_marginTop="4dp"-->
-<!--            android:textColor="@color/colorBlack"-->
-<!--            app:layout_constraintStart_toStartOf="@+id/userNameText"-->
-<!--            app:layout_constraintTop_toBottomOf="@+id/userNameText"-->
-<!--            tools:text="User Email" />-->
-
 
         <LinearLayout
             android:layout_width="wrap_content"
@@ -58,7 +25,7 @@
 
 
             <androidx.appcompat.widget.AppCompatButton
-                android:id="@+id/homeItem"
+                android:id="@+id/Home"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="16dp"
@@ -69,10 +36,10 @@
                 android:gravity="center_vertical"
                 android:includeFontPadding="false"
                 android:paddingHorizontal="16dp"
-                android:text="Dashboard" />
+                android:text="Home" />
 
             <androidx.appcompat.widget.AppCompatButton
-                android:id="@+id/forumItem"
+                android:id="@+id/Discover"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="16dp"
@@ -83,10 +50,10 @@
                 android:gravity="center_vertical"
                 android:includeFontPadding="false"
                 android:paddingHorizontal="16dp"
-                android:text="Forums"/>
+                android:text="Discover"/>
 
             <androidx.appcompat.widget.AppCompatButton
-                android:id="@+id/profileItem"
+                android:id="@+id/Messages"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="16dp"
@@ -100,7 +67,7 @@
                 android:text="Messages" />
 
             <androidx.appcompat.widget.AppCompatButton
-                android:id="@+id/aboutItem"
+                android:id="@+id/Profile"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/segoe_ui_regular"
@@ -110,14 +77,14 @@
                 android:gravity="center_vertical"
                 android:includeFontPadding="false"
                 android:paddingHorizontal="16dp"
-                android:text="About" />
+                android:text="Profile" />
 
 
         </LinearLayout>
 
 
         <androidx.appcompat.widget.AppCompatButton
-            android:id="@+id/logoutBtn"
+            android:id="@+id/SignOut"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:fontFamily="@font/segoe_ui_regular"

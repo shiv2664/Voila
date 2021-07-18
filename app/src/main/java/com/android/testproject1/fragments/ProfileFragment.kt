@@ -25,14 +25,14 @@ class ProfileFragment : Fragment() {
                               savedInstanceState: Bundle?): View? {
         binding= FragmentProfileBinding.inflate(inflater,container,false)
 
-        requireActivity().bottomNav.menu.getItem(4).isChecked=true
+//        requireActivity().bottomNav.menu.getItem(4).isChecked=true
 
         val fmc: FragmentManager = childFragmentManager
 
-        val toolbar = binding.toolbarProfile
-        (activity as AppCompatActivity).setSupportActionBar(toolbar)
-        (activity as AppCompatActivity).supportActionBar?.title = "Profile"
-        setHasOptionsMenu(true)
+//        val toolbar = binding.toolbarProfile
+//        (activity as AppCompatActivity).setSupportActionBar(toolbar)
+//        (activity as AppCompatActivity).supportActionBar?.title = "Profile"
+//        setHasOptionsMenu(true)
 
         adapter = ViewPager2Adapter(fmc, viewLifecycleOwner.lifecycle)
         binding.pager.adapter = adapter

@@ -7,17 +7,37 @@
 
     </data>
 
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:paddingBottom="10dp">
+
     <RelativeLayout
         android:background="@color/colorPrimary"
         android:layout_width="match_parent"
-        android:backgroundTintMode="@color/white"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:orientation="vertical">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="vertical">
+
+            <com.google.android.material.appbar.AppBarLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <androidx.appcompat.widget.Toolbar
+                    android:id="@+id/toolbarPost"
+                    app:titleTextColor="@color/black"
+                    android:layout_width="match_parent"
+                    android:layout_height="?attr/actionBarSize"
+                    android:elevation="4dp"
+                    android:background="@color/colorPrimary"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintRight_toRightOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:theme="@style/ToolbarColoredBackArrow" />
+            </com.google.android.material.appbar.AppBarLayout>
 
             <FrameLayout
                 android:id="@+id/pager_layout"
@@ -100,9 +120,30 @@
 
             <com.google.android.material.textfield.TextInputLayout
                 android:layout_width="match_parent"
-                android:hint="Some description about the post"
+                android:hint="Enter the offer"
+                android:layout_marginEnd="10dp"
+                app:boxStrokeColor="@color/colorAccentt"
+                app:hintTextColor="@color/colorAccentt"
+                android:layout_marginStart="10dp"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                android:layout_height="wrap_content">
+
+                <EditText
+                    android:id="@+id/descriptionTextTitle"
+                    android:maxLines="2"
+                    android:inputType="text|textMultiLine"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:layout_width="match_parent"
+                android:hint="Some description about the offer"
                 android:layout_marginEnd="10dp"
                 android:layout_marginStart="10dp"
+                app:boxStrokeColor="@color/colorAccentt"
+                app:hintTextColor="@color/colorAccentt"
                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                 android:layout_height="wrap_content">
 
@@ -115,7 +156,60 @@
 
             </com.google.android.material.textfield.TextInputLayout>
 
+
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:weightSum="2">
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:layout_width="match_parent"
+                    android:hint="₹Discounted price"
+                    android:layout_marginEnd="10dp"
+                    android:layout_marginStart="10dp"
+                    app:boxStrokeColor="@color/colorAccentt"
+                    app:hintTextColor="@color/colorAccentt"
+                    android:layout_weight="1"
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                    android:layout_height="wrap_content">
+
+                    <EditText
+                        android:id="@+id/DiscountedPrice"
+                        android:maxLines="5"
+                        android:inputType="numberDecimal"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content" />
+
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:layout_width="match_parent"
+                    android:hint="₹Original Price"
+                    android:layout_marginEnd="10dp"
+                    android:layout_marginStart="10dp"
+                    android:layout_weight="1"
+                    app:boxStrokeColor="@color/colorAccentt"
+                    app:hintTextColor="@color/colorAccentt"
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                    android:layout_height="wrap_content">
+
+                    <EditText
+                        android:id="@+id/OriginalPrice"
+                        android:maxLines="5"
+                        android:inputType="numberDecimal"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content" />
+
+                </com.google.android.material.textfield.TextInputLayout>
+
+            </LinearLayout>
+
+
+
         </LinearLayout>
 
     </RelativeLayout>
+    </ScrollView>
 </layout>

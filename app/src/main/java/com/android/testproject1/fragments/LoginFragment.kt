@@ -12,6 +12,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.android.testproject1.IMainActivity
 import com.android.testproject1.MainActivity
+import com.android.testproject1.MainActivity2
 import com.android.testproject1.R
 import com.android.testproject1.databinding.FragmentLoginBinding
 import com.android.testproject1.viewmodels.LoginViewModel
@@ -39,7 +40,7 @@ class LoginFragment : Fragment() {
             if (it != null) {
 //                Log.d(mYTag, it.toString())
                 activity?.finish()
-                val intent = Intent(activity, MainActivity::class.java)
+                val intent = Intent(activity, MainActivity2::class.java)
                 startActivity(intent)
             }
         })

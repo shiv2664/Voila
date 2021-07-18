@@ -13,6 +13,7 @@ interface IMainActivity {
     fun onGroupItemClick(userItem: UsersRoomEntity)
     fun onGroupItemClick(userItem: Users)
     fun onLocationClick()
+//    fun onJoinRecyclerViewClick()
 //    fun onSignUpButtonClick()
 
 }

@@ -32,7 +32,7 @@ class SplashActivity : AppCompatActivity() {
             run {
 
                 if (firebaseAuth.currentUser !=null){
-                    val intent=Intent(this,MainActivity::class.java)
+                    val intent=Intent(this,MainActivity2::class.java)
 //                    Log.d(myTag,firebaseAuth.currentUser!!.toString())
                     startActivity(intent)
                     finish()

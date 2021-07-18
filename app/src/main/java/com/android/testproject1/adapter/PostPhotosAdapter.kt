@@ -2,18 +2,17 @@ package com.android.testproject1.adapter
 
 import android.content.Context
 import android.os.Parcelable
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import androidx.viewpager.widget.PagerAdapter
 import com.android.testproject1.R
+import com.android.testproject1.model.MultipleImage
 import com.bumptech.glide.Glide
-import com.nguyenhoanglam.imagepicker.model.Image
 import java.util.ArrayList
 
-class PagerPhotosAdapter(private val context: Context?, private var IMAGES: ArrayList<Image>) : PagerAdapter() {
+class PostPhotosAdapter(private val context: Context?, private var IMAGES: ArrayList<MultipleImage>) : PagerAdapter() {
 
     private val inflater: LayoutInflater = LayoutInflater.from(context)
 
@@ -32,7 +31,7 @@ class PagerPhotosAdapter(private val context: Context?, private var IMAGES: Arra
 
         if (context != null) {
             Glide.with(context)
-                .load(IMAGES[position].path)
+                .load(IMAGES[position].local_path)
                 .into(imageView)
         }
         view.addView(imageLayout, 0)

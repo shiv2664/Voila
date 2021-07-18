@@ -1,19 +1,16 @@
 package com.android.testproject1.fragments
 
-import android.app.Application
 import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
-import android.graphics.Bitmap
 import android.os.Build
 import android.os.Bundle
 import android.os.Parcelable
 import android.util.Log
 import android.view.*
-import android.view.animation.AnimationUtils
-import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import com.afollestad.materialdialogs.MaterialDialog
 import com.android.testproject1.R
 import com.android.testproject1.adapter.PagerPhotosAdapter
 import com.android.testproject1.databinding.FragmentCreatePostBinding
@@ -43,41 +40,43 @@ class CreatePost : Fragment() {
     private lateinit var firestore: FirebaseFirestore
     private lateinit var firebaseAuth: FirebaseAuth
 
-    private var postID :String?=null
+    private var postID: String? = null
 
     var currentId: String? = null
     private val pICKIMAGES = 102
 
-    private lateinit var sharedPreferences:SharedPreferences
+    private lateinit var sharedPreferences: SharedPreferences
     private var serviceCount = 0
 
-    private lateinit var binding:FragmentCreatePostBinding
+    private lateinit var binding: FragmentCreatePostBinding
 
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
+    override fun onCreateView(
+        inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
         binding = FragmentCreatePostBinding.inflate(inflater, container, false)
 
-        requireActivity().bottomNav.menu.getItem(2).isChecked=true
+        mViewModel = ViewModelProvider(
+            this, ViewModelProvider.AndroidViewModelFactory
+                .getInstance(requireActivity().application)
+        ).get(CreatePostViewModel::class.java)
 
-        mViewModel = ViewModelProvider(this, ViewModelProvider.AndroidViewModelFactory
-            .getInstance(requireActivity().application)).get(CreatePostViewModel::class.java)
-
-        sharedPreferences =requireActivity().getSharedPreferences("uploadservice", Context.MODE_PRIVATE)
+        sharedPreferences =
+            requireActivity().getSharedPreferences("uploadservice", Context.MODE_PRIVATE)
         serviceCount = sharedPreferences.getInt("count", 0)
 
-        val toolbar = binding.createPostToolbar
-        (activity as AppCompatActivity).setSupportActionBar(toolbar)
-        (activity as AppCompatActivity).supportActionBar?.setTitle(com.android.testproject1.R.string.Explore)
-        setHasOptionsMenu(true)
+//        val toolbar = binding.createPostToolbar
+//        (activity as AppCompatActivity).setSupportActionBar(toolbar)
+//        (activity as AppCompatActivity).supportActionBar?.setTitle(com.android.testproject1.R.string.Explore)
+//        setHasOptionsMenu(true)
 
         firebaseAuth = FirebaseAuth.getInstance()
         firestore = FirebaseFirestore.getInstance()
         currentId = firebaseAuth.currentUser?.uid
-        Log.d(myTag,"image list size is"+imagesList1.size.toString())
+        Log.d(myTag, "image list size is" + imagesList1.size.toString())
 
-        postID=currentId+System.currentTimeMillis().toString()
+        postID = currentId + System.currentTimeMillis().toString()
 
         startPickImage()
 
@@ -106,15 +105,14 @@ class CreatePost : Fragment() {
             .setMultipleMode(true)
             .setShowNumberIndicator(true)
             .setMaxSize(6)
-            .setLimitMessage("You can select up to 10 images")
+            .setLimitMessage("You can select up to 6 images")
             .setSelectedImages(imagesList1)
             .setRequestCode(pICKIMAGES)
             .start();
-
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-        inflater.inflate(R.menu.menu_create_post, menu)
+        inflater.inflate(R.menu.menu_main, menu)
         super.onCreateOptionsMenu(menu, inflater)
     }
 
@@ -128,58 +126,60 @@ class CreatePost : Fragment() {
 
             } else {
 
-            sharedPreferences.edit().putInt("count", ++serviceCount).apply()
+                sharedPreferences.edit().putInt("count", ++serviceCount).apply()
                 Log.d(myTag, "On click  sp $serviceCount")
 
-            val intent = Intent(activity, UploadService::class.java)
+                val intent = Intent(activity, UploadService::class.java)
 
-            intent.putExtra("count", serviceCount)
+                intent.putExtra("count", serviceCount)
 
-            intent.putStringArrayListExtra("uploadedImagesUrl", uploadedImagesUrl)
+                intent.putStringArrayListExtra("uploadedImagesUrl", uploadedImagesUrl)
 
-            intent.putParcelableArrayListExtra("imagesList", imagesList1 as java.util.ArrayList<out Parcelable?>?)
+                intent.putParcelableArrayListExtra(
+                    "imagesList",
+                    imagesList1 as java.util.ArrayList<out Parcelable?>?
+                )
 
-            intent.putExtra("notification_id", System.currentTimeMillis().toInt())
+                intent.putExtra("notification_id", System.currentTimeMillis().toInt())
 
-            intent.putExtra("current_id", currentId)
+                intent.putExtra("current_id", currentId)
 
-            intent.putExtra("postID", postID)
+                intent.putExtra("postID", postID)
 
-            intent.putExtra("description", binding.descriptionTextMain.text.toString().trim())
+                intent.putExtra("description", binding.descriptionTextMain.text.toString().trim())
 
                 intent.action = UploadService.ACTION_START_FOREGROUND_SERVICE
 
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
 
-                requireActivity().startForegroundService(intent)
+                    requireActivity().startForegroundService(intent)
 
-                Log.d(myTag, "Build Version OP")
+                    Log.d(myTag, "Build Version OP")
 //                startForegroundService(activity!!,intent)
-            } else {
+                } else {
 
-                Log.d(myTag, "Build Version NP")
+                    Log.d(myTag, "Build Version NP")
 //                activity!!.startService(intent)
-                requireActivity().startService(intent)
+                    requireActivity().startService(intent)
 
-            }
-            Toasty.info(requireActivity(), "Uploading images..", Toasty.LENGTH_SHORT, true).show()
+                }
+                Toasty.info(requireActivity(), "Uploading images..", Toasty.LENGTH_SHORT, true)
+                    .show()
 //            activity!!.finish()
 
-            val fragment: Fragment = HomeFragment()
-            requireActivity()
-                .supportFragmentManager
-                .beginTransaction()
-                .replace(R.id.container, fragment)
-                .commit()
+                val fragment: Fragment = HomeFragment()
+                requireActivity()
+                    .supportFragmentManager
+                    .beginTransaction()
+                    .replace(R.id.container, fragment)
+                    .commit()
 
 
-
-        }
+            }
 
         }
         return super.onOptionsItemSelected(item)
     }
-
 
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -191,17 +191,16 @@ class CreatePost : Fragment() {
 //            Log.d(myTag, imagesList1.toString())
 
 
-
-//            activity?.let {
-//                MaterialDialog.Builder(it)
-//                    .title("Confirmation")
-//                    .content("Are you sure do you want to continue?")
-//                    .positiveText("Yes")
-//                    .negativeText("No")
-//                    .cancelable(false)
-//                    .canceledOnTouchOutside(false)
-//                    .neutralText("Cancel")
-//                    .onPositive { _, _ ->
+            activity?.let {
+                MaterialDialog.Builder(it)
+                    .title("Confirmation")
+                    .content("Are you sure do you want to continue?")
+                    .positiveText("Yes")
+                    .negativeText("No")
+                    .cancelable(false)
+                    .canceledOnTouchOutside(false)
+                    .neutralText("Cancel")
+                    .onPositive { _, _ ->
 
 
                         val indicator = binding.indicator
@@ -216,42 +215,40 @@ class CreatePost : Fragment() {
                         } else {
                             indicatorHolder.visibility = View.GONE
                         }
-//
-//
-//
-//
-//                        val fragment = CreatePost()
-//                        val b = Bundle()
-//                        b.putParcelableArrayList("imagesList", imagesList1)
-//                        Log.d(myTag, "picked images are--- $imagesList1")
-//
-//
-//                                            fragment.arguments=b
-//                        activity!!
-//                            .supportFragmentManager
-//                            .beginTransaction()
-//                            .replace(R.id.container, fragment)
-//                            .commit()
 
-//                    }
-//
-//
-//                    .onNegative { _, _ ->
-//
-//                        ImagePicker.with(this)
-//                            .setFolderMode(true)
-//                            .setFolderTitle("Album")
-//                            .setRootDirectoryName(Config.ROOT_DIR_DCIM)
-//                            .setDirectoryName("Image Picker")
-//                            .setMultipleMode(true)
-//                            .setShowNumberIndicator(true)
-//                            .setMaxSize(10)
-//                            .setLimitMessage("You can select up to 6 images")
-////                .setSelectedImages(imagesList1)
-//                            .setRequestCode(pICKIMAGES)
-//                            .start();
-//
-//                    }.show()
+
+                        val fragment = CreatePost()
+                        val b = Bundle()
+                        b.putParcelableArrayList("imagesList", imagesList1)
+                        Log.d(myTag, "picked images are--- $imagesList1")
+
+
+                        fragment.arguments = b
+                        requireActivity()
+                            .supportFragmentManager
+                            .beginTransaction()
+                            .replace(R.id.container, fragment)
+                            .commit()
+
+                    }
+
+
+                    .onNegative { _, _ ->
+
+                        ImagePicker.with(this)
+                            .setFolderMode(true)
+                            .setFolderTitle("Album")
+                            .setRootDirectoryName(Config.ROOT_DIR_DCIM)
+                            .setDirectoryName("Image Picker")
+                            .setMultipleMode(true)
+                            .setShowNumberIndicator(true)
+                            .setMaxSize(10)
+                            .setLimitMessage("You can select up to 6 images")
+//                .setSelectedImages(imagesList1)
+                            .setRequestCode(pICKIMAGES)
+                            .start();
+
+                    }.show()
 
             }
 
@@ -259,6 +256,7 @@ class CreatePost : Fragment() {
         }
 
     }
+}
 
 
 

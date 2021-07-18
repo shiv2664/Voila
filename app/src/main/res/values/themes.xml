@@ -23,6 +23,7 @@
         <item name="android:windowContentTransitions">true</item>
         <item name="android:statusBarColor">@color/colorPrimaryDark</item>
         <item name="android:windowLightStatusBar">true</item>
+        <item name="colorControlNormal">@color/colorAccentt</item>
 
     </style>
 
@@ -50,6 +51,12 @@
     <style name="roundimageview" parent="">
         <item name="cornerFamily">rounded</item>
         <item name="cornerSize">20dp</item>
+        <item name="color">@color/colorWhite</item>
+    </style>
+
+    <style name="roundimageview2" parent="">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSize">2dp</item>
         <item name="color">@color/colorWhite</item>
     </style>
 

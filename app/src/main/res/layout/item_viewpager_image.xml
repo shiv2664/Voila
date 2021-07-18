@@ -20,7 +20,7 @@
         android:layout_height="360dp"
         android:adjustViewBounds="true"
         android:scaleType="fitXY"
-        app:shapeAppearanceOverlay="@style/roundimageview" />
+        app:shapeAppearanceOverlay="@style/roundimageview2" />
 
 <!--    <FrameLayout-->
 <!--        android:id="@+id/like_layout"-->

@@ -1,22 +1,39 @@
 package com.android.testproject1
 
-import android.content.ActivityNotFoundException
+import android.Manifest
 import android.content.Intent
 import android.content.Intent.*
+import android.content.pm.PackageManager
 import android.net.Uri
 import android.os.Bundle
 import android.util.Log
+import android.view.Menu
+import android.view.MenuItem
+import android.widget.LinearLayout
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.fragment.app.Fragment
+import com.afollestad.materialdialogs.MaterialDialog
 import com.android.testproject1.adapter.MenuAdapter
-import com.android.testproject1.fragments.HomeFragment
-import com.android.testproject1.fragments.SearchFragment
+import com.android.testproject1.fragments.*
 import com.android.testproject1.model.Post
 import com.android.testproject1.model.Users
 import com.android.testproject1.room.enteties.UsersRoomEntity
+import com.google.android.material.bottomsheet.BottomSheetDialog
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.FieldValue
+import com.google.firebase.firestore.FirebaseFirestore
+import com.nguyenhoanglam.imagepicker.model.Config
+import com.nguyenhoanglam.imagepicker.model.Image
+import com.nguyenhoanglam.imagepicker.ui.imagepicker.ImagePicker
 import es.dmoral.toasty.Toasty
 import kotlinx.android.synthetic.main.activity_main2.*
+import kotlinx.android.synthetic.main.activity_main2.toolbar
+import kotlinx.android.synthetic.main.activity_main2_content.*
+import kotlinx.android.synthetic.main.bottom_sheet_dialog.*
 import kotlinx.android.synthetic.main.drawer_menu.*
 import nl.psdcompany.duonavigationdrawer.views.DuoMenuView
 import nl.psdcompany.duonavigationdrawer.widgets.DuoDrawerToggle
@@ -26,40 +43,100 @@ import kotlin.collections.ArrayList
 
 class MainActivity2 : AppCompatActivity(),IMainActivity,DuoMenuView.OnMenuClickListener {
 
+    companion object {
+        private const val READ_PERMISSION_CODE = 100
+        private const val STORAGE_PERMISSION_CODE = 101
+        private var GROUP_USER_ID:String?=null
+    }
+
+    private lateinit var firebaseFirestore: FirebaseFirestore
+    private lateinit var firebaseAuth: FirebaseAuth
+    var postId:String=""
+    val myTag = "MyTag"
+    private var imagesList1: ArrayList<Image> = java.util.ArrayList()
+    private val pICKIMAGES = 102
+    private var serviceCount = 0
+
+    private var addPost: MenuItem? = null
+    var checkTabDashboard:Boolean?=null
+
     private lateinit var mNavDrawer: DrawerLayout
     private var mTitles: ArrayList<String> = ArrayList()
     private lateinit var mMenuAdapter: MenuAdapter
 
-    val myTag = "MyTag"
+    private lateinit var mBottomSheetDialog:BottomSheetDialog
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main2)
-//        mTitles.addAll(listOf(listOf(resources.getStringArray(R.array.titles_menu)).toString()))
-//        mTitles.add("Dashboard")
-        Log.d(myTag, "" + mTitles)
-//        mTitles.add("DASHBOARD")
+        setSupportActionBar(toolbar)
+        toolbar.title = "Home"
+
+        checkPermission(
+            Manifest.permission.WRITE_EXTERNAL_STORAGE,
+            STORAGE_PERMISSION_CODE
+        )
+        checkPermission(
+            Manifest.permission.READ_EXTERNAL_STORAGE,
+            READ_PERMISSION_CODE
+        )
+
+
+        mBottomSheetDialog = BottomSheetDialog(this)
+        val sheetView = layoutInflater.inflate(R.layout.bottom_sheet_dialog, null)
+        mBottomSheetDialog.setContentView(sheetView)
+
+        val buttonPostPhoto: LinearLayout = sheetView.findViewById(R.id.postImage)
+        val buttonPostOffer: LinearLayout = sheetView.findViewById(R.id.postOffer)
+
+        buttonPostPhoto.setOnClickListener {
+            mBottomSheetDialog.dismiss()
+
+            startPickImage()
+//            PostText.startActivity(this@MainActivity)
+        }
+
+        buttonPostOffer.setOnClickListener {
+            mBottomSheetDialog.dismiss()
+//            startPickImage()
+            val intent=Intent(this,CreateOffer::class.java)
+            startActivity(intent)
+        }
 
         loadFragment(Dashboard())
+        checkTabDashboard=true
 
-        homeItem.setOnClickListener {
+        Home.setOnClickListener {
             loadFragment(Dashboard())
+            toolbar.title = "Home"
+            addPost?.isVisible = true
             drawer.closeDrawer()
         }
-        forumItem.setOnClickListener {
+        Discover.setOnClickListener {
 
-            val fragment =Dashboard()
+            val fragment = Dashboard()
             val fm = supportFragmentManager
             val bundle = Bundle()
             bundle.putString("bottom_nav","1")
+            toolbar.title = "Discover"
+            addPost?.isVisible = true
 
             fragment.arguments=bundle
                 fm.beginTransaction()
                     .replace(R.id.container, fragment)
                     .commit()
-
-
-
-//            loadFragment(Dashboard())
+            drawer.closeDrawer()
+        }
+        Messages.setOnClickListener {
+            loadFragment(MessagesFragment())
+            toolbar.title = "Chats"
+            addPost?.isVisible = false
+            drawer.closeDrawer()
+        }
+        Profile.setOnClickListener {
+            loadFragment(ProfileFragment())
+            toolbar.title = "Profile"
+            addPost?.isVisible = false
             drawer.closeDrawer()
         }
 
@@ -73,20 +150,127 @@ class MainActivity2 : AppCompatActivity(),IMainActivity,DuoMenuView.OnMenuClickL
         duoMenuView.setOnMenuClickListener(this);
         duoMenuView.adapter = mMenuAdapter;
 
+    }
+
+    private fun startPickImage() {
+        ImagePicker.with(this)
+            .setFolderMode(true)
+            .setFolderTitle("Album")
+            .setRootDirectoryName(Config.ROOT_DIR_DCIM)
+            .setDirectoryName("Image Picker")
+            .setMultipleMode(true)
+            .setShowNumberIndicator(true)
+            .setMaxSize(6)
+            .setLimitMessage("You can select up to 6 images")
+            .setSelectedImages(imagesList1)
+            .setRequestCode(pICKIMAGES)
+            .start();
+    }
+
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+
+//        Log.d(myTag,"Req Code "+requestCode+" "+Activity.RESULT_OK)
+
+        if (resultCode == RESULT_OK && data != null) {
+
+            if (ImagePicker.shouldHandleResult(requestCode, resultCode, data, pICKIMAGES)) {
+                imagesList1 = ImagePicker.getImages(data)
+
+//                val intent = Intent(this, CreatePost::class.java)
+//                intent.putParcelableArrayListExtra("imagesList", imagesList1)
+//                startActivity(intent)
+
+            MaterialDialog.Builder(this)
+                .title("Confirmation")
+                .content("Are you sure do you want to continue?")
+                .positiveText("Yes")
+                .negativeText("No")
+                .cancelable(false)
+                .canceledOnTouchOutside(false)
+                .neutralText("Cancel")
+                .onPositive { _, _ ->
+
+                    val intent=Intent(this,CreatePost::class.java)
+                    intent.putParcelableArrayListExtra("imagesList", imagesList1)
+                    startActivity(intent)
+                }
+//
+//
+                .onNegative { _, _ ->
+
+                    ImagePicker.with(this)
+                        .setFolderMode(true)
+                        .setFolderTitle("Album")
+                        .setRootDirectoryName(Config.ROOT_DIR_DCIM)
+                        .setDirectoryName("Image Picker")
+                        .setMultipleMode(true)
+                        .setShowNumberIndicator(true)
+                        .setMaxSize(10)
+                        .setLimitMessage("You can select up to 6 images")
+//                .setSelectedImages(imagesList1)
+                        .setRequestCode(pICKIMAGES)
+                        .start();
+
+                }.show()
+
+            } else {
+                Log.d(myTag, "Error is : ")
+            }
+        }
 
     }
 
-    override fun onResume() {
-        super.onResume()
+
+    private fun checkPermission(permission: String, requestCode: Int) {
+        if (ContextCompat.checkSelfPermission(this@MainActivity2, permission) == PackageManager.PERMISSION_DENIED) {
+            // Requesting the permission
+            ActivityCompat.requestPermissions(this@MainActivity2, arrayOf(permission), requestCode)
+        } else {
+//            Toast.makeText(this@MainActivity, "Permission already granted", Toast.LENGTH_SHORT).show()
+        }
     }
+
+    override fun onRequestPermissionsResult(requestCode: Int,
+                                            permissions: Array<String>,
+                                            grantResults: IntArray) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        if (requestCode == READ_PERMISSION_CODE) {
+            if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+//                Toast.makeText(this@MainActivity, "Read Permission Granted", Toast.LENGTH_SHORT).show()
+            } else {
+                Toast.makeText(this@MainActivity2, "Read Permission Denied", Toast.LENGTH_SHORT).show()
+            }
+        } else if (requestCode == STORAGE_PERMISSION_CODE) {
+            if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+//                Toast.makeText(this@MainActivity, "Storage Permission Granted", Toast.LENGTH_SHORT).show()
+            } else {
+                Toast.makeText(this@MainActivity2, "Storage Permission Denied", Toast.LENGTH_SHORT).show()
+            }
+        }
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        menuInflater.inflate(R.menu.menu_main,menu)
+        addPost=menu?.findItem(R.id.Post)
+
+        return super.onCreateOptionsMenu(menu)
+
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        val id = item.itemId
+        if (id == R.id.Post) {
+//            loadFragment(CreatePost())
+            mBottomSheetDialog.show()
+        }
+        return super.onOptionsItemSelected(item)
+    }
+
+
 
     override fun onBackPressed() {
-//        if (mNavDrawer.isDrawerOpen(GravityCompat.START)) {
-//            mNavDrawer.closeDrawer(GravityCompat.START)
-//        } else {
-//            super.onBackPressed()
-//        }
-
         if (drawer.isDrawerOpen) {
             drawer.closeDrawer()
         } else {
@@ -111,15 +295,66 @@ class MainActivity2 : AppCompatActivity(),IMainActivity,DuoMenuView.OnMenuClickL
     }
 
     override fun onRecyclerViewItemClick(postItem: Post) {
-        TODO("Not yet implemented")
+        val fragment = DetailsFragment()
+
+        postId=postItem.postId
+
+        val bundle = Bundle()
+        bundle.putParcelable("PostItem",postItem)
+        fragment.arguments=bundle
+
+
+        supportFragmentManager
+            .beginTransaction()
+            .addToBackStack("Detail Fragment")
+            .replace(R.id.container, fragment, "Details Fragment")
+            .commit()
     }
 
     override fun onJoinItemClick(userItem: Users) {
-        TODO("Not yet implemented")
+        val userId: String = userItem.id
+        val currentUserId: String = firebaseAuth.currentUser?.uid!!
+
+        val postMap: MutableMap<String, Any?> = HashMap()
+        postMap[currentUserId]=true
+
+        val fragment=GroupFragment()
+
+        val bundle = Bundle()
+        bundle.putParcelable("userItem",userItem)
+        fragment.arguments=bundle
+
+
+
+        firebaseFirestore.collection("Posts")
+            .document(postId)
+            .collection("Groups")
+            .document(userId)
+            .update("Members", FieldValue.arrayUnion(currentUserId))
+            .addOnSuccessListener {
+
+                supportFragmentManager
+                    .beginTransaction()
+                    .addToBackStack("Groups Fragment")
+                    .replace(R.id.container, fragment)
+                    .commit()
+            }
     }
 
     override fun onGroupItemClick(userItem: UsersRoomEntity) {
-        TODO("Not yet implemented")
+        GROUP_USER_ID =userItem.id
+
+        val fragment=ChatFragment()
+
+        val bundle = Bundle()
+        bundle.putParcelable("userItem",userItem)
+        fragment.arguments=bundle
+
+        supportFragmentManager
+            .beginTransaction()
+            .addToBackStack("Groups Fragment")
+            .replace(R.id.container, fragment)
+            .commit()
     }
 
     override fun onGroupItemClick(userItem: Users) {
@@ -148,7 +383,7 @@ class MainActivity2 : AppCompatActivity(),IMainActivity,DuoMenuView.OnMenuClickL
 
     override fun onOptionClicked(position: Int, objectClicked: Any?) {
         title = mTitles[position]
-        Log.d("MyTag", "Positin Clicked " + position)
+        Log.d("MyTag", "Positin Clicked $position")
 
         // Set the right options selected
 
@@ -160,10 +395,6 @@ class MainActivity2 : AppCompatActivity(),IMainActivity,DuoMenuView.OnMenuClickL
             0 -> loadFragment(HomeFragment())
             1 -> loadFragment(SearchFragment())
         }
-
-        // Close the drawer
-
-        // Close the drawer
         drawer.closeDrawer()
     }
 
