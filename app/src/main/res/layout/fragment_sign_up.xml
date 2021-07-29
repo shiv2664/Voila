@@ -33,6 +33,8 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="40dp"
                     android:layout_marginEnd="40dp"
+                    app:boxStrokeColor="@color/colorAccentt"
+                    app:hintTextColor="@color/colorAccentt"
                     android:hint="Name"
                     style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
 
@@ -74,6 +76,8 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="40dp"
                     android:layout_marginEnd="40dp"
+                    app:boxStrokeColor="@color/colorAccentt"
+                    app:hintTextColor="@color/colorAccentt"
                     android:hint="Email"
                     style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
 
@@ -113,6 +117,8 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="40dp"
                     android:layout_marginEnd="40dp"
+                    app:boxStrokeColor="@color/colorAccentt"
+                    app:hintTextColor="@color/colorAccentt"
                     android:hint="Phone Number"
                     style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
 
@@ -155,6 +161,8 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="40dp"
                     android:layout_marginEnd="40dp"
+                    app:boxStrokeColor="@color/colorAccentt"
+                    app:hintTextColor="@color/colorAccentt"
                     android:hint="Password"
                     style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
 
@@ -197,6 +205,8 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="40dp"
                     android:layout_marginEnd="40dp"
+                    app:boxStrokeColor="@color/colorAccentt"
+                    app:hintTextColor="@color/colorAccentt"
                     android:hint="Confirm Password"
                     style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
 

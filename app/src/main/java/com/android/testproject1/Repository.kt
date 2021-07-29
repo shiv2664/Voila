@@ -175,7 +175,7 @@ class Repository(private val application: Application)
 
     fun loadGroupMembers(userUid:String,postId: String){
 
-        val docRef = db.collection("Posts").document(postId).collection("Groups").document(userUid)
+        val docRef = db.collection("Offers").document(postId).collection("Groups").document(userUid)
         docRef.get()
             .addOnSuccessListener { document ->
                 if (document != null) {

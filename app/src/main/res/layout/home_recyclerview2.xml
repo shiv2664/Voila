@@ -39,13 +39,13 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
 
-
+                <!--                    android:onClick="@{()->listener.onRecyclerViewItemClick(postItem)}"-->
                 <com.google.android.material.imageview.ShapeableImageView
                     android:id="@+id/image"
                     android:layout_gravity="center"
                     android:layout_width="match_parent"
                     app:backgroundImage="@{postItem.image_url_0}"
-                    android:onClick="@{()->listener.onRecyclerViewItemClick(postItem)}"
+
                     app:shapeAppearanceOverlay="@style/roundimageview"
                     android:scaleType="fitXY"
                     android:layout_height="360dp"

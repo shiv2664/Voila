@@ -36,19 +36,19 @@ class GroupFragment : Fragment() {
 
         firestore= FirebaseFirestore.getInstance()
 
-        val toolbar = binding.toolbarHome
-        (activity as AppCompatActivity).setSupportActionBar(toolbar)
-        (activity as AppCompatActivity).supportActionBar?.title = "Group"
-        setHasOptionsMenu(true)
+//        val toolbar = binding.toolbarHome
+//        (activity as AppCompatActivity).setSupportActionBar(toolbar)
+//        (activity as AppCompatActivity).supportActionBar?.title = "Group"
+//        setHasOptionsMenu(true)
 
         val bundle = this.arguments
         val groupItem= bundle?.getParcelable<Users>("userItem")
 
-        DetailsFragment.postId?.let {
+
             if (groupItem != null) {
-                mViewModel.loadGroupMembers(groupItem.id,it)
+                GroupsOnOfferFragment.postId?.let { mViewModel.loadGroupMembers(groupItem.id, it) }
             }
-        }
+
         mViewModel.getGroupList().observe(viewLifecycleOwner, {
             binding.userList=it
         })

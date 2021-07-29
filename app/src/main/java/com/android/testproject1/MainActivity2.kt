@@ -19,6 +19,7 @@ import androidx.fragment.app.Fragment
 import com.afollestad.materialdialogs.MaterialDialog
 import com.android.testproject1.adapter.MenuAdapter
 import com.android.testproject1.fragments.*
+import com.android.testproject1.model.Offer
 import com.android.testproject1.model.Post
 import com.android.testproject1.model.Users
 import com.android.testproject1.room.enteties.UsersRoomEntity
@@ -54,7 +55,8 @@ class MainActivity2 : AppCompatActivity(),IMainActivity,DuoMenuView.OnMenuClickL
     var postId:String=""
     val myTag = "MyTag"
     private var imagesList1: ArrayList<Image> = java.util.ArrayList()
-    private val pICKIMAGES = 102
+    private val pickImages = 102
+    private val pickImages2 = 103
     private var serviceCount = 0
 
     private var addPost: MenuItem? = null
@@ -72,6 +74,10 @@ class MainActivity2 : AppCompatActivity(),IMainActivity,DuoMenuView.OnMenuClickL
         setSupportActionBar(toolbar)
         toolbar.title = "Home"
 
+        firebaseAuth= FirebaseAuth.getInstance()
+        firebaseFirestore= FirebaseFirestore.getInstance()
+
+
         checkPermission(
             Manifest.permission.WRITE_EXTERNAL_STORAGE,
             STORAGE_PERMISSION_CODE
@@ -86,6 +92,7 @@ class MainActivity2 : AppCompatActivity(),IMainActivity,DuoMenuView.OnMenuClickL
         val sheetView = layoutInflater.inflate(R.layout.bottom_sheet_dialog, null)
         mBottomSheetDialog.setContentView(sheetView)
 
+
         val buttonPostPhoto: LinearLayout = sheetView.findViewById(R.id.postImage)
         val buttonPostOffer: LinearLayout = sheetView.findViewById(R.id.postOffer)
 
@@ -98,9 +105,9 @@ class MainActivity2 : AppCompatActivity(),IMainActivity,DuoMenuView.OnMenuClickL
 
         buttonPostOffer.setOnClickListener {
             mBottomSheetDialog.dismiss()
-//            startPickImage()
-            val intent=Intent(this,CreateOffer::class.java)
-            startActivity(intent)
+            startPickImage2()
+//            val intent=Intent(this,CreateOffer::class.java)
+//            startActivity(intent)
         }
 
         loadFragment(Dashboard())
@@ -125,6 +132,20 @@ class MainActivity2 : AppCompatActivity(),IMainActivity,DuoMenuView.OnMenuClickL
                 fm.beginTransaction()
                     .replace(R.id.container, fragment)
                     .commit()
+            drawer.closeDrawer()
+        }
+        Search.setOnClickListener {
+            val fragment = SearchPeople()
+            val fm = supportFragmentManager
+//            val bundle = Bundle()
+//            bundle.putString("bottom_nav","1")
+//            toolbar.title = "Discover"
+//            addPost?.isVisible = true
+
+//            fragment.arguments=bundle
+            fm.beginTransaction()
+                .replace(R.id.container, fragment)
+                .commit()
             drawer.closeDrawer()
         }
         Messages.setOnClickListener {
@@ -153,6 +174,7 @@ class MainActivity2 : AppCompatActivity(),IMainActivity,DuoMenuView.OnMenuClickL
     }
 
     private fun startPickImage() {
+        imagesList1.clear()
         ImagePicker.with(this)
             .setFolderMode(true)
             .setFolderTitle("Album")
@@ -163,7 +185,23 @@ class MainActivity2 : AppCompatActivity(),IMainActivity,DuoMenuView.OnMenuClickL
             .setMaxSize(6)
             .setLimitMessage("You can select up to 6 images")
             .setSelectedImages(imagesList1)
-            .setRequestCode(pICKIMAGES)
+            .setRequestCode(pickImages)
+            .start();
+    }
+
+    private fun startPickImage2() {
+        imagesList1.clear()
+        ImagePicker.with(this)
+            .setFolderMode(true)
+            .setFolderTitle("Album")
+            .setRootDirectoryName(Config.ROOT_DIR_DCIM)
+            .setDirectoryName("Image Picker")
+            .setMultipleMode(true)
+            .setShowNumberIndicator(true)
+            .setMaxSize(6)
+            .setLimitMessage("You can select up to 6 images")
+            .setSelectedImages(imagesList1)
+            .setRequestCode(pickImages2)
             .start();
     }
 
@@ -175,7 +213,7 @@ class MainActivity2 : AppCompatActivity(),IMainActivity,DuoMenuView.OnMenuClickL
 
         if (resultCode == RESULT_OK && data != null) {
 
-            if (ImagePicker.shouldHandleResult(requestCode, resultCode, data, pICKIMAGES)) {
+            if (ImagePicker.shouldHandleResult(requestCode, resultCode, data, pickImages)) {
                 imagesList1 = ImagePicker.getImages(data)
 
 //                val intent = Intent(this, CreatePost::class.java)
@@ -210,7 +248,7 @@ class MainActivity2 : AppCompatActivity(),IMainActivity,DuoMenuView.OnMenuClickL
                         .setMaxSize(10)
                         .setLimitMessage("You can select up to 6 images")
 //                .setSelectedImages(imagesList1)
-                        .setRequestCode(pICKIMAGES)
+                        .setRequestCode(pickImages)
                         .start();
 
                 }.show()
@@ -218,6 +256,48 @@ class MainActivity2 : AppCompatActivity(),IMainActivity,DuoMenuView.OnMenuClickL
             } else {
                 Log.d(myTag, "Error is : ")
             }
+
+            if (ImagePicker.shouldHandleResult(requestCode, resultCode, data, pickImages2)) {
+                imagesList1 = ImagePicker.getImages(data)
+
+
+                MaterialDialog.Builder(this)
+                    .title("Confirmation")
+                    .content("Are you sure do you want to continue?")
+                    .positiveText("Yes")
+                    .negativeText("No")
+                    .cancelable(false)
+                    .canceledOnTouchOutside(false)
+                    .neutralText("Cancel")
+                    .onPositive { _, _ ->
+
+                        val intent=Intent(this,CreateOffer::class.java)
+                        intent.putParcelableArrayListExtra("imagesList", imagesList1)
+                        startActivity(intent)
+                    }
+//
+//
+                    .onNegative { _, _ ->
+
+                        ImagePicker.with(this)
+                            .setFolderMode(true)
+                            .setFolderTitle("Album")
+                            .setRootDirectoryName(Config.ROOT_DIR_DCIM)
+                            .setDirectoryName("Image Picker")
+                            .setMultipleMode(true)
+                            .setShowNumberIndicator(true)
+                            .setMaxSize(10)
+                            .setLimitMessage("You can select up to 6 images")
+//                .setSelectedImages(imagesList1)
+                            .setRequestCode(pickImages2)
+                            .start();
+
+                    }.show()
+
+            } else {
+                Log.d(myTag, "Error is : ")
+            }
+
         }
 
     }
@@ -294,20 +374,21 @@ class MainActivity2 : AppCompatActivity(),IMainActivity,DuoMenuView.OnMenuClickL
         TODO("Not yet implemented")
     }
 
-    override fun onRecyclerViewItemClick(postItem: Post) {
-        val fragment = DetailsFragment()
+    override fun onRecyclerViewItemClick(offerItem: Offer) {
+//        val fragment = DetailsFragment()
+        val fragment = GroupsOnOfferFragment()
 
-        postId=postItem.postId
+        postId=offerItem.postId
 
         val bundle = Bundle()
-        bundle.putParcelable("PostItem",postItem)
+        bundle.putParcelable("OfferItem",offerItem)
         fragment.arguments=bundle
 
 
         supportFragmentManager
             .beginTransaction()
-            .addToBackStack("Detail Fragment")
-            .replace(R.id.container, fragment, "Details Fragment")
+            .addToBackStack("Groups On Offer Fragment")
+            .add(R.id.container, fragment, "GroupsOnOffer")
             .commit()
     }
 
@@ -325,8 +406,7 @@ class MainActivity2 : AppCompatActivity(),IMainActivity,DuoMenuView.OnMenuClickL
         fragment.arguments=bundle
 
 
-
-        firebaseFirestore.collection("Posts")
+        firebaseFirestore.collection("Offers")
             .document(postId)
             .collection("Groups")
             .document(userId)
@@ -336,7 +416,7 @@ class MainActivity2 : AppCompatActivity(),IMainActivity,DuoMenuView.OnMenuClickL
                 supportFragmentManager
                     .beginTransaction()
                     .addToBackStack("Groups Fragment")
-                    .replace(R.id.container, fragment)
+                    .add(R.id.container, fragment)
                     .commit()
             }
     }
@@ -353,12 +433,24 @@ class MainActivity2 : AppCompatActivity(),IMainActivity,DuoMenuView.OnMenuClickL
         supportFragmentManager
             .beginTransaction()
             .addToBackStack("Groups Fragment")
-            .replace(R.id.container, fragment)
+            .add(R.id.container, fragment)
             .commit()
     }
 
     override fun onGroupItemClick(userItem: Users) {
-        TODO("Not yet implemented")
+        GROUP_USER_ID =userItem.id
+
+        val fragment=ChatFragment()
+
+        val bundle = Bundle()
+        bundle.putParcelable("userItem",userItem)
+        fragment.arguments=bundle
+
+        supportFragmentManager
+            .beginTransaction()
+            .addToBackStack("Groups Fragment")
+            .add(R.id.container, fragment)
+            .commit()
     }
 
     override fun onLocationClick() {

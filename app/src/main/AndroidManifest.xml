@@ -42,7 +42,12 @@
             android:theme="@style/LoginAppTheme" />
 
         <service
-            android:name=".services.UploadService"
+            android:name=".services.UploadServicePosts"
+            android:enabled="true"
+            android:exported="true" />
+
+        <service
+            android:name=".services.UploadServiceOffers"
             android:enabled="true"
             android:exported="true" />
     </application>

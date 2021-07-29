@@ -22,9 +22,7 @@
         android:id="@+id/htab_maincontent"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginBottom="56dp"
         android:background="@color/white">
-<!--        android:fitsSystemWindows="true"-->
 
 
         <com.google.android.material.appbar.AppBarLayout
@@ -73,14 +71,14 @@
 <!--                    app:layout_collapseMode="pin"-->
 <!--                    app:popupTheme="@style/ThemeOverlay.AppCompat.Light"/>-->
 
-                <androidx.appcompat.widget.Toolbar
-                    android:id="@+id/toolbar_home"
-                    android:layout_width="match_parent"
-                    android:layout_height="?attr/actionBarSize"
-                    app:titleTextColor="@color/colorTextBlack"
-                    app:layout_collapseMode="pin"
-                    app:layout_scrollFlags="scroll|enterAlwaysCollapsed"
-                    app:popupTheme="@style/AppTheme.PopupOverlay"/>
+<!--                <androidx.appcompat.widget.Toolbar-->
+<!--                    android:id="@+id/toolbar_home"-->
+<!--                    android:layout_width="match_parent"-->
+<!--                    android:layout_height="?attr/actionBarSize"-->
+<!--                    app:titleTextColor="@color/colorTextBlack"-->
+<!--                    app:layout_collapseMode="pin"-->
+<!--                    app:layout_scrollFlags="scroll|enterAlwaysCollapsed"-->
+<!--                    app:popupTheme="@style/AppTheme.PopupOverlay"/>-->
 
             </com.google.android.material.appbar.CollapsingToolbarLayout>
 

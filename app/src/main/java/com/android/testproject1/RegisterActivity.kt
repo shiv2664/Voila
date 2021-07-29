@@ -13,6 +13,7 @@ import com.android.testproject1.databinding.FragmentLoginBinding
 import com.android.testproject1.databinding.FragmentSignUpBinding
 import com.android.testproject1.fragments.LoginFragment
 import com.android.testproject1.fragments.SignUpFragment
+import com.android.testproject1.model.Offer
 import com.android.testproject1.model.Post
 import com.android.testproject1.model.Users
 import com.android.testproject1.room.enteties.PostRoomEntity
@@ -61,7 +62,7 @@ class RegisterActivity : AppCompatActivity(),IMainActivity {
         textAnim()
     }
 
-    override fun onRecyclerViewItemClick(postItem: Post) {
+    override fun onRecyclerViewItemClick(offerItem: Offer) {
         TODO("Not yet implemented")
     }
 

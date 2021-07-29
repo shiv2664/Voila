@@ -4,17 +4,7 @@
 
     <data>
 
-        <variable
-            name="userItem"
-            type="com.android.testproject1.model.Users" />
-
-        <variable
-            name="listener"
-            type="com.android.testproject1.IMainActivity" />
-
     </data>
-
-
 
     <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
@@ -28,8 +18,8 @@
         app:cardElevation="2dp"
         app:cardUseCompatPadding="true">
 
-<!--        android:focusable="true"-->
-<!--        android:clickable="true"-->
+        <!--        android:focusable="true"-->
+        <!--        android:clickable="true"-->
         <RelativeLayout
             android:id="@+id/contentContainerRl"
             android:layout_width="match_parent"
@@ -63,7 +53,7 @@
                 android:gravity="center_horizontal|start"
                 android:orientation="vertical">
 
-<!--                android:textColor="@color/primaryTextColor"-->
+                <!--                android:textColor="@color/primaryTextColor"-->
                 <TextView
                     android:id="@+id/usernameTv"
                     android:layout_width="wrap_content"
@@ -73,19 +63,18 @@
                     android:lines="1"
                     android:minLines="1"
                     android:maxLines="1"
-                    android:text="@{userItem.name}"/>
+                    android:text="UserName"/>
 
-<!--                android:textColor="@color/secondaryTextColor"-->
-                <TextView
-                    android:id="@+id/fullNameTv"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textSize="12sp"
-                    android:ellipsize="end"
-                    android:lines="1"
-                    android:minLines="1"
-                    android:maxLines="1"
-                    android:text="Group Id"/>
+                <!--                android:textColor="@color/secondaryTextColor"-->
+<!--                <TextView-->
+<!--                    android:id="@+id/fullNameTv"-->
+<!--                    android:layout_width="wrap_content"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    android:textSize="12sp"-->
+<!--                    android:ellipsize="end"-->
+<!--                    android:lines="1"-->
+<!--                    android:minLines="1"-->
+<!--                    android:maxLines="1"/>-->
 
             </LinearLayout>
 
@@ -100,7 +89,7 @@
                 android:layout_marginEnd="15dp"
                 android:orientation="horizontal">
 
-<!--                tools:background="@drawable/user_action_button_idle_selector"-->
+                <!--                tools:background="@drawable/user_action_button_idle_selector"-->
                 <ImageView
                     android:id="@+id/firstButtonIv"
                     android:layout_width="wrap_content"
@@ -112,11 +101,10 @@
                     android:paddingRight="15dp"
                     android:paddingEnd="15dp"
                     android:layout_marginEnd="4dp"
-                    android:onClick="@{()->listener.onJoinItemClick(userItem)}"
                     android:background="@drawable/idle_button_selector"
-                    android:src="@drawable/bookmark2" />
+                    android:src="@drawable/ic_friend"/>
 
-<!--                tools:background="@drawable/user_action_button_activated_selector"-->
+                <!--                tools:background="@drawable/user_action_button_activated_selector"-->
                 <ImageView
                     android:id="@+id/secondButtonIv"
                     android:layout_width="wrap_content"
@@ -129,7 +117,7 @@
                     android:paddingEnd="15dp"
                     android:layout_marginStart="4dp"
                     android:background="@drawable/idle_button_selector"
-                    android:src="@drawable/ic_friend" />
+                    android:src="@drawable/bookmark2"/>
 
             </LinearLayout>
 
@@ -137,69 +125,4 @@
 
     </androidx.cardview.widget.CardView>
 
-
-
-
-
-
-
-<!--    <RelativeLayout-->
-<!--        android:layout_width="match_parent"-->
-<!--        android:layout_height="wrap_content">-->
-
-
-<!--        <de.hdodenhof.circleimageview.CircleImageView-->
-<!--            android:id="@+id/profile_image1"-->
-<!--            android:layout_width="50dp"-->
-<!--            android:layout_height="50dp"-->
-<!--            android:layout_marginStart="4dp"-->
-<!--            android:elevation="3dp"-->
-<!--            android:src="@drawable/person3"-->
-<!--            android:layout_centerVertical="true" />-->
-
-
-<!--        <LinearLayout-->
-<!--            android:layout_toEndOf="@id/profile_image1"-->
-<!--            android:layout_marginStart="10dp"-->
-<!--            android:layout_centerHorizontal="true"-->
-<!--            android:layout_width="match_parent"-->
-<!--            android:layout_height="wrap_content"-->
-<!--            android:orientation="vertical">-->
-
-<!--            <TextView-->
-<!--                android:layout_width="wrap_content"-->
-<!--                android:layout_height="wrap_content"-->
-<!--                android:maxLines="1"-->
-<!--                android:text="@{userItem.name}"-->
-<!--                android:textSize="18sp"-->
-<!--                android:fontFamily="@font/pacifico"-->
-<!--                android:textStyle="bold" />-->
-
-<!--            <TextView-->
-<!--                android:layout_width="wrap_content"-->
-<!--                android:layout_height="wrap_content"-->
-<!--                android:maxLines="1"-->
-<!--                android:text="@{userItem.name}"-->
-
-<!--                android:textSize="18sp"-->
-<!--                android:fontFamily="@font/segoe_ui_bold"-->
-<!--                android:textStyle="bold" />-->
-<!--            &lt;!&ndash;                    android:text="5 Joined 2 Left"&ndash;&gt;-->
-
-
-<!--        </LinearLayout>-->
-
-<!--        <com.google.android.material.button.MaterialButton-->
-<!--            android:layout_width="wrap_content"-->
-<!--            android:layout_height="wrap_content"-->
-<!--            android:layout_centerVertical="true"-->
-<!--            android:layout_alignParentEnd="true"-->
-<!--            android:fontFamily="@font/seg_ui_semibold"-->
-<!--            app:backgroundTint="@null"-->
-<!--            android:background="@drawable/button_background"-->
-<!--            android:onClick="@{()->listener.onJoinItemClick(userItem)}"-->
-<!--            android:text="Join" />-->
-
-
-<!--    </RelativeLayout>-->
 </layout>

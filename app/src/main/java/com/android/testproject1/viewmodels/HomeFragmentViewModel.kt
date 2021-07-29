@@ -50,14 +50,14 @@ class HomeFragmentViewModel(application: Application): AndroidViewModel(applicat
         }
 
 
-        Log.d(myTAG, " lastResult is  : ${lastResult?.toObject(Post::class.java)?.postId}")
+//        Log.d(myTAG, " lastResult is  : ${lastResult?.toObject(Post::class.java)?.postId}")
 
         query.get()
             .addOnSuccessListener { queryDocumentSnapshots ->
                 for (documentSnapshot in queryDocumentSnapshots) {
                     val post: Post = documentSnapshot.toObject(Post::class.java)
                     list2.addAll(listOf(post))
-                    Log.d(myTAG,"post Ids are "+post.postId)
+//                    Log.d(myTAG,"post Ids are "+post.postId)
                     postList.postValue(list2)
                 }
 

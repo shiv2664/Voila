@@ -12,173 +12,123 @@
         android:layout_height="match_parent"
         android:paddingBottom="10dp">
 
-    <RelativeLayout
-        android:background="@color/colorPrimary"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical">
-
-        <LinearLayout
+        <RelativeLayout
+            android:background="@color/colorPrimary"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="vertical">
-
-            <com.google.android.material.appbar.AppBarLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-                <androidx.appcompat.widget.Toolbar
-                    android:id="@+id/toolbarPost"
-                    app:titleTextColor="@color/black"
-                    android:layout_width="match_parent"
-                    android:layout_height="?attr/actionBarSize"
-                    android:elevation="4dp"
-                    android:background="@color/colorPrimary"
-                    app:layout_constraintLeft_toLeftOf="parent"
-                    app:layout_constraintRight_toRightOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:theme="@style/ToolbarColoredBackArrow" />
-            </com.google.android.material.appbar.AppBarLayout>
-
-            <FrameLayout
-                android:id="@+id/pager_layout"
-                android:visibility="visible"
-                android:layout_width="match_parent"
-                android:layout_height="360dp">
-
-                <androidx.viewpager.widget.ViewPager
-                    android:id="@+id/pager"
-                    android:layout_gravity="top"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent" />
-
-                <Button
-                    android:id="@+id/Upload"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:backgroundTint="@color/greyprofile"
-                    android:text="Upload"
-                    android:layout_gravity="center"
-                    android:visibility="gone"/>
-
-
-                <RelativeLayout
-                    android:visibility="visible"
-                    android:id="@+id/indicator_holder"
-                    android:background="#20000000"
-                    android:layout_gravity="bottom"
-                    android:padding="12dp"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
-
-                    <com.tbuonomo.viewpagerdotsindicator.DotsIndicator
-                        android:id="@+id/indicator"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_centerHorizontal="true"
-                        app:dotsColor="@color/white"
-                        app:dotsCornerRadius="8dp"
-                        app:dotsSize="6dp"
-                        app:dotsSpacing="4dp"
-                        app:dotsWidthFactor="2.5" />
-
-                </RelativeLayout>
-
-            </FrameLayout>
-
-            <RelativeLayout
-                android:padding="5dp"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-
-                <ImageView
-                    android:clickable="true"
-                    android:focusable="true"
-                    android:background="?selectableItemBackground"
-                    android:id="@+id/delete"
-                    android:layout_alignParentEnd="true"
-                    android:padding="10dp"
-                    android:src="@drawable/ic_delete_black_24dp"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" />
-                <!--                    android:onClick="deleteItem"-->
-
-                <ImageView
-                    android:clickable="true"
-                    android:focusable="true"
-
-                    android:background="?selectableItemBackground"
-                    android:layout_marginEnd="10dp"
-                    android:layout_toStartOf="@+id/delete"
-                    android:id="@+id/edit_crop"
-                    android:padding="10dp"
-                    android:src="@drawable/ic_crop_rotate_black_24dp"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" />
-                <!--                    android:onClick="openCropItem"-->
-
-            </RelativeLayout>
-
-            <com.google.android.material.textfield.TextInputLayout
-                android:layout_width="match_parent"
-                android:hint="Enter the offer"
-                android:layout_marginEnd="10dp"
-                app:boxStrokeColor="@color/colorAccentt"
-                app:hintTextColor="@color/colorAccentt"
-                android:layout_marginStart="10dp"
-                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-                android:layout_height="wrap_content">
-
-                <EditText
-                    android:id="@+id/descriptionTextTitle"
-                    android:maxLines="2"
-                    android:inputType="text|textMultiLine"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content" />
-
-            </com.google.android.material.textfield.TextInputLayout>
-
-            <com.google.android.material.textfield.TextInputLayout
-                android:layout_width="match_parent"
-                android:hint="Some description about the offer"
-                android:layout_marginEnd="10dp"
-                android:layout_marginStart="10dp"
-                app:boxStrokeColor="@color/colorAccentt"
-                app:hintTextColor="@color/colorAccentt"
-                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-                android:layout_height="wrap_content">
-
-                <EditText
-                    android:id="@+id/descriptionTextMain"
-                    android:maxLines="5"
-                    android:inputType="text|textMultiLine"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content" />
-
-            </com.google.android.material.textfield.TextInputLayout>
-
-
+            android:layout_height="wrap_content"
+            android:paddingBottom="10dp">
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:weightSum="2">
+                android:layout_height="match_parent"
+                android:orientation="vertical">
+
+                <com.google.android.material.appbar.AppBarLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+                    <androidx.appcompat.widget.Toolbar
+                        android:id="@+id/toolbarPostOffer"
+                        app:titleTextColor="@color/black"
+                        android:layout_width="match_parent"
+                        android:layout_height="?attr/actionBarSize"
+                        android:elevation="4dp"
+                        android:background="@color/colorPrimary"
+                        app:theme="@style/ToolbarColoredBackArrow" />
+                </com.google.android.material.appbar.AppBarLayout>
+
+                <FrameLayout
+                    android:id="@+id/pager_layout"
+                    android:visibility="visible"
+                    android:layout_width="match_parent"
+                    android:layout_height="360dp">
+
+                    <androidx.viewpager.widget.ViewPager
+                        android:id="@+id/pager"
+                        android:layout_gravity="top"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent" />
+
+                    <Button
+                        android:id="@+id/Upload"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:backgroundTint="@color/greyprofile"
+                        android:text="Upload"
+                        android:layout_gravity="center"
+                        android:visibility="gone"/>
+
+
+                    <RelativeLayout
+                        android:visibility="visible"
+                        android:id="@+id/indicator_holder"
+                        android:background="#20000000"
+                        android:layout_gravity="bottom"
+                        android:padding="12dp"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+
+                        <com.tbuonomo.viewpagerdotsindicator.DotsIndicator
+                            android:id="@+id/indicator"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_centerHorizontal="true"
+                            app:dotsColor="@color/white"
+                            app:dotsCornerRadius="8dp"
+                            app:dotsSize="6dp"
+                            app:dotsSpacing="4dp"
+                            app:dotsWidthFactor="2.5" />
+
+                    </RelativeLayout>
+
+                </FrameLayout>
+
+                <RelativeLayout
+                    android:padding="5dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <ImageView
+                        android:clickable="true"
+                        android:focusable="true"
+                        android:background="?selectableItemBackground"
+                        android:id="@+id/delete"
+                        android:layout_alignParentEnd="true"
+                        android:padding="10dp"
+                        android:src="@drawable/ic_delete_black_24dp"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content" />
+                    <!--                    android:onClick="deleteItem"-->
+
+                    <ImageView
+                        android:clickable="true"
+                        android:focusable="true"
+
+                        android:background="?selectableItemBackground"
+                        android:layout_marginEnd="10dp"
+                        android:layout_toStartOf="@+id/delete"
+                        android:id="@+id/edit_crop"
+                        android:padding="10dp"
+                        android:src="@drawable/ic_crop_rotate_black_24dp"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content" />
+                    <!--                    android:onClick="openCropItem"-->
+
+                </RelativeLayout>
 
                 <com.google.android.material.textfield.TextInputLayout
                     android:layout_width="match_parent"
-                    android:hint="₹Discounted price"
+                    android:hint="Enter the offer"
                     android:layout_marginEnd="10dp"
-                    android:layout_marginStart="10dp"
                     app:boxStrokeColor="@color/colorAccentt"
                     app:hintTextColor="@color/colorAccentt"
-                    android:layout_weight="1"
+                    android:layout_marginStart="10dp"
                     style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                     android:layout_height="wrap_content">
 
                     <EditText
-                        android:id="@+id/DiscountedPrice"
-                        android:maxLines="5"
-                        android:inputType="numberDecimal"
+                        android:id="@+id/descriptionTextTitle"
+                        android:maxLines="2"
+                        android:inputType="text|textMultiLine"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content" />
 
@@ -186,30 +136,144 @@
 
                 <com.google.android.material.textfield.TextInputLayout
                     android:layout_width="match_parent"
-                    android:hint="₹Original Price"
+                    android:hint="Some description about the offer"
                     android:layout_marginEnd="10dp"
                     android:layout_marginStart="10dp"
-                    android:layout_weight="1"
                     app:boxStrokeColor="@color/colorAccentt"
                     app:hintTextColor="@color/colorAccentt"
                     style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                     android:layout_height="wrap_content">
 
                     <EditText
-                        android:id="@+id/OriginalPrice"
+                        android:id="@+id/descriptionTextMain"
                         android:maxLines="5"
-                        android:inputType="numberDecimal"
+                        android:inputType="text|textMultiLine"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content" />
 
                 </com.google.android.material.textfield.TextInputLayout>
+
+
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:weightSum="2">
+
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:layout_width="match_parent"
+                        android:hint="People(Min)(Req)"
+                        android:layout_marginEnd="10dp"
+                        android:layout_marginStart="10dp"
+                        app:boxStrokeColor="@color/colorAccentt"
+                        app:hintTextColor="@color/colorAccentt"
+                        android:layout_weight="1"
+                        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                        android:layout_height="wrap_content">
+
+                        <EditText
+                            android:id="@+id/MinPeople"
+                            android:maxLines="5"
+                            android:inputType="number"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content" />
+
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:layout_width="match_parent"
+                        android:hint="People(Max)(Opt)"
+                        android:layout_marginEnd="10dp"
+                        android:layout_marginStart="10dp"
+                        android:layout_weight="1"
+                        app:boxStrokeColor="@color/colorAccentt"
+                        app:hintTextColor="@color/colorAccentt"
+                        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                        android:layout_height="wrap_content">
+
+                        <EditText
+                            android:id="@+id/MaxPeople"
+                            android:maxLines="5"
+                            android:inputType="number"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content" />
+
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:weightSum="2">
+
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:layout_width="match_parent"
+                        android:hint="₹Discounted Price"
+                        android:layout_marginEnd="10dp"
+                        android:layout_marginStart="10dp"
+                        app:boxStrokeColor="@color/colorAccentt"
+                        app:hintTextColor="@color/colorAccentt"
+                        android:layout_weight="1"
+                        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                        android:layout_height="wrap_content">
+
+                        <EditText
+                            android:id="@+id/DiscountedPrice"
+                            android:maxLines="5"
+                            android:inputType="numberDecimal"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content" />
+
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:layout_width="match_parent"
+                        android:hint="₹Original Price"
+                        android:layout_marginEnd="10dp"
+                        android:layout_marginStart="10dp"
+                        android:layout_weight="1"
+                        app:boxStrokeColor="@color/colorAccentt"
+                        app:hintTextColor="@color/colorAccentt"
+                        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                        android:layout_height="wrap_content">
+
+                        <EditText
+                            android:id="@+id/OriginalPrice"
+                            android:maxLines="5"
+                            android:inputType="numberDecimal"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content" />
+
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                </LinearLayout>
+
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:id="@+id/CityInputLauout"
+                        android:layout_marginEnd="10dp"
+                        android:layout_marginStart="10dp"
+                        app:boxStrokeColor="@color/colorAccentt"
+                        app:hintTextColor="@color/colorAccentt"
+                        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="City">
+
+                        <AutoCompleteTextView
+                            android:id="@+id/City"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:background="@null"/>
+
+                    </com.google.android.material.textfield.TextInputLayout>
+
 
             </LinearLayout>
 
+        </RelativeLayout>
 
-
-        </LinearLayout>
-
-    </RelativeLayout>
     </ScrollView>
 </layout>

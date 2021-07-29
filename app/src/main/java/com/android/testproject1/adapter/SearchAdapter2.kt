@@ -9,10 +9,11 @@ import com.android.testproject1.BR
 import com.android.testproject1.IMainActivity
 import com.android.testproject1.databinding.ItemDiscoverBinding
 import com.android.testproject1.databinding.SearchRecyclerviewGridBinding
+import com.android.testproject1.model.Offer
 import com.android.testproject1.model.ProductExplore
 
 class SearchAdapter2(private val context: Context,
-                     private var productExploreList:MutableList<ProductExplore>): RecyclerView.
+                     private var offerList:MutableList<Offer>): RecyclerView.
                      Adapter<SearchAdapter2.BindingViewHolder>() {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BindingViewHolder {
 
@@ -22,9 +23,9 @@ class SearchAdapter2(private val context: Context,
 
     override fun onBindViewHolder(holder: BindingViewHolder, position: Int) {
 
-        val exploreProduct = productExploreList[position]
+        val exploreOffer = offerList[position]
 
-        holder.itemBinding.setVariable(BR.productitem2,exploreProduct)
+        holder.itemBinding.setVariable(BR.offerItem,exploreOffer)
         holder.itemBinding.setVariable(BR.listener, context as IMainActivity)
         holder.itemBinding.executePendingBindings()
 
@@ -32,14 +33,14 @@ class SearchAdapter2(private val context: Context,
     }
 
     override fun getItemCount(): Int {
-        return productExploreList.size
+        return offerList.size
     }
 
-//    fun UpdateDataList(data: List<Product>){
-//        dataList.clear()
-//        dataList.addAll(data)
-//        notifyDataSetChanged()
-//    }
+    fun updateData(data: List<Offer>){
+        offerList.clear()
+       offerList.addAll(data)
+        notifyDataSetChanged()
+    }
 
 
     class BindingViewHolder(val itemBinding: ViewDataBinding)

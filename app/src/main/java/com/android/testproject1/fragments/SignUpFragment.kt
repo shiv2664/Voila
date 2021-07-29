@@ -28,7 +28,6 @@ class SignUpFragment : Fragment() {
     private val myTAG:String="MyTag"
 
 
-
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         val binding= FragmentSignUpBinding.inflate(inflater, container, false)
@@ -39,12 +38,12 @@ class SignUpFragment : Fragment() {
             .getInstance(requireActivity().application))
             .get(SignUpViewModel::class.java)
 
-        mViewModel.getUserLiveData().observe(viewLifecycleOwner, Observer {
-            if (it != null) {
-                val intent = Intent(activity, MainActivity2::class.java)
-                startActivity(intent)
-            }
-        })
+//        mViewModel.getUserLiveData().observe(viewLifecycleOwner, Observer {
+//            if (it != null) {
+//                val intent = Intent(activity, MainActivity2::class.java)
+//                startActivity(intent)
+//            }
+//        })
 
 
         binding.signUp.setOnClickListener {

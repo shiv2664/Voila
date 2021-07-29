@@ -14,7 +14,7 @@ import com.afollestad.materialdialogs.MaterialDialog
 import com.android.testproject1.R
 import com.android.testproject1.adapter.PagerPhotosAdapter
 import com.android.testproject1.databinding.FragmentCreatePostBinding
-import com.android.testproject1.services.UploadService
+import com.android.testproject1.services.UploadServicePosts
 import com.android.testproject1.viewmodels.CreatePostViewModel
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
@@ -22,8 +22,6 @@ import com.nguyenhoanglam.imagepicker.model.Config
 import com.nguyenhoanglam.imagepicker.model.Image
 import com.nguyenhoanglam.imagepicker.ui.imagepicker.ImagePicker
 import es.dmoral.toasty.Toasty
-import kotlinx.android.synthetic.main.activity_main.*
-import java.util.*
 import kotlin.collections.ArrayList
 
 
@@ -129,7 +127,7 @@ class CreatePost : Fragment() {
                 sharedPreferences.edit().putInt("count", ++serviceCount).apply()
                 Log.d(myTag, "On click  sp $serviceCount")
 
-                val intent = Intent(activity, UploadService::class.java)
+                val intent = Intent(activity, UploadServicePosts::class.java)
 
                 intent.putExtra("count", serviceCount)
 
@@ -148,7 +146,7 @@ class CreatePost : Fragment() {
 
                 intent.putExtra("description", binding.descriptionTextMain.text.toString().trim())
 
-                intent.action = UploadService.ACTION_START_FOREGROUND_SERVICE
+                intent.action = UploadServicePosts.ACTION_START_FOREGROUND_SERVICE_UPLOAD_POST
 
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
 

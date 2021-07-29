@@ -39,15 +39,15 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
 
-                <!--                <com.google.android.material.imageview.ShapeableImageView-->
-                <!--                    android:id="@+id/img"-->
-                <!--                    android:onClick="@{()->listener.onRecyclerViewItemClick(postItem)}"-->
-                <!--                    app:backgroundImage="@{postItem.image_url_0}"-->
-                <!--                    android:transitionName="img"-->
-                <!--                    android:layout_width="match_parent"-->
-                <!--                    android:layout_height="280dp"-->
-                <!--                    android:scaleType="centerCrop"-->
-                <!--                    tools:ignore="UnusedAttribute" />-->
+<!--                                <com.google.android.material.imageview.ShapeableImageView-->
+<!--                                    android:id="@+id/img"-->
+<!--                                    android:onClick="@{()->listener.onRecyclerViewItemClick(postItem)}"-->
+<!--                                    app:backgroundImage="@{postItem.image_url_0}"-->
+<!--                                    android:transitionName="img"-->
+<!--                                    android:layout_width="match_parent"-->
+<!--                                    android:layout_height="280dp"-->
+<!--                                    android:scaleType="centerCrop"-->
+<!--                                    tools:ignore="UnusedAttribute" />-->
 
 
                 <FrameLayout

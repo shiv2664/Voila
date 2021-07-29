@@ -48,7 +48,7 @@ class DetailsFragment : Fragment() {
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View {
 //        context?.theme?.applyStyle(R.style.AppTheme, true);
-        val binding= FragmentDetailsBinding.inflate(inflater, container, false)
+        binding= FragmentDetailsBinding.inflate(inflater, container, false)
 
         val bundle = this.arguments
          postItem= bundle?.getParcelable<Post>("PostItem")!!

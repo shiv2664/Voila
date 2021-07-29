@@ -3,11 +3,9 @@ package com.android.testproject1.services
 import android.R
 import android.app.PendingIntent
 import android.app.Service
-import android.content.ContentValues
 import android.content.Context
 import android.content.Intent
 import android.graphics.Bitmap
-import android.graphics.BitmapFactory
 import android.graphics.ImageDecoder
 import android.net.Uri
 import android.os.Build
@@ -15,7 +13,6 @@ import android.os.IBinder
 import android.provider.MediaStore
 import android.text.TextUtils
 import android.util.Log
-import android.widget.Toast
 import androidx.core.app.NotificationCompat
 import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.FieldValue
@@ -30,68 +27,80 @@ import java.io.File
 import java.io.IOException
 import java.util.*
 
-
-class UploadService : Service() {
+class UploadServiceOffers : Service() {
 
 
     companion object{
-
-        val ACTION_START_FOREGROUND_SERVICE = "ACTION_START_FOREGROUND_SERVICE"
-        private val TAG_FOREGROUND_SERVICE = UploadService::class.java.simpleName
-        val ACTION_STOP_FOREGROUND_SERVICE = "ACTION_STOP_FOREGROUND_SERVICE"
-
-
+        val ACTION_START_FOREGROUND_SERVICE_UPLOAD_OFFERS = "ACTION_START_FOREGROUND_SERVICE"
     }
     private var count = 0
     private var bitmap: Bitmap? = null
     private var resized: Bitmap? = null
     val myTag:String = "MyTag"
 
+    var numberImages:Int=0
+
 
 
     override fun onCreate() {
-
         Log.d(myTag, "Service Created ")
-
         super.onCreate()
 
     }
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
 
-        Log.d(myTag, "$intent   $flags  $startId")
+        Log.d(myTag, "onStart $intent   $flags  $startId")
 
         if (intent!=null) {
             val action = intent.action
-            if (action == ACTION_START_FOREGROUND_SERVICE) {
+            if (action == ACTION_START_FOREGROUND_SERVICE_UPLOAD_OFFERS) {
 
-                val imagesList: ArrayList<Image>? =
-                    intent.getParcelableArrayListExtra<Image>("imagesList")
+                val imagesList: ArrayList<Image>? = intent.getParcelableArrayListExtra<Image>("imagesList")
 
-                val notification_id = intent.getIntExtra("notification_id", 2)
+                val notificationId = intent.getIntExtra("notification_id", 3)
 
-                val postID = intent.getStringExtra("postID")
+                val postID = intent.getStringExtra("offerId")
 
-                val current_id = intent.getStringExtra("current_id")
+                val title=intent.getStringExtra("title")
+
+                val originalPrice=intent.getStringExtra("originalPrice")
+
+                val discountedPrice=intent.getStringExtra("discountedPrice")
+
+                val currentId = intent.getStringExtra("current_id")
 
                 val description = intent.getStringExtra("description")
 
                 val uploadedImagesUrl = intent.getStringArrayListExtra("uploadedImagesUrl")
+
+                val city=intent.getStringExtra("city")
+
                 count = intent.getIntExtra("count", 0)
+
+
+                Log.d(myTag, "image list is $imagesList notificationId is $notificationId " +
+                        "postID is $postID title is $title originalPrice is $originalPrice " +
+                        "discountedPrice is $discountedPrice city is $city currentId is $currentId " +
+                        " description is $description uploadedImagesUrl is $uploadedImagesUrl")
 
                 if (imagesList != null) {
                     if (postID != null) {
-                        uploadImages(
-                            notification_id,
-                            0,
-                            imagesList,
-                            current_id,
-                            description,
-                            uploadedImagesUrl,
-                            postID
-                        )
+                        if (title != null) {
+                            if (originalPrice != null) {
+                                if (discountedPrice != null) {
+                                    if (city != null) {
+                                        uploadImages(notificationId, 0, imagesList, currentId, description,
+                                            uploadedImagesUrl, postID,title,originalPrice,discountedPrice,city)
+
+                                        Log.d(myTag,"Nothing is null")
+                                    }
+                                }
+                            }
+                        }
                     }
                 }
+
             }
 
         }
@@ -127,17 +136,7 @@ class UploadService : Service() {
         progress: Int,
         indeterminate: Boolean
     ) {
-
-//        val notification = NotificationCompat.Builder(this, CHANNEL_ID)
-//            .setContentTitle("Example Service")
-//            .setContentText(input)
-//            .setSmallIcon(R.drawable.ic_android)
-//            .setContentIntent(pendingIntent)
-//            .build()
-//        startForeground(1, notification)
-
-
-        val builder = NotificationCompat.Builder(context, App.CHANNEL_ID)
+        val builder = NotificationCompat.Builder(context, App.CHANNEL_ID2)
 //         Create notification default intent.
         val intent = Intent()
         val pendingIntent = PendingIntent.getActivity(this, 0, intent, 0)
@@ -148,7 +147,7 @@ class UploadService : Service() {
             .setContentIntent(pendingIntent)
             .setAutoCancel(true)
             .setTicker(message)
-            .setChannelId(App.CHANNEL_ID)
+            .setChannelId(App.CHANNEL_ID2)
             .setPriority(NotificationCompat.PRIORITY_LOW)
             .setProgress(max_progress, progress, indeterminate)
             .setVibrate(LongArray(0))
@@ -162,7 +161,7 @@ class UploadService : Service() {
         inImage.compress(Bitmap.CompressFormat.JPEG, 100, bytes)
         var path: String?=null
         try {
-             path = MediaStore.Images.Media.insertImage(inContext.contentResolver, inImage, "Title", null)
+            path = MediaStore.Images.Media.insertImage(inContext.contentResolver, inImage, "Title", null)
 
         }catch (e: java.lang.Exception){
             e.localizedMessage?.toString()?.let { Log.d(myTag, it) }
@@ -185,9 +184,13 @@ class UploadService : Service() {
         currentUser_id: String?,
         description: String?,
         uploadedImagesUrl: ArrayList<String>?,
-        postID:String
+        postID:String,
+        title: String,
+        originalPrice:String,
+        discountPrice:String,
+        city:String
     ) {
-        val img_count = index + 1
+        val imgCount = index + 1
 
         var imageUri: Uri
 
@@ -195,7 +198,7 @@ class UploadService : Service() {
 
         if (Build.VERSION.SDK_INT >= 29) {
             try {
-                bitmap = imageUri0?.let {ImageDecoder.createSource(this.contentResolver,it)}?.let { ImageDecoder.decodeBitmap(it) }
+                bitmap = imageUri0?.let { ImageDecoder.createSource(this.contentResolver,it)}?.let { ImageDecoder.decodeBitmap(it) }
             } catch (e: IOException) {
                 e.printStackTrace()
 
@@ -229,7 +232,7 @@ class UploadService : Service() {
         }
 
 
-            imageUri = Uri.parse(path)
+        imageUri = Uri.parse(path)
 
 
 //        imageUri = try {
@@ -244,82 +247,71 @@ class UploadService : Service() {
 //            Uri.fromFile(File(imagesList!![index].path))
 //        }
 
-
-            val fileToUpload = FirebaseStorage.getInstance().reference.child("Posts")
-                .child(postID)
-                .child("Enjoyah_" + System.currentTimeMillis() + "_" + imagesList[index].name)
-            fileToUpload.putFile(imageUri)
-                .addOnSuccessListener {
-                    Log.d(myTag, "Uploaded Succesfully")
-                    fileToUpload.downloadUrl
-                        .addOnSuccessListener { uri: Uri ->
-                            uploadedImagesUrl!!.add(uri.toString())
-                            val next_index = index + 1
-                            try {
-                                if (!TextUtils.isEmpty(imagesList[index + 1].path)) {
-                                    uploadImages(
-                                        notification_id,
-                                        next_index,
-                                        imagesList,
-                                        currentUser_id,
-                                        description,
-                                        uploadedImagesUrl,
-                                        postID
-                                    )
-                                } else {
-                                    uploadPost(
-                                        notification_id,
-                                        currentUser_id,
-                                        description,
-                                        uploadedImagesUrl,
-                                        postID
-                                    )
-                                }
-                            } catch (e: Exception) {
-                                e.printStackTrace()
-                                uploadPost(
-                                    notification_id,
-                                    currentUser_id,
-                                    description,
-                                    uploadedImagesUrl, postID
-                                )
-                            }
+        val fileToUpload = currentUser_id?.let { FirebaseStorage.getInstance().reference.child("Offers").child(it)
+                    .child(postID)
+                    .child("Voila_"+System.currentTimeMillis()+"_$numberImages")
+            }
+        numberImages++
+        fileToUpload?.putFile(imageUri)?.addOnSuccessListener {
+            Log.d(myTag, "Uploaded Successfully")
+            fileToUpload.downloadUrl
+                .addOnSuccessListener { uri: Uri ->
+                    uploadedImagesUrl!!.add(uri.toString())
+                    val nextIndex = index + 1
+                    try {
+                        if (!TextUtils.isEmpty(imagesList[index + 1].path)) {
+                            uploadImages(
+                                notification_id,
+                                nextIndex,
+                                imagesList,
+                                currentUser_id,
+                                description,
+                                uploadedImagesUrl,
+                                postID,
+                                title,originalPrice, discountPrice,city)
+                        } else {
+                            uploadPost(
+                                notification_id,
+                                currentUser_id,
+                                description,
+                                uploadedImagesUrl,
+                                postID,
+                                title,originalPrice,discountPrice,city)
                         }
-                        .addOnFailureListener { obj: Exception -> obj.printStackTrace() }
-                }
-                .addOnFailureListener { obj: Exception ->
-                    obj.printStackTrace()
-                    obj.localizedMessage?.toString()?.let { Log.d(myTag, "Exception is  $it") }
-                }
-                .addOnProgressListener { taskSnapshot: UploadTask.TaskSnapshot ->
-                    if (count == 1) {
-                        val title =
-                            "Uploading " + img_count + "/" + imagesList.size + " images..."
-                        val progress =
-                            (100.0 * taskSnapshot.bytesTransferred / taskSnapshot.totalByteCount).toInt()
-                        notifyProgress(
+                    } catch (e: Exception) {
+                        e.printStackTrace()
+                        uploadPost(
                             notification_id,
-                            R.drawable.stat_sys_upload,
-                            title,
-                            "$progress%",
-                            applicationContext,
-                            100,
-                            progress,
-                            false
-                        )
-                    } else if (count > 1) {
-                        notifyProgress(
-                            notification_id,
-                            R.drawable.stat_sys_upload,
-                            "Enjoyah",
-                            "Uploading $count posts",
-                            applicationContext,
-                            100,
-                            0,
-                            true
-                        )
+                            currentUser_id,
+                            description,
+                            uploadedImagesUrl, postID,
+                            title, originalPrice, discountPrice,city)
                     }
                 }
+                .addOnFailureListener { obj: Exception -> obj.printStackTrace() }
+        }?.addOnFailureListener { obj: Exception ->
+            obj.printStackTrace()
+            obj.localizedMessage?.toString()?.let { Log.d(myTag, "Exception is  $it") }
+        }?.addOnProgressListener { taskSnapshot: UploadTask.TaskSnapshot ->
+            if (count == 1) {
+                val title = "Uploading " + imgCount + "/" + imagesList.size + " images..."
+                val progress = (100.0 * taskSnapshot.bytesTransferred / taskSnapshot.totalByteCount).toInt()
+
+                notifyProgress(notification_id, R.drawable.stat_sys_upload, title, "$progress%",
+                    applicationContext, 100, progress, false)
+            } else if (count > 1) {
+                notifyProgress(
+                    notification_id,
+                    R.drawable.stat_sys_upload,
+                    "Viola",
+                    "Uploading $count ",
+                    applicationContext,
+                    100,
+                    0,
+                    true
+                )
+            }
+        }
     }
 
 
@@ -328,15 +320,15 @@ class UploadService : Service() {
         currentUser_id: String?,
         description: String?,
         uploadedImagesUrl: ArrayList<String>?,
-        postID: String
-    ) {
-        if (!uploadedImagesUrl!!.isEmpty()) {
+        postID: String,
+        title:String,originalPrice:String,discountPrice:String,city: String) {
+        if (uploadedImagesUrl!!.isNotEmpty()) {
             if (count == 1) {
                 notifyProgress(
                     notification_id,
                     R.drawable.stat_sys_upload,
-                    "Hify",
-                    "Sending post..",
+                    "Voila",
+                    "Uploading Offer..",
                     applicationContext,
                     100,
                     0,
@@ -406,34 +398,37 @@ class UploadService : Service() {
                     }
                     postMap["description"] = description
                     postMap["postId"]= postID
-                    postMap["color"] = "0"
+                    postMap["title"]=title
+                    postMap["originalPrice"]=originalPrice
+                    postMap["discountPrice"]=discountPrice
+                    postMap["city"]=city
+                    postMap["ratings"] = "0"
+                    postMap["usersRated"] = "0"
+                    postMap["addressMap"] = "none"
+                    postMap["offerCategory"] = ""
+                    postMap["minPeople"] = ""
+                    postMap["maxPeople"] = ""
 
                     userPostMap[postID]=true
 
-                    FirebaseFirestore.getInstance().collection("Posts").document(postID)
-                        .set(postMap,SetOptions.merge()).continueWith {
+                    FirebaseFirestore.getInstance().collection("Offers").document(postID)
+                        .set(postMap, SetOptions.merge()).continueWith {
                             if (id != null) {
                                 FirebaseFirestore.getInstance().collection("Users").document(id)
-                                    .collection("Posts").document("Uploaded")
-                                    .update("UploadedPosts", FieldValue.arrayUnion(postID))
+                                    .collection("Offers").document("UploadedOffers")
+                                    .update("UploadedOffers", FieldValue.arrayUnion(postID))
                             }
                         }
                         .addOnSuccessListener {
-                            getSharedPreferences("uploadservice", MODE_PRIVATE).edit().putInt("count", --count).apply()
-                            Toasty.success(applicationContext, "Post added", Toasty.LENGTH_SHORT, true).show()
+                            getSharedPreferences("uploadService2", MODE_PRIVATE).edit().putInt("count", --count).apply()
+                            Toasty.success(applicationContext, "Offer added", Toasty.LENGTH_SHORT, true).show()
                             Log.d(myTag, "count is $count")
                             if (count == 0) {
                                 stopForegroundService(true)
                             }
                         }
                         .addOnFailureListener { e: Exception ->
-                            Toasty.error(
-                                applicationContext,
-                                "Error :" + e.message,
-                                Toasty.LENGTH_SHORT,
-                                true
-                            )
-                                .show()
+                            Toasty.error(applicationContext, "Error :" + e.message, Toasty.LENGTH_SHORT, true).show()
                             stopForegroundService(true)
                             e.printStackTrace()
                         }

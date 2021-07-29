@@ -82,6 +82,7 @@ dependencies {
 
     implementation 'com.afollestad.material-dialogs:commons:0.8.6.1'
 
+    implementation 'com.github.chivorns:smartmaterialspinner:1.5.0'
     implementation 'nl.psdcompany:duo-navigation-drawer:3.0.0'
     implementation 'com.borjabravo:readmoretextview:2.1.0'
 

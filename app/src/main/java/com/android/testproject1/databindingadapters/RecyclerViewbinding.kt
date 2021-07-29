@@ -1,16 +1,11 @@
 package com.android.testproject1.databindingadapters
 
-import android.util.Log
 import androidx.databinding.BindingAdapter
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.android.testproject1.adapter.*
-import com.android.testproject1.model.Chat
-import com.android.testproject1.model.Post
-import com.android.testproject1.model.ProductExplore
-import com.android.testproject1.model.Users
-import com.android.testproject1.room.enteties.PostRoomEntity
+import com.android.testproject1.model.*
 import com.android.testproject1.room.enteties.UsersRoomEntity
 
 
@@ -97,11 +92,11 @@ fun bindList(view: RecyclerView,usersList: List<Users>?){
         view.layoutManager = linearLayoutManager
     }
 
-    var adapter:DetailsUserAdapter?= view.adapter as DetailsUserAdapter?
+    var adapter:GroupsOnOfferAdapter?= view.adapter as GroupsOnOfferAdapter?
 
     if (adapter == null) {
         if (usersList != null) {
-            adapter = DetailsUserAdapter(view.context,usersList.toMutableList())
+            adapter = GroupsOnOfferAdapter(view.context,usersList.toMutableList())
             view.adapter = adapter
         }
     }
@@ -237,21 +232,30 @@ fun bindGroupChat(view:RecyclerView,groupChatList:List<Chat>?) {
 }
 
 
-@BindingAdapter("bindgridist")
-fun bindgridlist(view: RecyclerView,productExplore:List<ProductExplore>){
+@BindingAdapter("bindSearchRecyclerView")
+fun bindSearchRecyclerView(view: RecyclerView,dataList:List<Offer>?){
 
-    if (productExplore.isEmpty())
-        return
+    if (dataList != null) {
+        if (dataList.isEmpty())
+            return
+    }
 
-    val linearLayoutManager = view.layoutManager
-    if (linearLayoutManager == null)
-        view.layoutManager = LinearLayoutManager(view.context)
+    val linearLayoutManager = LinearLayoutManager(view.context)
+    val layoutManager = view.layoutManager
+    if (layoutManager == null) {
+        view.layoutManager = linearLayoutManager
+    }
 
-    var adapter = view.adapter
+    var adapter:SearchAdapter2?= view.adapter as SearchAdapter2?
 
     if (adapter == null) {
-        adapter = SearchAdapter2(view.context, productExplore.toMutableList())
-        view.adapter = adapter
+        if (dataList != null) {
+            adapter = SearchAdapter2(view.context,dataList.toMutableList())
+            view.adapter = adapter
+        }
+    }
+    if (dataList != null) {
+        adapter?.updateData(dataList)
     }
 
 

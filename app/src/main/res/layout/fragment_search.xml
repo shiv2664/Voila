@@ -14,10 +14,14 @@
         <import type="java.util.List" />
         
         <import type="com.android.testproject1.model.ProductExplore"/>
+        <import type="com.android.testproject1.model.Offer"/>
             
             <variable
                 name="productExploreList"
                 type="List&lt;ProductExplore>" />
+        <variable
+            name="offerList"
+            type="List&lt;Offer>" />
 
     </data>
 
@@ -189,7 +193,7 @@
             app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
             <androidx.recyclerview.widget.RecyclerView
-                app:bindgridist="@{productExploreList}"
+                app:bindSearchRecyclerView="@{offerList}"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent" />
             <!--            android:layoutAnimation="@anim/layout_animation_fall_down"-->

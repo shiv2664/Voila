@@ -68,6 +68,7 @@ class SignUpViewModel(application: Application) : AndroidViewModel(application) 
                     val uid= firebaseAuth.currentUser?.uid.toString()
                     val userMap: MutableMap<String, Any> = HashMap()
                     val postMap: MutableMap<String, Any> = HashMap()
+                    val offerMap: MutableMap<String, Any> = HashMap()
                     val chatListMap: MutableMap<String, Any> = HashMap()
 
                     userMap["id"] = uid
@@ -79,6 +80,7 @@ class SignUpViewModel(application: Application) : AndroidViewModel(application) 
                     userMap["location"] = ""
 
                     postMap["Posts"]= uid
+                    offerMap["Offers"]= uid
 
                     chatListMap["Owner"]=uid
 
@@ -87,10 +89,18 @@ class SignUpViewModel(application: Application) : AndroidViewModel(application) 
                         .addOnSuccessListener {
                             detailsRegisteredData.postValue(true)
                             firebaseFirestore.collection("Users").document(uid)
-                                .collection("Posts").document("Uploaded")
+                                .collection("Posts").document("UploadedPosts")
                                 .set(postMap).continueWith {
                                     firebaseFirestore.collection("ChatList").document(uid)
-                                        .set(chatListMap, SetOptions.merge())
+                                        .set(chatListMap, SetOptions.merge()).continueWith {
+                                            firebaseFirestore.collection("Users").document(uid)
+                                                .collection("Offers").document("UploadedOffers")
+                                                .set(offerMap)
+                                        }.continueWith {
+                                            firebaseFirestore.collection("Users").document(uid)
+                                                .collection("Friends").document("UserFriends")
+                                                .set(chatListMap)
+                                        }
                                 }
 
                             FirebaseMessaging.getInstance().token.addOnCompleteListener {

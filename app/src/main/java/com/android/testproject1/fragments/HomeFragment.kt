@@ -36,7 +36,6 @@ class HomeFragment : Fragment() {
     var scrollOutItems:Int = 0
 
     private lateinit var mViewModel: HomeFragmentViewModel
-    private lateinit var postAdapter2: PostsAdapter2
     var myTag: String = "MyTag"
 
     override fun onCreateView(
@@ -84,9 +83,7 @@ class HomeFragment : Fragment() {
                 totalItems = rv_Posts.layoutManager?.itemCount!!
                 scrollOutItems = (rv_Posts.layoutManager as LinearLayoutManager).findFirstVisibleItemPosition()
 
-                Log.d(myTag,
-                    " currentItems : $currentItems  totalItems : $totalItems scrollOutItems :$scrollOutItems"
-                )
+//                Log.d(myTag," currentItems : $currentItems  totalItems : $totalItems scrollOutItems :$scrollOutItems")
 
 //                isScrolling &&
                 if (isScrolling && currentItems + scrollOutItems == totalItems) {

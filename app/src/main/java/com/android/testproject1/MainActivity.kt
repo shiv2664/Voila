@@ -13,6 +13,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.android.testproject1.fragments.CreatePost
 import com.android.testproject1.fragments.*
+import com.android.testproject1.model.Offer
 import com.android.testproject1.model.Post
 import com.android.testproject1.model.Users
 import com.android.testproject1.room.enteties.AppDatabase
@@ -131,7 +132,7 @@ class MainActivity : AppCompatActivity() ,IMainActivity {
         TODO("Not yet implemented")
     }
 
-    override fun onRecyclerViewItemClick(postItem: Post) {
+    override fun onRecyclerViewItemClick(offerItem: Offer) {
         TODO("Not yet implemented")
 //        val fragment = DetailsFragment()
 //

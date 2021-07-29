@@ -11,10 +11,8 @@ import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
-import androidx.fragment.app.Fragment
 import com.android.testproject1.adapter.PagerPhotosAdapter
-import com.android.testproject1.fragments.HomeFragment
-import com.android.testproject1.services.UploadService
+import com.android.testproject1.services.UploadServicePosts
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.nguyenhoanglam.imagepicker.model.Image
@@ -91,7 +89,7 @@ class CreatePost : AppCompatActivity() {
                 sharedPreferences.edit().putInt("count", ++serviceCount).apply()
                 Log.d(myTag, "On click  sp $serviceCount")
 
-                val intent = Intent(this, UploadService::class.java)
+                val intent = Intent(this, UploadServicePosts::class.java)
 
                 intent.putExtra("count", serviceCount)
 
@@ -107,7 +105,7 @@ class CreatePost : AppCompatActivity() {
 
                 intent.putExtra("description",descriptionTextMain.text.toString().trim())
 
-                intent.action = UploadService.ACTION_START_FOREGROUND_SERVICE
+                intent.action = UploadServicePosts.ACTION_START_FOREGROUND_SERVICE_UPLOAD_POST
 
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                     startForegroundService(intent)
@@ -119,22 +117,10 @@ class CreatePost : AppCompatActivity() {
                     Log.d(myTag, "Build Version NP")
 //                activity!!.startService(intent)
                     startService(intent)
-
                 }
-                Toasty.info(this, "Uploading images..", Toasty.LENGTH_SHORT, true)
-                    .show()
+                Toasty.info(this, "Uploading images..", Toasty.LENGTH_SHORT, true).show()
                 finish()
-
-//                val fragment: Fragment = HomeFragment()
-//                supportFragmentManager
-//                    .beginTransaction()
-//                    .replace(R.id.container, fragment)
-//                    .commit()
-
-
             }
-
-
         }
 
         return super.onOptionsItemSelected(item)

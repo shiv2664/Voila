@@ -72,15 +72,15 @@ class ChatFragment : Fragment() {
             }
         }
 
-        val toolbar = binding.myToolbar
-        (activity as AppCompatActivity).setSupportActionBar(toolbar)
-        if (groupItem != null) {
-            (activity as AppCompatActivity).supportActionBar?.title = groupItem.name
-        }
-        setHasOptionsMenu(true)
+//        val toolbar = binding.myToolbar
+//        (activity as AppCompatActivity).setSupportActionBar(toolbar)
+//        if (groupItem != null) {
+//            (activity as AppCompatActivity).supportActionBar?.title = groupItem.name
+//        }
+//        setHasOptionsMenu(true)
 
 
-        requireActivity().bottomAppBar.visibility=View.GONE
+//        requireActivity().bottomAppBar.visibility=View.GONE
         firebseauth= FirebaseAuth.getInstance()
 
         if (groupItem != null) {
@@ -217,12 +217,12 @@ class ChatFragment : Fragment() {
     }
 
     override fun onResume() {
-        requireActivity().bottomAppBar.visibility=View.GONE
+//        requireActivity().bottomAppBar.visibility=View.GONE
         super.onResume()
     }
 
     override fun onPause() {
-        requireActivity().bottomAppBar.visibility=View.VISIBLE
+//        requireActivity().bottomAppBar.visibility=View.VISIBLE
         super.onPause()
     }
 
