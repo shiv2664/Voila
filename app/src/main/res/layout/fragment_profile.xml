@@ -10,7 +10,7 @@
         android:id="@+id/htab_maincontent"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginBottom="56dp">
+        android:background="@color/colorWhite">
 
         <!--        android:background="?attr/colorPrimary"-->
         <com.google.android.material.appbar.AppBarLayout

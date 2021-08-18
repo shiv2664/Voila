@@ -6,68 +6,127 @@
 
     </data>
 
-<!--            app:footer="@layout/duo_view_footer"-->
-    <nl.psdcompany.duonavigationdrawer.views.DuoDrawerLayout
-        android:id="@+id/drawer"
+    <androidx.coordinatorlayout.widget.CoordinatorLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <nl.psdcompany.duonavigationdrawer.views.DuoMenuView
-            android:id="@+id/duoMenuView"
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/toolbar"
+            app:title="Home"
+            app:titleTextColor="@color/black"
             android:layout_width="match_parent"
-            android:tag="@string/tag_menu"
-            app:header="@layout/nav_header"
-            android:layout_height="match_parent">
+            android:layout_height="?attr/actionBarSize"
+            android:background="@color/colorPrimary"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:theme="@style/ToolbarColoredBackArrow" />
 
-            <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent">
-
-                <include
-                    layout="@layout/drawer_menu"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="0dp"
-                    android:layout_marginTop="0dp"
-                    android:layout_marginBottom="0dp" />
-
-
-            </RelativeLayout>
-
-        </nl.psdcompany.duonavigationdrawer.views.DuoMenuView>
-
-        <androidx.constraintlayout.widget.ConstraintLayout
+        <FrameLayout
+            android:layout_marginTop="57dp"
+            android:layout_marginBottom="56dp"
+            android:id="@+id/container"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:tag="@string/tag_content">
+            />
 
-            <FrameLayout
-                android:id="@+id/container"
+        <ProgressBar
+            android:id="@+id/progressbar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:visibility="gone"/>
+
+        <com.google.android.material.bottomappbar.BottomAppBar
+            android:id="@+id/bottomAppBar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom"
+            app:elevation="8dp"
+            app:fabAlignmentMode="center"
+            app:fabCradleRoundedCornerRadius="32dp"
+            app:fabCradleMargin="10dp"
+            app:backgroundTint="@color/lightgrey"
+            app:fabCradleVerticalOffset="18dp"
+            app:buttonGravity="bottom">
+            <!--            app:backgroundTint="@color/greybackground"-->
+
+            <com.google.android.material.bottomnavigation.BottomNavigationView
+                android:id="@+id/bottomNav"
                 android:layout_width="match_parent"
-                android:layout_height="0dp"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintRight_toRightOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/toolbar" />
+                android:layout_height="match_parent"
+                android:layout_gravity="bottom"
+                android:background="@color/lightgrey"
+                app:menu="@menu/bottom_menu"
+                android:layout_marginEnd="16dp"
+                app:itemIconTint="@color/bottom_nav_selector" />
 
-<!--            android:background="@color/colorPrimary"-->
-<!--            app:theme="@style/ThemeOverlay.AppCompat.Dark"-->
-            <androidx.appcompat.widget.Toolbar
-                android:id="@+id/toolbar"
-                app:title="Home"
-                app:titleTextColor="@color/black"
-                android:layout_width="match_parent"
-                android:layout_height="?attr/actionBarSize"
-                android:elevation="4dp"
-                android:background="@color/colorPrimary"
-                app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintRight_toRightOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:theme="@style/ToolbarColoredBackArrow" />
+        </com.google.android.material.bottomappbar.BottomAppBar>
 
-        </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.coordinatorlayout.widget.CoordinatorLayout>
 
-    </nl.psdcompany.duonavigationdrawer.views.DuoDrawerLayout>
+<!--            app:footer="@layout/duo_view_footer"-->
+<!--    <nl.psdcompany.duonavigationdrawer.views.DuoDrawerLayout-->
+<!--        android:id="@+id/drawer"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="match_parent">-->
+
+<!--        <nl.psdcompany.duonavigationdrawer.views.DuoMenuView-->
+<!--            android:id="@+id/duoMenuView"-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:tag="@string/tag_menu"-->
+<!--            app:header="@layout/nav_header"-->
+<!--            android:layout_height="match_parent">-->
+
+<!--            <RelativeLayout-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="match_parent">-->
+
+<!--                <include-->
+<!--                    layout="@layout/drawer_menu"-->
+<!--                    android:layout_width="wrap_content"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    android:layout_marginStart="0dp"-->
+<!--                    android:layout_marginTop="0dp"-->
+<!--                    android:layout_marginBottom="0dp" />-->
+
+
+<!--            </RelativeLayout>-->
+
+<!--        </nl.psdcompany.duonavigationdrawer.views.DuoMenuView>-->
+
+<!--        <androidx.constraintlayout.widget.ConstraintLayout-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="match_parent"-->
+<!--            android:tag="@string/tag_content">-->
+
+<!--            <FrameLayout-->
+<!--                android:id="@+id/container"-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="0dp"-->
+<!--                app:layout_constraintBottom_toBottomOf="parent"-->
+<!--                app:layout_constraintLeft_toLeftOf="parent"-->
+<!--                app:layout_constraintRight_toRightOf="parent"-->
+<!--                app:layout_constraintTop_toBottomOf="@+id/toolbar" />-->
+
+<!--&lt;!&ndash;            android:background="@color/colorPrimary"&ndash;&gt;-->
+<!--&lt;!&ndash;            app:theme="@style/ThemeOverlay.AppCompat.Dark"&ndash;&gt;-->
+<!--            <androidx.appcompat.widget.Toolbar-->
+<!--                android:id="@+id/toolbar"-->
+<!--                app:title="Home"-->
+<!--                app:titleTextColor="@color/black"-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="?attr/actionBarSize"-->
+<!--                android:elevation="4dp"-->
+<!--                android:background="@color/colorPrimary"-->
+<!--                app:layout_constraintLeft_toLeftOf="parent"-->
+<!--                app:layout_constraintRight_toRightOf="parent"-->
+<!--                app:layout_constraintTop_toTopOf="parent"-->
+<!--                app:theme="@style/ToolbarColoredBackArrow" />-->
+
+<!--        </androidx.constraintlayout.widget.ConstraintLayout>-->
+
+<!--    </nl.psdcompany.duonavigationdrawer.views.DuoDrawerLayout>-->
 
 </layout>
 

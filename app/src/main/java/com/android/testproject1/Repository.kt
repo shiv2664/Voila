@@ -2,15 +2,10 @@ package com.android.testproject1
 
 import android.app.Application
 import android.util.Log
-import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import com.android.testproject1.model.Chat
+import com.android.testproject1.room.enteties.ChatRoomEntity
 import com.android.testproject1.model.Post
 import com.android.testproject1.model.Users
-import com.android.testproject1.room.enteties.AppDatabase
-import com.android.testproject1.room.enteties.PostRoomEntity
-import com.android.testproject1.room.enteties.AppDao
-import com.android.testproject1.services.App
 import com.google.firebase.auth.*
 import com.google.firebase.firestore.*
 import kotlinx.android.synthetic.main.activity_main.*
@@ -26,8 +21,8 @@ class Repository(private val application: Application)
     private val userPostList: MutableLiveData<MutableList<Post>> = MutableLiveData()
     private val userList: MutableLiveData<MutableList<Users>> = MutableLiveData()
     private val groupList: MutableLiveData<MutableList<Users>> = MutableLiveData()
-    private val chatList: MutableLiveData<MutableList<Chat>> = MutableLiveData()
-    private val groupChatList: MutableLiveData<MutableList<Chat>> = MutableLiveData()
+    private val chatList: MutableLiveData<MutableList<ChatRoomEntity>> = MutableLiveData()
+    private val groupChatList: MutableLiveData<MutableList<ChatRoomEntity>> = MutableLiveData()
     private val userChatList: MutableLiveData<MutableList<Users>> = MutableLiveData()
 
 
@@ -68,7 +63,7 @@ class Repository(private val application: Application)
     }
 
     fun loadChat(chatKey:String) {
-        val list2 = mutableListOf<Chat>()
+        val list2 = mutableListOf<ChatRoomEntity>()
 
 //        db.collection("Chats").document("UserChats").collection(chatKey)
         db.collection("Chats").document(chatKey).collection("UserChats")
@@ -83,7 +78,7 @@ class Repository(private val application: Application)
                     when (dc.type) {
 
                         DocumentChange.Type.ADDED ->{
-                            dc.document.toObject(Chat::class.java).let {
+                            dc.document.toObject(ChatRoomEntity::class.java).let {
                                 list2.add(it)
                             }
                             chatList.postValue(list2)
@@ -101,7 +96,7 @@ class Repository(private val application: Application)
 
     fun loadGroupChat(postId: String,groupId:String){
 
-        val list2 = mutableListOf<Chat>()
+        val list2 = mutableListOf<ChatRoomEntity>()
 
         db.collection("Posts").document(postId).collection("Groups")
             .document(groupId).collection("Chats")
@@ -116,7 +111,7 @@ class Repository(private val application: Application)
                     when (dc.type) {
 
                         DocumentChange.Type.ADDED ->{
-                            dc.document.toObject(Chat::class.java).let {
+                            dc.document.toObject(ChatRoomEntity::class.java).let {
                                 list2.add(it)
                             }
                             groupChatList.postValue(list2)
@@ -406,12 +401,12 @@ class Repository(private val application: Application)
     }
 
     @JvmName("getChatList")
-    fun getChatList(): MutableLiveData<MutableList<Chat>> {
+    fun getChatList(): MutableLiveData<MutableList<ChatRoomEntity>> {
         return chatList
     }
 
     @JvmName("getGroupChatList")
-    fun getGroupChatList(): MutableLiveData<MutableList<Chat>> {
+    fun getGroupChatList(): MutableLiveData<MutableList<ChatRoomEntity>> {
         return groupChatList
     }
 

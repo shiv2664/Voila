@@ -83,7 +83,7 @@ class HomeFragment : Fragment() {
                 totalItems = rv_Posts.layoutManager?.itemCount!!
                 scrollOutItems = (rv_Posts.layoutManager as LinearLayoutManager).findFirstVisibleItemPosition()
 
-//                Log.d(myTag," currentItems : $currentItems  totalItems : $totalItems scrollOutItems :$scrollOutItems")
+                Log.d(myTag," currentItems : $currentItems  totalItems : $totalItems scrollOutItems :$scrollOutItems")
 
 //                isScrolling &&
                 if (isScrolling && currentItems + scrollOutItems == totalItems) {

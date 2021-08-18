@@ -5,11 +5,11 @@
 
         <variable
             name="chatMessage"
-            type="com.android.testproject1.model.Chat" />
+            type="com.android.testproject1.room.enteties.ChatRoomEntity" />
 
         <variable
             name="listener"
-            type="com.android.testproject1.IMainActivity" />
+            type="com.android.testproject1.interfaces.IMainActivity" />
 
     </data>
 

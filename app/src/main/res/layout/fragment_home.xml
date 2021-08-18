@@ -6,7 +6,7 @@
 
         <variable
             name="listener"
-            type="com.android.testproject1.IMainActivity" />
+            type="com.android.testproject1.interfaces.IMainActivity" />
 
         <import type="java.util.List"/>
         <import type="com.android.testproject1.model.Post"/>
@@ -30,8 +30,7 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/greyprofile"
-        >
+        android:background="@color/greyprofile">
 
 <!--        <com.google.android.material.appbar.AppBarLayout-->
 <!--            android:visibility="gone"-->
@@ -58,9 +57,8 @@
             android:id="@+id/rv_Posts"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            app:bindhomerecyclerview="@{dataList}"
             android:layoutAnimation="@anim/layout_animation_fall_down"
-            />
+            app:bindhomerecyclerview="@{dataList}" />
 
 
     </RelativeLayout>

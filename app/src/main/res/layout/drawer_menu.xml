@@ -17,7 +17,7 @@
 
 
         <LinearLayout
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
             android:layout_marginBottom="48dp"
@@ -26,7 +26,7 @@
 
             <androidx.appcompat.widget.AppCompatButton
                 android:id="@+id/Home"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="16dp"
                 android:background="@android:color/transparent"
@@ -40,7 +40,7 @@
 
             <androidx.appcompat.widget.AppCompatButton
                 android:id="@+id/Discover"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="16dp"
                 android:fontFamily="@font/segoe_ui_regular"
@@ -54,7 +54,7 @@
 
             <androidx.appcompat.widget.AppCompatButton
                 android:id="@+id/Search"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="16dp"
                 android:fontFamily="@font/segoe_ui_regular"
@@ -67,8 +67,22 @@
                 android:text="Search"/>
 
             <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/Friends"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="16dp"
+                android:fontFamily="@font/segoe_ui_regular"
+                android:background="@android:color/transparent"
+                android:drawableStart="@drawable/ic_forum_black_24dp"
+                android:drawablePadding="16dp"
+                android:gravity="center_vertical"
+                android:includeFontPadding="false"
+                android:paddingHorizontal="16dp"
+                android:text="Friends"/>
+
+            <androidx.appcompat.widget.AppCompatButton
                 android:id="@+id/Messages"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="16dp"
                 android:fontFamily="@font/segoe_ui_regular"
@@ -82,7 +96,7 @@
 
             <androidx.appcompat.widget.AppCompatButton
                 android:id="@+id/Profile"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/segoe_ui_regular"
                 android:background="@android:color/transparent"
@@ -99,7 +113,7 @@
 
         <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/SignOut"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:fontFamily="@font/segoe_ui_regular"
             android:background="@android:color/transparent"

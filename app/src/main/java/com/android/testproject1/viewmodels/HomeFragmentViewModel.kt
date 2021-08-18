@@ -39,14 +39,15 @@ class HomeFragmentViewModel(application: Application): AndroidViewModel(applicat
 
     fun loadNotes() {
 
+        Log.d(myTAG,"last result is : "+lastResult?.toObject(Post::class.java)?.postId)
 
         val query: Query= if (lastResult == null) {
             db.collection("Posts").orderBy("timestamp", Query.Direction.DESCENDING)
-                .limit(5)
+                .limit(10)
         } else {
             db.collection("Posts").orderBy("timestamp", Query.Direction.DESCENDING)
                 .startAfter(lastResult?.toObject(Post::class.java)?.timestamp)
-                .limit(5)
+                .limit(10)
         }
 
 
@@ -57,11 +58,11 @@ class HomeFragmentViewModel(application: Application): AndroidViewModel(applicat
                 for (documentSnapshot in queryDocumentSnapshots) {
                     val post: Post = documentSnapshot.toObject(Post::class.java)
                     list2.addAll(listOf(post))
-//                    Log.d(myTAG,"post Ids are "+post.postId)
+                    Log.d(myTAG,"post Ids are "+post.postId)
                     postList.postValue(list2)
                 }
 
-//                Log.d(myTAG,"query Snapshot size "+queryDocumentSnapshots.size())
+                Log.d(myTAG,"query Snapshot size "+queryDocumentSnapshots.size())
                 if (queryDocumentSnapshots.size() > 0) {
                     lastResult = queryDocumentSnapshots.documents[queryDocumentSnapshots.size() - 1]
                 }

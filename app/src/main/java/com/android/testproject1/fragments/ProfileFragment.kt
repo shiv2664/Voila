@@ -37,7 +37,7 @@ class ProfileFragment : Fragment() {
         adapter = ViewPager2Adapter(fmc, viewLifecycleOwner.lifecycle)
         binding.pager.adapter = adapter
         binding.tabLayout.addTab(binding.tabLayout.newTab().setText("Posts"));
-        binding.tabLayout.addTab(binding.tabLayout.newTab().setText("User Info"));
+        binding.tabLayout.addTab(binding.tabLayout.newTab().setText("Saved"));
         binding.pager.setPageTransformer(DepthPageTransform())
 
         binding.tabLayout.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {

@@ -1,0 +1,458 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+
+    <data>
+
+        <variable
+            name="offerItem"
+            type="com.android.testproject1.room.enteties.OffersSavedRoomEntity" />
+
+        <variable
+            name="listener"
+            type="com.android.testproject1.interfaces.IMainActivity" />
+
+    </data>
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+
+        <!--        android:layout_marginLeft="11dp"-->
+        <!--        android:layout_marginRight="11dp"-->
+        <!--        android:layout_marginTop="7dp"-->
+        <!--        android:layout_marginBottom="7dp"-->
+        <!--        app:cardElevation="@dimen/cardview_default_elevation"-->
+        <!--        app:cardCornerRadius="10dp"-->
+        <androidx.cardview.widget.CardView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+
+            android:layout_marginBottom="-4dp"
+            android:layout_marginLeft="3dp"
+            android:layout_marginStart="3dp"
+            android:layout_marginRight="3dp"
+            android:layout_marginEnd="3dp"
+            app:cardCornerRadius="10dp"
+            app:cardElevation="2dp"
+            app:cardUseCompatPadding="true"
+            >
+
+            <RelativeLayout
+                android:background="?android:attr/selectableItemBackground"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <com.google.android.material.imageview.ShapeableImageView
+                    android:id="@+id/img"
+                    app:backgroundImage="@{offerItem.image_url_0}"
+                    android:transitionName="img"
+                    android:layout_width="match_parent"
+                    android:layout_height="280dp"
+                    android:scaleType="fitXY"/>
+
+                <ImageView
+                    android:id="@+id/shadow_bottom"
+                    android:background="@drawable/bottom_shadow"
+                    android:layout_alignBottom="@id/img"
+                    android:layout_width="match_parent"
+                    android:layout_height="80dp" />
+
+                <ProgressBar
+                    android:visibility="gone"
+                    android:id="@+id/prograss_load_photo"
+                    style="@android:style/Widget.DeviceDefault.Light.ProgressBar.Small"
+                    android:layout_marginTop="70dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
+
+                <!--            <TextView-->
+                <!--                android:id="@+id/author"-->
+                <!--                android:layout_width="match_parent"-->
+                <!--                android:layout_height="30dp"-->
+                <!--                android:drawablePadding="10dp"-->
+                <!--                android:ellipsize="end"-->
+                <!--                android:maxLines="1"-->
+                <!--                android:singleLine="true"-->
+                <!--                android:layout_marginRight="160dp"-->
+                <!--                android:text="Author"-->
+                <!--                android:gravity="bottom"-->
+                <!--                android:layout_alignLeft="@+id/title"-->
+                <!--                android:layout_alignStart="@+id/title"-->
+                <!--                android:layout_alignRight="@id/layoutDate"-->
+                <!--                android:layout_alignTop="@+id/layoutDate"-->
+                <!--                android:layout_alignEnd="@id/layoutDate"/>-->
+
+
+                <RelativeLayout
+                    android:paddingBottom="5dp"
+                    android:layout_alignStart="@+id/detailsLayout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_alignBottom="@id/img">
+
+                    <de.hdodenhof.circleimageview.CircleImageView
+                        android:id="@+id/profileImage"
+                        android:layout_width="50dp"
+                        android:layout_height="50dp"
+                        android:src="@drawable/person3" />
+
+                    <!--                    android:layout_toStartOf="@+id/locationLayout"-->
+                    <RelativeLayout
+                        android:layout_toStartOf="@+id/priceLayout"
+                        android:layout_toEndOf="@+id/profileImage"
+                        android:layout_centerVertical="true"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:paddingStart="1dp"
+                        android:paddingEnd="1dp">
+                        <LinearLayout
+                            android:id="@+id/ratingsLayout"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentStart="true"
+                            android:layout_marginStart="10dp"
+                            android:layout_marginEnd="10dp"
+                            android:orientation="horizontal">
+                            <ImageView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:background="@drawable/ic_baseline_star_24"/>
+                            <ImageView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:background="@drawable/ic_baseline_star_24"/>
+                            <ImageView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:background="@drawable/ic_baseline_star_24"/>
+                            <ImageView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:background="@drawable/ic_baseline_star_24"/>
+                            <ImageView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:background="@drawable/ic_baseline_star_24"/>
+                            <RelativeLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content">
+                                <TextView
+                                    android:id="@+id/Ratings"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_centerHorizontal="true"
+                                    android:text="32"
+                                    android:textColor="@color/colorTextWhite"
+                                    android:textSize="16sp"/>
+
+                            </RelativeLayout>
+
+                        </LinearLayout>
+
+                    </RelativeLayout>
+
+
+                    <RelativeLayout
+                        android:id="@+id/priceLayout"
+                        android:layout_centerVertical="true"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/round_white"
+                        android:padding="5dp"
+                        android:layout_marginEnd="20dp"
+                        android:layout_alignParentEnd="true">
+
+                        <TextView
+                            android:id="@+id/DiscountedPrice"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:fontFamily="sans-serif-light"
+                            android:textSize="18sp"
+                            android:padding="2dp"
+                            android:hint="₹1999"
+                            android:textStyle="bold"
+                            android:maxLines="1"
+                            android:singleLine="true"
+                            android:text="@{`₹`+offerItem.discountPrice}" />
+
+                    </RelativeLayout>
+
+                    <!--                    <RelativeLayout-->
+                    <!--                        android:id="@+id/locationLayout"-->
+                    <!--                        android:layout_centerVertical="true"-->
+                    <!--                        android:layout_width="wrap_content"-->
+                    <!--                        android:layout_height="wrap_content"-->
+                    <!--                        android:background="@drawable/round_white"-->
+                    <!--                        android:padding="5dp"-->
+                    <!--                        android:layout_marginEnd="20dp"-->
+                    <!--                        android:layout_alignParentEnd="true">-->
+
+                    <!--                        <ImageView-->
+                    <!--                            android:src="@drawable/ic_location_24dp"-->
+                    <!--                            android:onClick="@{()->listener.onLocationClick()}"-->
+                    <!--                            android:layout_width="18dp"-->
+                    <!--                            android:layout_height="18dp"-->
+                    <!--                            android:layout_marginLeft="5dp"-->
+                    <!--                            android:layout_marginRight="5dp" />-->
+
+                    <!--                        <TextView-->
+                    <!--                            android:textColor="#606060"-->
+                    <!--                            android:onClick="@{()->listener.onLocationClick()}"-->
+                    <!--                            android:id="@+id/publishedAt"-->
+                    <!--                            android:layout_marginStart="27dp"-->
+                    <!--                            android:layout_marginEnd="10dp"-->
+                    <!--                            android:text="@{offerItem.city}"-->
+                    <!--                            android:layout_width="wrap_content"-->
+                    <!--                            android:layout_height="wrap_content" />-->
+                    <!--                    </RelativeLayout>-->
+
+
+
+                </RelativeLayout>
+
+
+
+                <LinearLayout
+                    android:orientation="vertical"
+                    android:id="@+id/detailsLayout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="16dp"
+                    android:layout_marginRight="16dp"
+                    android:layout_marginTop="10dp"
+                    android:layout_below="@id/img">
+
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+
+                        <TextView
+                            android:layout_centerVertical="true"
+                            android:layout_alignParentStart="true"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:fontFamily="sans-serif-light"
+                            android:textStyle="bold"
+                            android:layout_marginEnd="10dp"
+                            android:text="@{`Eligibility : `+offerItem.minPeople+`+ People`}"
+                            android:maxLines="1"
+                            android:textSize="16sp"
+                            android:id="@+id/eligiblity" />
+
+                        <RelativeLayout
+                            android:id="@+id/locationLayout"
+                            android:layout_toEndOf="@id/eligiblity"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:background="@drawable/round_white"
+                            android:padding="5dp"
+                            android:layout_marginEnd="20dp">
+
+                            <ImageView
+                                android:src="@drawable/ic_location_24dp"
+                                android:onClick="@{()->listener.onLocationClick()}"
+                                android:layout_width="18dp"
+                                android:layout_height="18dp"
+                                android:layout_marginLeft="5dp"
+                                android:layout_marginRight="5dp" />
+
+                            <TextView
+                                android:textColor="#606060"
+                                android:onClick="@{()->listener.onLocationClick()}"
+                                android:id="@+id/publishedAt"
+                                android:layout_marginStart="27dp"
+                                android:layout_marginEnd="10dp"
+                                android:text="@{offerItem.city}"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content" />
+                        </RelativeLayout>
+
+                        <!--                        <com.github.ivbaranov.mfb.MaterialFavoriteButton-->
+                        <!--                            android:id="@+id/like_button"-->
+                        <!--                            app:mfb_animate_favorite="true"-->
+                        <!--                            app:mfb_animate_unfavorite="false"-->
+                        <!--                            app:mfb_rotation_duration="400"-->
+                        <!--                            app:mfb_rotation_angle="360"-->
+                        <!--                            app:mfb_bounce_duration="300"-->
+                        <!--                            android:layout_alignParentEnd="true"-->
+                        <!--                            android:layout_width="wrap_content"-->
+                        <!--                            android:layout_height="wrap_content"-->
+                        <!--                            app:mfb_not_favorite_image="@drawable/ic_bookmark_border_black_24dp"-->
+                        <!--                            app:mfb_favorite_image="@drawable/ic_baseline_bookmark_24" />-->
+
+
+                        <!--                        android:onClick="@{()->listener.onBookMarkItemClick(offerItem)}"-->
+                        <ImageView
+                            android:id="@+id/bookMark"
+                            android:layout_width="30dp"
+                            android:layout_height="30dp"
+                            android:layout_alignParentEnd="true"
+                            android:src="@drawable/ic_bookmark_border_black_24dp" />
+
+
+
+                    </RelativeLayout>
+
+
+                    <TextView
+                        android:layout_marginTop="10dp"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="sans-serif-light"
+                        android:textStyle="bold"
+                        android:layout_marginEnd="10dp"
+                        android:text="@{offerItem.name}"
+                        android:maxLines="2"
+                        android:textSize="18sp"
+                        android:id="@+id/title" />
+
+
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:padding="1dp">
+
+                        <TextView
+                            android:layout_marginEnd="10dp"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:fontFamily="sans-serif-light"
+                            android:textStyle="bold"
+                            android:text="@{offerItem.title}"
+                            android:maxLines="3"
+                            android:textSize="17sp"
+                            android:layout_marginTop="10dp"
+                            android:layout_toStartOf="@+id/priceCardView"
+                            android:id="@+id/offer" />
+                        <!--                        android:layout_toStartOf="@+id/DiscountedPrice"-->
+
+                        <androidx.cardview.widget.CardView
+                            android:id="@+id/priceCardView"
+                            android:layout_marginTop="10dp"
+                            android:layout_marginEnd="4dp"
+                            android:layout_alignParentEnd="true"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            app:contentPadding="5dp"
+                            app:cardCornerRadius="10dp">
+
+                            <!--                            <TextView-->
+                            <!--                                android:id="@+id/DiscountedPrice"-->
+                            <!--                                android:layout_width="wrap_content"-->
+                            <!--                                android:layout_height="wrap_content"-->
+                            <!--                                android:fontFamily="sans-serif-light"-->
+                            <!--                                android:textSize="20sp"-->
+                            <!--                                android:padding="2dp"-->
+                            <!--                                android:hint="1999"-->
+                            <!--                                android:textStyle="bold"-->
+                            <!--                                android:maxLines="1"-->
+                            <!--                                android:singleLine="true"-->
+                            <!--                                android:text="@{`₹`+offerItem.discountPrice}" />-->
+
+                        </androidx.cardview.widget.CardView>
+                    </RelativeLayout>
+
+                    <com.borjabravo.readmoretextview.ReadMoreTextView
+                        android:id="@+id/desc"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="5dp"
+                        app:trimMode="trimModeLine"
+                        app:trimLines="5"
+                        android:text="@{offerItem.description}"/>
+
+                    <!--                    <TextView-->
+                    <!--                        android:id="@+id/DiscountedPrice"-->
+                    <!--                        android:layout_width="match_parent"-->
+                    <!--                        android:layout_height="wrap_content"-->
+                    <!--                        android:textSize="24sp"-->
+                    <!--                        android:layout_marginTop="10dp"-->
+                    <!--                        android:layout_marginBottom="20dp"-->
+                    <!--                        android:fontFamily="sans-serif-light"-->
+                    <!--                        android:textStyle="bold"-->
+                    <!--                        android:maxLines="1"-->
+                    <!--                        android:singleLine="true"-->
+                    <!--                        android:text="@{`₹`+offerItem.discountPrice}" />-->
+
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+
+                        <!--                        <com.google.android.material.button.MaterialButton-->
+                        <!--                            android:id="@+id/Pay"-->
+                        <!--                            android:layout_width="wrap_content"-->
+                        <!--                            android:layout_height="wrap_content"-->
+                        <!--                            android:text="Pay"-->
+                        <!--                            app:backgroundTint="@color/colorAccentt"-->
+                        <!--                            app:cornerRadius="10dp"-->
+                        <!--                            android:layout_marginTop="10dp"-->
+                        <!--                            android:layout_marginBottom="20dp"-->
+                        <!--                            style="@style/Widget.MaterialComponents.Button.OutlinedButton"/>-->
+
+                        <!--                        android:onClick="@{()->listener.onRecyclerViewItemClick()}"-->
+
+                        <!--                        android:onClick="@{()->listener.onRecyclerViewItemClick(offerItem)}"-->
+                        <com.google.android.material.button.MaterialButton
+                            android:id="@+id/Groups"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="Groups"
+
+                            app:backgroundTint="@color/colorAccentt"
+                            app:cornerRadius="10dp"
+                            android:layout_alignParentEnd="true"
+                            android:layout_marginTop="10dp"
+                            android:layout_marginBottom="20dp"
+                            style="@style/Widget.MaterialComponents.Button.OutlinedButton"/>
+
+                        <!--                        <TextView-->
+                        <!--                            android:id="@+id/source"-->
+                        <!--                            android:layout_width="wrap_content"-->
+                        <!--                            android:layout_height="20dp"-->
+                        <!--                            android:layout_marginTop="10dp"-->
+                        <!--                            android:layout_marginBottom="20dp"-->
+                        <!--                            android:fontFamily="sans-serif-light"-->
+                        <!--                            android:textStyle="bold"-->
+                        <!--                            android:maxLines="1"-->
+                        <!--                            android:textSize="16sp"-->
+                        <!--                            android:drawablePadding="10dp"-->
+                        <!--                            android:singleLine="true"-->
+                        <!--                            android:ellipsize="end"-->
+                        <!--                            android:text="Pay" />-->
+
+
+                        <!--                        <TextView-->
+                        <!--                            android:layout_alignParentEnd="true"-->
+                        <!--                            android:id="@+id/JoinGroupRecyclerView"-->
+                        <!--                            android:layout_width="wrap_content"-->
+                        <!--                            android:fontFamily="sans-serif-light"-->
+                        <!--                            android:layout_height="20dp"-->
+                        <!--                            android:textStyle="bold"-->
+                        <!--                            android:textSize="16sp"-->
+                        <!--                            android:onClick="@{()->listener.onLocationClick()}"-->
+                        <!--                            android:layout_marginTop="10dp"-->
+                        <!--                            android:layout_marginBottom="10dp"-->
+                        <!--                            android:maxLines="1"-->
+                        <!--                            android:drawablePadding="10dp"-->
+                        <!--                            android:singleLine="true"-->
+                        <!--                            android:ellipsize="end"-->
+                        <!--                            android:text="Join/Create group" />-->
+
+
+
+                    </RelativeLayout>
+
+                </LinearLayout>
+
+
+
+
+            </RelativeLayout>
+
+        </androidx.cardview.widget.CardView>
+
+    </FrameLayout>
+</layout>

@@ -6,11 +6,9 @@ import android.view.ViewGroup
 import androidx.databinding.ViewDataBinding
 import androidx.recyclerview.widget.RecyclerView
 import com.android.testproject1.BR
-import com.android.testproject1.IMainActivity
+import com.android.testproject1.interfaces.IMainActivity
 import com.android.testproject1.databinding.ItemDiscoverBinding
-import com.android.testproject1.databinding.SearchRecyclerviewGridBinding
 import com.android.testproject1.model.Offer
-import com.android.testproject1.model.ProductExplore
 
 class SearchAdapter2(private val context: Context,
                      private var offerList:MutableList<Offer>): RecyclerView.

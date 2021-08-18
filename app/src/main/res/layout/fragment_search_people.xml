@@ -5,7 +5,19 @@
 
     <data>
 
+        <variable
+            name="listener"
+            type="com.android.testproject1.interfaces.IMainActivity" />
+
+        <import type="java.util.List"/>
+        <import type="com.android.testproject1.model.Users"/>
+
+        <variable
+            name="userList"
+            type="List&lt;com.android.testproject1.model.Users>"/>
+
     </data>
+
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -14,6 +26,7 @@
         android:orientation="vertical">
 
         <androidx.appcompat.widget.SearchView
+            android:id="@+id/FindPeopleSearchView"
             android:layout_marginTop="2dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -21,6 +34,7 @@
 
         <androidx.recyclerview.widget.RecyclerView
             android:layout_marginTop="5sp"
+            app:bindSearchPeopleRecyclerview="@{userList}"
             android:id="@+id/searchPeopleRecyclerView"
             android:layout_width="match_parent"
             android:layout_height="match_parent"/>

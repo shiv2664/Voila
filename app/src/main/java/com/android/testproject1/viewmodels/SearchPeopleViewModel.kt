@@ -26,9 +26,13 @@ class SearchPeopleViewModel(application: Application) :AndroidViewModel(applicat
         return userList
     }
 
+    fun setNull(){
+        lastResult=null
+    }
 
     fun loadUsers(userName:String) {
 
+        list2.clear()
 
         val query: Query = if (lastResult == null) {
             db.collection("Users").whereEqualTo("name",userName)
@@ -37,7 +41,8 @@ class SearchPeopleViewModel(application: Application) :AndroidViewModel(applicat
         } else {
             db.collection("Users").whereEqualTo("name",userName)
 //                .orderBy("timestamp", Query.Direction.DESCENDING)
-                .startAfter(lastResult?.toObject(Users::class.java)?.id)
+                .startAfter(lastResult)
+//                .startAfter(lastResult?.toObject(Users::class.java)?.id)
                 .limit(5)
         }
 

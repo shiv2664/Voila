@@ -21,7 +21,7 @@ class SearchFragment : Fragment() {
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
 
-//        context?.theme?.applyStyle(R.style.AppTheme, true);
+        context?.theme?.applyStyle(R.style.AppTheme, true);
         binding= FragmentSearchBinding.inflate(inflater,container,false)
 
         mViewModel = ViewModelProvider(this, ViewModelProvider.AndroidViewModelFactory

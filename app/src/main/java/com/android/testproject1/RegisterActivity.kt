@@ -1,28 +1,20 @@
 package com.android.testproject1
 
 import android.animation.ObjectAnimator
-import android.content.Intent
 import android.os.Bundle
-import android.renderscript.ScriptGroup
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.FragmentManager
-import com.android.testproject1.databinding.ActivityRegisterBinding
-import com.android.testproject1.databinding.FragmentHomeBinding
-import com.android.testproject1.databinding.FragmentLoginBinding
-import com.android.testproject1.databinding.FragmentSignUpBinding
 import com.android.testproject1.fragments.LoginFragment
 import com.android.testproject1.fragments.SignUpFragment
+import com.android.testproject1.interfaces.IMainActivity
+import com.android.testproject1.model.Notifications
 import com.android.testproject1.model.Offer
-import com.android.testproject1.model.Post
 import com.android.testproject1.model.Users
-import com.android.testproject1.room.enteties.PostRoomEntity
 import com.android.testproject1.room.enteties.UsersRoomEntity
 import kotlinx.android.synthetic.main.activity_register.*
-import kotlinx.android.synthetic.main.fragment_login.*
-import kotlinx.android.synthetic.main.fragment_sign_up.*
 
-class RegisterActivity : AppCompatActivity(),IMainActivity {
+class RegisterActivity : AppCompatActivity(), IMainActivity {
     private var fragmentmanager:FragmentManager?=null
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -78,6 +70,22 @@ class RegisterActivity : AppCompatActivity(),IMainActivity {
     }
 
     override fun onLocationClick() {
+        TODO("Not yet implemented")
+    }
+
+    override fun onSendFriendReqClick(userItem: Users) {
+        TODO("Not yet implemented")
+    }
+
+    override fun onNotificationItemClick(notificationsItem: Notifications) {
+        TODO("Not yet implemented")
+    }
+
+    override fun onSearchPeopleItemClick(userItem: Users) {
+        TODO("Not yet implemented")
+    }
+
+    override fun onBookMarkItemClick(offerItem: Offer) {
         TODO("Not yet implemented")
     }
 

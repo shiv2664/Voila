@@ -31,10 +31,10 @@ class Dashboard : Fragment(), BottomNavigationView.OnNavigationItemSelectedListe
         bottomNavigationView.setOnNavigationItemReselectedListener(this)
 
         if (navSelected=="1"){
-            loadfragment(SearchFragment())
+            loadFragment(SearchFragment())
             binding.bottomNav.selectedItemId= R.id.action_discover
         }else{
-            loadfragment(HomeFragment())
+            loadFragment(HomeFragment())
             binding.bottomNav.selectedItemId= R.id.action_home
         }
 
@@ -43,7 +43,7 @@ class Dashboard : Fragment(), BottomNavigationView.OnNavigationItemSelectedListe
     }
 
 
-    fun loadfragment(fragment: Fragment?) {
+    private fun loadFragment(fragment: Fragment?) {
         (activity as AppCompatActivity).supportFragmentManager
             .beginTransaction()
             .replace(R.id.frame_container, fragment!!)
@@ -54,12 +54,12 @@ class Dashboard : Fragment(), BottomNavigationView.OnNavigationItemSelectedListe
     override fun onNavigationItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             R.id.action_home -> {
-                loadfragment(HomeFragment())
+                loadFragment(HomeFragment())
                 activity?.toolbar?.title ="Home"
             }
             R.id.action_discover -> {
 //                add_post.setVisible(false)
-                loadfragment(SearchFragment())
+                loadFragment(SearchFragment())
                 activity?.toolbar?.title ="Discover"
             }
         }

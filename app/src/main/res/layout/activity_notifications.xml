@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="listener"
+            type="com.android.testproject1.interfaces.IMainActivity" />
+
+        <import type="java.util.List"/>
+        <import type="com.android.testproject1.model.Notifications"/>
+
+        <variable
+            name="dataList"
+            type="List&lt;Notifications>"/>
+
+    </data>
+
+    <RelativeLayout android:id="@+id/layout"
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <com.google.android.material.appbar.AppBarLayout
+            android:layout_alignParentTop="true"
+            android:id="@+id/top"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <androidx.appcompat.widget.Toolbar
+                android:id="@+id/toolbar"
+                app:title="Notifications"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+        </com.google.android.material.appbar.AppBarLayout>
+
+        <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+            android:layout_below="@+id/top"
+            android:id="@+id/refreshLayout"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <FrameLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/notificationsRecyclerView"
+                    app:bindnotificationrecyclerview="@{dataList}"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"/>
+
+                <LinearLayout
+                    android:id="@+id/default_item"
+                    android:visibility="gone"
+                    android:layout_gravity="center"
+                    android:orientation="vertical"
+                    android:gravity="center"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <ImageView
+                        android:layout_marginBottom="5dp"
+                        app:srcCompat="@drawable/ic_notifications_black_24dp"
+                        android:layout_width="100dp"
+                        android:layout_height="100dp"
+                        app:tint="@color/colorAccentt" />
+
+                    <TextView
+                        android:id="@+id/default_title"
+                        fontPath="fonts/GoogleSans_Bold.ttf"
+                        android:textSize="19sp"
+                        android:gravity="center"
+                        android:text="No notifications yet"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        tools:ignore="MissingPrefix" />
+
+                </LinearLayout>
+
+            </FrameLayout>
+
+        </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+
+
+    </RelativeLayout>
+
+
+</layout>

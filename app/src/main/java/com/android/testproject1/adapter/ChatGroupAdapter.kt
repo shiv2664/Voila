@@ -7,16 +7,16 @@ import android.view.ViewGroup
 import androidx.databinding.ViewDataBinding
 import androidx.recyclerview.widget.RecyclerView
 import com.android.testproject1.BR
-import com.android.testproject1.IMainActivity
+import com.android.testproject1.interfaces.IMainActivity
 import com.android.testproject1.databinding.ChatItemLeftBinding
 import com.android.testproject1.databinding.ChatItemRightBinding
-import com.android.testproject1.model.Chat
+import com.android.testproject1.room.enteties.ChatRoomEntity
 import com.google.firebase.auth.FirebaseAuth
 import java.text.DateFormat
 import java.text.SimpleDateFormat
 import java.util.*
 
-class ChatGroupAdapter(private val context: Context, private var chats: MutableList<Chat>): RecyclerView
+class ChatGroupAdapter(private val context: Context, private var chats: MutableList<ChatRoomEntity>): RecyclerView
 .Adapter<ChatGroupAdapter.BindingViewHolder>() {
 
     private val MSG_TYPE_LEFT = 0
@@ -48,7 +48,7 @@ class ChatGroupAdapter(private val context: Context, private var chats: MutableL
 
     }
 
-    fun updateData(newChatList: List<Chat>) {
+    fun updateData(newChatList: List<ChatRoomEntity>) {
         Log.d("MyTag size before ",chats.size.toString())
         chats.clear()
         Log.d("MyTag ",chats.size.toString())

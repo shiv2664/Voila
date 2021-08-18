@@ -6,7 +6,7 @@
     <data>
          <variable
             name="listener"
-            type="com.android.testproject1.IMainActivity" />
+            type="com.android.testproject1.interfaces.IMainActivity" />
 
     </data>
 

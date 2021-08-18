@@ -7,15 +7,14 @@ import android.view.View
 import android.view.ViewGroup
 import com.android.testproject1.R
 
-
-class ViewPagerFragmentUserInfo : Fragment() {
+class Friends : Fragment() {
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.frragment_viewpager_userinfo, container, false)
+        return inflater.inflate(R.layout.fragment_friends, container, false)
     }
 
 }

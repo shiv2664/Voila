@@ -4,6 +4,14 @@
 
     <data>
 
+        <variable
+            name="userItem"
+            type="com.android.testproject1.model.Users" />
+
+        <variable
+            name="listener"
+            type="com.android.testproject1.interfaces.IMainActivity" />
+
     </data>
 
     <androidx.cardview.widget.CardView
@@ -25,7 +33,9 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:clickable="true"
-            android:foreground="?attr/selectableItemBackground">
+            android:onClick="@{()->listener.onSearchPeopleItemClick(userItem)}"
+            android:foreground="?attr/selectableItemBackground"
+            android:focusable="true">
 
             <de.hdodenhof.circleimageview.CircleImageView
                 android:id="@+id/profileImageIv"
@@ -42,14 +52,14 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_centerVertical="true"
-                android:layout_toEndOf="@id/profileImageIv"
-                android:layout_toStartOf="@+id/buttonsContainerLl"
-                android:layout_marginTop="15dp"
-                android:layout_marginBottom="15dp"
-                android:layout_marginLeft="15dp"
                 android:layout_marginStart="15dp"
-                android:layout_marginRight="15dp"
+                android:layout_marginLeft="15dp"
+                android:layout_marginTop="15dp"
                 android:layout_marginEnd="15dp"
+                android:layout_marginRight="15dp"
+                android:layout_marginBottom="15dp"
+                android:layout_toStartOf="@+id/buttonsContainerLl"
+                android:layout_toEndOf="@id/profileImageIv"
                 android:gravity="center_horizontal|start"
                 android:orientation="vertical">
 
@@ -58,23 +68,23 @@
                     android:id="@+id/usernameTv"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textSize="15sp"
                     android:ellipsize="end"
                     android:lines="1"
-                    android:minLines="1"
                     android:maxLines="1"
-                    android:text="UserName"/>
+                    android:minLines="1"
+                    android:text="@{userItem.name}"
+                    android:textSize="15sp" />
 
                 <!--                android:textColor="@color/secondaryTextColor"-->
-<!--                <TextView-->
-<!--                    android:id="@+id/fullNameTv"-->
-<!--                    android:layout_width="wrap_content"-->
-<!--                    android:layout_height="wrap_content"-->
-<!--                    android:textSize="12sp"-->
-<!--                    android:ellipsize="end"-->
-<!--                    android:lines="1"-->
-<!--                    android:minLines="1"-->
-<!--                    android:maxLines="1"/>-->
+                <!--                <TextView-->
+                <!--                    android:id="@+id/fullNameTv"-->
+                <!--                    android:layout_width="wrap_content"-->
+                <!--                    android:layout_height="wrap_content"-->
+                <!--                    android:textSize="12sp"-->
+                <!--                    android:ellipsize="end"-->
+                <!--                    android:lines="1"-->
+                <!--                    android:minLines="1"-->
+                <!--                    android:maxLines="1"/>-->
 
             </LinearLayout>
 
@@ -91,7 +101,7 @@
 
                 <!--                tools:background="@drawable/user_action_button_idle_selector"-->
                 <ImageView
-                    android:id="@+id/firstButtonIv"
+                    android:id="@+id/addFriend"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:paddingTop="5dp"
@@ -100,13 +110,14 @@
                     android:paddingStart="15dp"
                     android:paddingRight="15dp"
                     android:paddingEnd="15dp"
+                    android:onClick="@{()->listener.onSendFriendReqClick(userItem)}"
                     android:layout_marginEnd="4dp"
                     android:background="@drawable/idle_button_selector"
-                    android:src="@drawable/ic_friend"/>
+                    android:src="@drawable/ic_baseline_person_add_24"/>
 
                 <!--                tools:background="@drawable/user_action_button_activated_selector"-->
                 <ImageView
-                    android:id="@+id/secondButtonIv"
+                    android:id="@+id/chatButton"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:paddingTop="5dp"
@@ -117,7 +128,7 @@
                     android:paddingEnd="15dp"
                     android:layout_marginStart="4dp"
                     android:background="@drawable/idle_button_selector"
-                    android:src="@drawable/bookmark2"/>
+                    android:src="@drawable/ic_baseline_chat_bubble_24"/>
 
             </LinearLayout>
 

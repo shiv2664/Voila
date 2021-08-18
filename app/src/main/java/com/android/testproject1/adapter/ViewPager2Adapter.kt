@@ -4,7 +4,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.Lifecycle
 import androidx.viewpager2.adapter.FragmentStateAdapter
-import com.android.testproject1.fragments.ViewPagerFragmentUserInfo
+import com.android.testproject1.fragments.ViewPagerFragmentSaved
 import com.android.testproject1.fragments.ViewpagerFragmentPosts
 
 
@@ -15,7 +15,7 @@ class ViewPager2Adapter(fragmentManager: FragmentManager, lifecycle: Lifecycle) 
 
         when (position) {
             0 -> { return ViewpagerFragmentPosts() }
-            1 -> {return ViewPagerFragmentUserInfo() }
+            1 -> {return ViewPagerFragmentSaved() }
         }
 
         return ViewpagerFragmentPosts()

@@ -7,9 +7,8 @@ import android.view.ViewGroup
 import androidx.databinding.ViewDataBinding
 import androidx.recyclerview.widget.RecyclerView
 import com.android.testproject1.BR
-import com.android.testproject1.IMainActivity
+import com.android.testproject1.interfaces.IMainActivity
 import com.android.testproject1.databinding.GroupRecyclerviewLayoutBinding
-import com.android.testproject1.model.Chat
 import com.android.testproject1.model.Users
 
 class GroupAdapter(private val context: Context, private var userList: MutableList<Users>): RecyclerView

@@ -7,9 +7,8 @@ import android.view.ViewGroup
 import androidx.databinding.ViewDataBinding
 import androidx.recyclerview.widget.RecyclerView
 import com.android.testproject1.BR
-import com.android.testproject1.IMainActivity
+import com.android.testproject1.interfaces.IMainActivity
 import com.android.testproject1.databinding.UserChatlistRecyclerviewLayoutBinding
-import com.android.testproject1.model.Users
 import com.android.testproject1.room.enteties.UsersRoomEntity
 
 class UserChatListAdapter(private val context: Context, private var userList: MutableList<UsersRoomEntity>): RecyclerView

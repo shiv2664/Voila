@@ -47,8 +47,6 @@ class MessagesFragment : Fragment() {
             binding.userChatList = it
         })
 
-
-
         return binding.root
     }
 

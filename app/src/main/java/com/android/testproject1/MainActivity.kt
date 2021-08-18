@@ -3,7 +3,6 @@ package com.android.testproject1
 import android.Manifest
 import android.content.pm.PackageManager
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
@@ -13,25 +12,21 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.android.testproject1.fragments.CreatePost
 import com.android.testproject1.fragments.*
+import com.android.testproject1.interfaces.IMainActivity
+import com.android.testproject1.model.Notifications
 import com.android.testproject1.model.Offer
-import com.android.testproject1.model.Post
 import com.android.testproject1.model.Users
-import com.android.testproject1.room.enteties.AppDatabase
-import com.android.testproject1.room.enteties.PostRoomEntity
 import com.android.testproject1.room.enteties.UsersRoomEntity
 import com.android.testproject1.viewmodels.MainActivityViewModel
-import com.google.android.gms.common.api.internal.ActivityLifecycleObserver.of
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore
-import com.google.firebase.firestore.SetOptions
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.fragment_home.*
 import java.util.*
 
 
-class MainActivity : AppCompatActivity() ,IMainActivity {
+class MainActivity : AppCompatActivity() , IMainActivity {
 
     companion object {
         private const val READ_PERMISSION_CODE = 100
@@ -206,6 +201,22 @@ class MainActivity : AppCompatActivity() ,IMainActivity {
     }
 
     override fun onLocationClick() {
+        TODO("Not yet implemented")
+    }
+
+    override fun onSendFriendReqClick(userItem: Users) {
+        TODO("Not yet implemented")
+    }
+
+    override fun onNotificationItemClick(notificationsItem: Notifications) {
+        TODO("Not yet implemented")
+    }
+
+    override fun onSearchPeopleItemClick(userItem: Users) {
+        TODO("Not yet implemented")
+    }
+
+    override fun onBookMarkItemClick(offerItem: Offer) {
         TODO("Not yet implemented")
     }
 

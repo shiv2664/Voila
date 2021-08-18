@@ -49,6 +49,6 @@
 
         </com.google.android.material.bottomappbar.BottomAppBar>
 
-
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
+
 </layout>

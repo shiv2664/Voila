@@ -7,14 +7,14 @@
 
         <variable
             name="listener"
-            type="com.android.testproject1.IMainActivity" />
+            type="com.android.testproject1.interfaces.IMainActivity" />
 
         <import type="java.util.List"/>
-        <import type="com.android.testproject1.model.Chat"/>
+        <import type="com.android.testproject1.room.enteties.ChatRoomEntity"/>
 
         <variable
             name="chatList"
-            type="List&lt;Chat>"/>
+            type="List&lt;ChatRoomEntity>"/>
 
 
     </data>
@@ -80,8 +80,6 @@
             android:layout_marginEnd="5dp"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_below="@+id/bar_layout"
-
             app:bindChat="@{chatList}"
             android:layout_above="@id/btnSend"
             android:layout_marginBottom="2dp"/>
@@ -115,13 +113,11 @@
 
         <com.getbase.floatingactionbutton.FloatingActionButton
             android:id="@+id/btnSend"
-            app:fab_colorNormal="@color/colorPrimaryDark"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            app:fab_icon="@drawable/ic_send_black_2dp"
             android:layout_alignParentEnd="true"
             android:layout_alignParentBottom="true"
-            />
+            app:fab_icon="@drawable/ic_send_black_2dp" />
 
 
 

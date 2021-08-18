@@ -4,19 +4,14 @@ import android.app.Application
 import android.util.Log
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.viewModelScope
 import com.android.testproject1.Repository
-import com.android.testproject1.model.Chat
 import com.android.testproject1.model.Post
 import com.android.testproject1.room.enteties.AppDatabase
-import com.android.testproject1.room.enteties.UsersRoomEntity
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.DocumentChange
 import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.Query
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
 
 class ViewPagerFragmentPostViewModel(application: Application) :AndroidViewModel(application) {
 

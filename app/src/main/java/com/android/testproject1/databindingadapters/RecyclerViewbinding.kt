@@ -1,11 +1,11 @@
 package com.android.testproject1.databindingadapters
 
 import androidx.databinding.BindingAdapter
-import androidx.recyclerview.widget.GridLayoutManager
-import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
+import androidx.recyclerview.widget.*
 import com.android.testproject1.adapter.*
 import com.android.testproject1.model.*
+import com.android.testproject1.room.enteties.ChatRoomEntity
+import com.android.testproject1.room.enteties.OffersSavedRoomEntity
 import com.android.testproject1.room.enteties.UsersRoomEntity
 
 
@@ -50,6 +50,41 @@ fun bindHomeRecyclerView(view: RecyclerView, dataList:List<Post>?) {
 
 }
 
+
+@BindingAdapter("bindnotificationrecyclerview")
+fun bindNotificationsRecyclerView(view: RecyclerView, dataList:List<Notifications>?) {
+
+//    if (dataList != null) {
+//        if (dataList.isEmpty())
+//            return
+//    }
+
+    val linearLayoutManager = LinearLayoutManager(view.context)
+    val layoutManager = view.layoutManager
+    if (layoutManager == null) {
+        view.layoutManager = linearLayoutManager
+    }
+
+    view.itemAnimator = DefaultItemAnimator()
+//    view.addItemDecoration(DividerItemDecoration(view.context, DividerItemDecoration.VERTICAL))
+    view.setHasFixedSize(true)
+
+    var adapter:NotificationsAdapter?= view.adapter as NotificationsAdapter?
+
+    if (adapter == null) {
+        if (dataList != null) {
+            adapter = NotificationsAdapter(view.context,dataList.toMutableList())
+            view.adapter = adapter
+        }
+    }
+    if (dataList != null) {
+        adapter?.updateData(dataList)
+    }
+
+}
+
+
+
 @BindingAdapter("bindprofilepostrecyclerview")
 fun bindRecyclerView(view: RecyclerView, dataList:List<Post>?) {
 
@@ -79,6 +114,7 @@ fun bindRecyclerView(view: RecyclerView, dataList:List<Post>?) {
 }
 
 
+
 @BindingAdapter("bindDetailsRecyclerView")
 fun bindList(view: RecyclerView,usersList: List<Users>?){
 
@@ -105,6 +141,35 @@ fun bindList(view: RecyclerView,usersList: List<Users>?){
     }
 
 }
+
+
+@BindingAdapter("bindSearchPeopleRecyclerview")
+fun bindPeopleSearchList(view: RecyclerView,usersList: List<Users>?){
+
+    if (usersList != null) {
+        if (usersList.isEmpty())
+            return
+    }
+    val linearLayoutManager = LinearLayoutManager(view.context)
+    val layoutManager = view.layoutManager
+    if (layoutManager == null) {
+        view.layoutManager = linearLayoutManager
+    }
+
+    var adapter:SearchPeopleAdapter?= view.adapter as SearchPeopleAdapter?
+
+    if (adapter == null) {
+        if (usersList != null) {
+            adapter = SearchPeopleAdapter(view.context,usersList.toMutableList())
+            view.adapter = adapter
+        }
+    }
+    if (usersList != null) {
+        adapter?.updateData(usersList)
+    }
+
+}
+
 
 @BindingAdapter("bindGroupList")
 fun bind(view: RecyclerView,usersList: List<Users>?){
@@ -167,7 +232,7 @@ fun bindUserChatList(view: RecyclerView,usersList: List<UsersRoomEntity>?){
 
 
 @BindingAdapter("bindChat")
-fun bindChat(view:RecyclerView,chatList:List<Chat>?) {
+fun bindChat(view:RecyclerView,chatList:List<ChatRoomEntity>?) {
     if (chatList != null) {
         if (chatList.isEmpty())
             return
@@ -200,7 +265,7 @@ fun bindChat(view:RecyclerView,chatList:List<Chat>?) {
 
 
 @BindingAdapter("bindGroupChat")
-fun bindGroupChat(view:RecyclerView,groupChatList:List<Chat>?) {
+fun bindGroupChat(view:RecyclerView,groupChatList:List<ChatRoomEntity>?) {
     if (groupChatList != null) {
         if (groupChatList.isEmpty())
             return
@@ -251,6 +316,36 @@ fun bindSearchRecyclerView(view: RecyclerView,dataList:List<Offer>?){
     if (adapter == null) {
         if (dataList != null) {
             adapter = SearchAdapter2(view.context,dataList.toMutableList())
+            view.adapter = adapter
+        }
+    }
+    if (dataList != null) {
+        adapter?.updateData(dataList)
+    }
+
+
+}
+
+
+@BindingAdapter("bindProfileSavedRecyclerView")
+fun bindProfileSavedRecyclerView(view: RecyclerView,dataList:List<OffersSavedRoomEntity>?){
+
+    if (dataList != null) {
+        if (dataList.isEmpty())
+            return
+    }
+
+    val linearLayoutManager = LinearLayoutManager(view.context)
+    val layoutManager = view.layoutManager
+    if (layoutManager == null) {
+        view.layoutManager = linearLayoutManager
+    }
+
+    var adapter:SavedOffersAdapter?= view.adapter as SavedOffersAdapter?
+
+    if (adapter == null) {
+        if (dataList != null) {
+            adapter = SavedOffersAdapter(view.context,dataList.toMutableList())
             view.adapter = adapter
         }
     }

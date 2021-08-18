@@ -96,11 +96,12 @@ class SignUpViewModel(application: Application) : AndroidViewModel(application) 
                                             firebaseFirestore.collection("Users").document(uid)
                                                 .collection("Offers").document("UploadedOffers")
                                                 .set(offerMap)
-                                        }.continueWith {
-                                            firebaseFirestore.collection("Users").document(uid)
-                                                .collection("Friends").document("UserFriends")
-                                                .set(chatListMap)
                                         }
+//                                        .continueWith {
+//                                            firebaseFirestore.collection("Users").document(uid)
+//                                                .collection("Friends").document("UserFriends")
+//                                                .set(chatListMap)
+//                                        }
                                 }
 
                             FirebaseMessaging.getInstance().token.addOnCompleteListener {

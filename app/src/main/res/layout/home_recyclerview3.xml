@@ -15,7 +15,7 @@
 
         <variable
             name="listener"
-            type="com.android.testproject1.IMainActivity" />
+            type="com.android.testproject1.interfaces.IMainActivity" />
 
     </data>
 
@@ -129,21 +129,20 @@
                         android:src="@drawable/person3" />
 
                     <TextView
-                        android:layout_marginStart="10dp"
-                        android:layout_marginEnd="10dp"
+                        android:id="@+id/title"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_centerVertical="true"
-                        android:fontFamily="@font/pacifico"
-                        android:layout_toEndOf="@+id/profileImage"
+                        android:layout_marginStart="10dp"
+                        android:layout_marginEnd="10dp"
                         android:layout_toStartOf="@+id/like_button"
-                        android:textColor="@color/colorTextWhite"
-                        android:textStyle="bold"
-                        android:text="@{postItem.name}"
+                        android:layout_toEndOf="@+id/profileImage"
                         android:paddingStart="1dp"
                         android:paddingEnd="1dp"
+                        android:text="@{postItem.name}"
+                        android:textColor="@color/colorTextWhite"
                         android:textSize="18sp"
-                        android:id="@+id/title" />
+                        android:textStyle="bold" />
 
 
                     <com.github.ivbaranov.mfb.MaterialFavoriteButton
@@ -201,9 +200,10 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="5dp"
-                        app:trimMode="trimModeLine"
+                        android:fontFamily="sans-serif"
+                        android:text="@{postItem.description}"
                         app:trimLines="5"
-                        android:text="@{postItem.description}"/>
+                        app:trimMode="trimModeLine" />
                     <!--                    <TextView-->
                     <!--                        android:visibility="invisible"-->
                     <!--                        android:id="@+id/source"-->

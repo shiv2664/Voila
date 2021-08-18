@@ -1,9 +1,8 @@
-package com.android.testproject1
+package com.android.testproject1.interfaces
 
+import com.android.testproject1.model.Notifications
 import com.android.testproject1.model.Offer
-import com.android.testproject1.model.Post
 import com.android.testproject1.model.Users
-import com.android.testproject1.room.enteties.PostRoomEntity
 import com.android.testproject1.room.enteties.UsersRoomEntity
 
 interface IMainActivity {
@@ -14,6 +13,10 @@ interface IMainActivity {
     fun onGroupItemClick(userItem: UsersRoomEntity)
     fun onGroupItemClick(userItem: Users)
     fun onLocationClick()
+    fun onSendFriendReqClick(userItem: Users)
+    fun onNotificationItemClick(notificationsItem: Notifications)
+    fun onSearchPeopleItemClick(userItem: Users)
+    fun onBookMarkItemClick(offerItem: Offer)
 //    fun onJoinRecyclerViewClick()
 //    fun onSignUpButtonClick()
 

@@ -7,7 +7,7 @@
 
         <variable
             name="listener"
-            type="com.android.testproject1.IMainActivity" />
+            type="com.android.testproject1.interfaces.IMainActivity" />
 
         <import type="java.util.List"/>
         <import type="com.android.testproject1.model.Post"/>

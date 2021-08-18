@@ -1,6 +1,5 @@
 package com.android.testproject1.fragments
 
-import android.app.Application
 import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -10,8 +9,7 @@ import android.view.animation.Animation
 import android.view.animation.AnimationUtils
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
-import com.android.testproject1.IMainActivity
-import com.android.testproject1.MainActivity
+import com.android.testproject1.interfaces.IMainActivity
 import com.android.testproject1.MainActivity2
 import com.android.testproject1.R
 import com.android.testproject1.databinding.FragmentLoginBinding

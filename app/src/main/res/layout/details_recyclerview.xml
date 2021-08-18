@@ -10,7 +10,7 @@
 
         <variable
             name="listener"
-            type="com.android.testproject1.IMainActivity" />
+            type="com.android.testproject1.interfaces.IMainActivity" />
 
     </data>
 
@@ -43,49 +43,49 @@
                 android:layout_height="40dp"
                 android:layout_alignParentStart="true"
                 android:layout_centerVertical="true"
+                android:layout_marginStart="15dp"
                 android:layout_marginTop="15dp"
                 android:layout_marginBottom="15dp"
-                android:layout_marginStart="15dp"
-                android:src="@drawable/person3"/>
+                android:src="@drawable/person3" />
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_centerVertical="true"
-                android:layout_toEndOf="@id/profileImageIv"
-                android:layout_toStartOf="@+id/buttonsContainerLl"
-                android:layout_marginTop="15dp"
-                android:layout_marginBottom="15dp"
-                android:layout_marginLeft="15dp"
                 android:layout_marginStart="15dp"
-                android:layout_marginRight="15dp"
+                android:layout_marginLeft="15dp"
+                android:layout_marginTop="15dp"
                 android:layout_marginEnd="15dp"
+                android:layout_marginRight="15dp"
+                android:layout_marginBottom="15dp"
+                android:layout_toStartOf="@+id/buttonsContainerLl"
+                android:layout_toEndOf="@id/profileImageIv"
                 android:gravity="center_horizontal|start"
                 android:orientation="vertical">
 
-<!--                android:textColor="@color/primaryTextColor"-->
+                <!--                android:textColor="@color/primaryTextColor"-->
                 <TextView
                     android:id="@+id/usernameTv"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textSize="15sp"
                     android:ellipsize="end"
                     android:lines="1"
-                    android:minLines="1"
                     android:maxLines="1"
-                    android:text="@{userItem.name}"/>
+                    android:minLines="1"
+                    android:text="@{userItem.name}"
+                    android:textSize="15sp" />
 
-<!--                android:textColor="@color/secondaryTextColor"-->
+                <!--                android:textColor="@color/secondaryTextColor"-->
                 <TextView
                     android:id="@+id/fullNameTv"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textSize="12sp"
                     android:ellipsize="end"
                     android:lines="1"
-                    android:minLines="1"
                     android:maxLines="1"
-                    android:text="Group Id"/>
+                    android:minLines="1"
+                    android:text="Group Id"
+                    android:textSize="12sp" />
 
             </LinearLayout>
 

@@ -7,7 +7,7 @@
 
         <variable
             name="listener"
-            type="com.android.testproject1.IMainActivity" />
+            type="com.android.testproject1.interfaces.IMainActivity" />
 
         <import type="java.util.List"/>
         <import type="com.android.testproject1.model.Users"/>
@@ -91,7 +91,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:src="@drawable/ic_baseline_people_outline_24"
-            app:backgroundTint="@color/colorPrimary"
+            app:backgroundTint="@color/colorAccentt"
             app:tint="@android:color/white"
             android:layout_alignParentEnd="true"
             android:layout_alignParentBottom="true"
@@ -139,7 +139,7 @@
 
 <!--        <variable-->
 <!--            name="listener"-->
-<!--            type="com.android.testproject1.IMainActivity" />-->
+<!--            type="com.android.testproject1.interfaces.IMainActivity" />-->
 
 <!--        <import type="java.util.List"/>-->
 <!--        <import type="com.android.testproject1.model.Users"/>-->

@@ -37,10 +37,10 @@ class ChatGroupFragment : Fragment() {
         savedInstanceState: Bundle?): View {
         binding=FragmentChatGroupBinding.inflate(inflater,container,false)
 
-        val toolbar = binding.myToolbar
-        (activity as AppCompatActivity).setSupportActionBar(toolbar)
-        (activity as AppCompatActivity).supportActionBar?.title = "Enjoyah"
-        setHasOptionsMenu(true)
+//        val toolbar = binding.myToolbar
+//        (activity as AppCompatActivity).setSupportActionBar(toolbar)
+//        (activity as AppCompatActivity).supportActionBar?.title = "Enjoyah"
+//        setHasOptionsMenu(true)
 
         auth= FirebaseAuth.getInstance()
         firestore= FirebaseFirestore.getInstance()
@@ -63,7 +63,6 @@ class ChatGroupFragment : Fragment() {
 
         })
 
-
         currentUserId?.let { it1 ->
             firestore.collection("Users").document(it1).get().addOnSuccessListener {
                 if (it!=null){
@@ -74,12 +73,6 @@ class ChatGroupFragment : Fragment() {
                 }
             }
         }
-
-
-
-
-
-
 
         binding.btnSend2.setOnClickListener {
 
@@ -166,18 +159,4 @@ class ChatGroupFragment : Fragment() {
 
     }
 
-    override fun onPause() {
-        requireActivity().bottomAppBar.visibility=View.VISIBLE
-        super.onPause()
-    }
-
-    override fun onDestroyView() {
-        requireActivity().bottomAppBar.visibility=View.VISIBLE
-        super.onDestroyView()
-    }
-
-    override fun onResume() {
-        requireActivity().bottomAppBar.visibility=View.GONE
-        super.onResume()
-    }
 }

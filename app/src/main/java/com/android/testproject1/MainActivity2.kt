@@ -16,33 +16,43 @@ import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.viewModelScope
 import com.afollestad.materialdialogs.MaterialDialog
 import com.android.testproject1.adapter.MenuAdapter
 import com.android.testproject1.fragments.*
+import com.android.testproject1.interfaces.IMainActivity
+import com.android.testproject1.model.Notifications
 import com.android.testproject1.model.Offer
-import com.android.testproject1.model.Post
 import com.android.testproject1.model.Users
+import com.android.testproject1.room.enteties.AppDatabase
+import com.android.testproject1.room.enteties.OffersSavedRoomEntity
 import com.android.testproject1.room.enteties.UsersRoomEntity
+import com.google.android.gms.tasks.OnFailureListener
+import com.google.android.gms.tasks.OnSuccessListener
+import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.firestore.FieldValue
-import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.*
 import com.nguyenhoanglam.imagepicker.model.Config
 import com.nguyenhoanglam.imagepicker.model.Image
 import com.nguyenhoanglam.imagepicker.ui.imagepicker.ImagePicker
 import es.dmoral.toasty.Toasty
 import kotlinx.android.synthetic.main.activity_main2.*
-import kotlinx.android.synthetic.main.activity_main2.toolbar
-import kotlinx.android.synthetic.main.activity_main2_content.*
+import kotlinx.android.synthetic.main.activity_main2.bottomNav
 import kotlinx.android.synthetic.main.bottom_sheet_dialog.*
 import kotlinx.android.synthetic.main.drawer_menu.*
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import nl.psdcompany.duonavigationdrawer.views.DuoMenuView
 import nl.psdcompany.duonavigationdrawer.widgets.DuoDrawerToggle
 import java.util.*
 import kotlin.collections.ArrayList
+import kotlin.collections.HashMap
 
 
-class MainActivity2 : AppCompatActivity(),IMainActivity,DuoMenuView.OnMenuClickListener {
+//DuoMenuView.OnMenuClickListener
+class MainActivity2 : AppCompatActivity(), IMainActivity {
 
     companion object {
         private const val READ_PERMISSION_CODE = 100
@@ -68,11 +78,34 @@ class MainActivity2 : AppCompatActivity(),IMainActivity,DuoMenuView.OnMenuClickL
 
     private lateinit var mBottomSheetDialog:BottomSheetDialog
 
+    var stringCheck:String?=null
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main2)
         setSupportActionBar(toolbar)
-        toolbar.title = "Home"
+        toolbar.title="Voila"
+
+        stringCheck=intent.getStringExtra("openFriend")
+        val notificationsItem=intent.getParcelableExtra<Notifications>("notificationsItem")
+
+        if (stringCheck=="openFriend"){
+
+            val fragment = SearchPeopleContainer()
+            val fm = supportFragmentManager
+            val bundle = Bundle()
+            bundle.putString("openFriend","openFriend")
+            bundle.putParcelable("notificationsItem",notificationsItem)
+            toolbar.title = "Search"
+
+            fragment.arguments=bundle
+            fm.beginTransaction()
+                .replace(R.id.container, fragment)
+                .commit()
+
+        }else{
+            loadFragment(HomeFragment())
+        }
 
         firebaseAuth= FirebaseAuth.getInstance()
         firebaseFirestore= FirebaseFirestore.getInstance()
@@ -92,6 +125,24 @@ class MainActivity2 : AppCompatActivity(),IMainActivity,DuoMenuView.OnMenuClickL
         val sheetView = layoutInflater.inflate(R.layout.bottom_sheet_dialog, null)
         mBottomSheetDialog.setContentView(sheetView)
 
+        val bottomNavigationView = bottomNav
+        bottomNavigationView.background = null
+        loadFragment(HomeFragment())
+
+        bottomNavigationView.setOnNavigationItemSelectedListener(BottomNavigationView.OnNavigationItemSelectedListener { menuItem ->
+            when (menuItem.itemId) {
+                R.id.home ->{
+                    toolbar.title="Voila"
+                    return@OnNavigationItemSelectedListener loadFragment(HomeFragment())}
+                R.id.search -> return@OnNavigationItemSelectedListener loadFragment(SearchFragment())
+                R.id.notifications -> return@OnNavigationItemSelectedListener loadFragment(MessagesFragment())
+                R.id.profile -> return@OnNavigationItemSelectedListener loadFragment(ProfileFragment())
+                R.id.NewPost -> return@OnNavigationItemSelectedListener loadFragment(Friends())
+
+            }
+            false
+        })
+
 
         val buttonPostPhoto: LinearLayout = sheetView.findViewById(R.id.postImage)
         val buttonPostOffer: LinearLayout = sheetView.findViewById(R.id.postOffer)
@@ -110,66 +161,77 @@ class MainActivity2 : AppCompatActivity(),IMainActivity,DuoMenuView.OnMenuClickL
 //            startActivity(intent)
         }
 
-        loadFragment(Dashboard())
         checkTabDashboard=true
 
-        Home.setOnClickListener {
-            loadFragment(Dashboard())
-            toolbar.title = "Home"
-            addPost?.isVisible = true
-            drawer.closeDrawer()
-        }
-        Discover.setOnClickListener {
-
-            val fragment = Dashboard()
-            val fm = supportFragmentManager
-            val bundle = Bundle()
-            bundle.putString("bottom_nav","1")
-            toolbar.title = "Discover"
-            addPost?.isVisible = true
-
-            fragment.arguments=bundle
-                fm.beginTransaction()
-                    .replace(R.id.container, fragment)
-                    .commit()
-            drawer.closeDrawer()
-        }
-        Search.setOnClickListener {
-            val fragment = SearchPeople()
-            val fm = supportFragmentManager
+//        Home.setOnClickListener {
+//            loadFragment(Dashboard())
+//            toolbar.title = "Home"
+//            addPost?.isVisible = true
+//            drawer.closeDrawer()
+//        }
+//        Discover.setOnClickListener {
+//
+//            val fragment = Dashboard()
+//            val fm = supportFragmentManager
 //            val bundle = Bundle()
 //            bundle.putString("bottom_nav","1")
 //            toolbar.title = "Discover"
 //            addPost?.isVisible = true
-
+//
 //            fragment.arguments=bundle
-            fm.beginTransaction()
-                .replace(R.id.container, fragment)
-                .commit()
-            drawer.closeDrawer()
-        }
-        Messages.setOnClickListener {
-            loadFragment(MessagesFragment())
-            toolbar.title = "Chats"
-            addPost?.isVisible = false
-            drawer.closeDrawer()
-        }
-        Profile.setOnClickListener {
-            loadFragment(ProfileFragment())
-            toolbar.title = "Profile"
-            addPost?.isVisible = false
-            drawer.closeDrawer()
-        }
+//                fm.beginTransaction()
+//                    .replace(R.id.container, fragment)
+//                    .commit()
+//            drawer.closeDrawer()
+//        }
+//        Search.setOnClickListener {
+//            val fragment = SearchPeopleContainer()
+//            val fm = supportFragmentManager
+////            val bundle = Bundle()
+////            bundle.putString("bottom_nav","1")
+////            toolbar.title = "Discover"
+////            addPost?.isVisible = true
+//            toolbar.title = "Search"
+////            fragment.arguments=bundle
+//            fm.beginTransaction()
+//                .replace(R.id.container, fragment)
+//                .commit()
+//            drawer.closeDrawer()
+//        }
+//        Friends.setOnClickListener {
+//            val fragment = Friends()
+//            val fm = supportFragmentManager
+////            val bundle = Bundle()
+////            bundle.putString("bottom_nav","1")
+////            toolbar.title = "Discover"
+////            addPost?.isVisible = true
+//
+////            fragment.arguments=bundle
+//            fm.beginTransaction()
+//                .replace(R.id.container, fragment)
+//                .commit()
+//            drawer.closeDrawer()
+//        }
+//        Messages.setOnClickListener {
+//            loadFragment(MessagesFragment())
+//            toolbar.title = "Chats"
+//            addPost?.isVisible = false
+//            drawer.closeDrawer()
+//        }
+//        Profile.setOnClickListener {
+//            loadFragment(ProfileFragment())
+//            toolbar.title = "Profile"
+//            addPost?.isVisible = false
+//            drawer.closeDrawer()
+//        }
 
 
-        val duoDrawerToggle = DuoDrawerToggle(
-            this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close
-        )
-        drawer.setDrawerListener(duoDrawerToggle)
-        duoDrawerToggle.syncState()
-        mMenuAdapter = MenuAdapter(mTitles);
-        duoMenuView.setOnMenuClickListener(this);
-        duoMenuView.adapter = mMenuAdapter;
+//        val duoDrawerToggle = DuoDrawerToggle(this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close)
+//        drawer.setDrawerListener(duoDrawerToggle)
+//        duoDrawerToggle.syncState()
+//        mMenuAdapter = MenuAdapter(mTitles);
+//        duoMenuView.setOnMenuClickListener(this);
+//        duoMenuView.adapter = mMenuAdapter
 
     }
 
@@ -344,6 +406,9 @@ class MainActivity2 : AppCompatActivity(),IMainActivity,DuoMenuView.OnMenuClickL
         if (id == R.id.Post) {
 //            loadFragment(CreatePost())
             mBottomSheetDialog.show()
+        }else if (id==R.id.notification){
+            val intent=Intent(this@MainActivity2,NotificationsActivity::class.java)
+            startActivity(intent)
         }
         return super.onOptionsItemSelected(item)
     }
@@ -351,11 +416,12 @@ class MainActivity2 : AppCompatActivity(),IMainActivity,DuoMenuView.OnMenuClickL
 
 
     override fun onBackPressed() {
-        if (drawer.isDrawerOpen) {
-            drawer.closeDrawer()
-        } else {
-            super.onBackPressed()
-        }
+        super.onBackPressed()
+//        if (drawer.isDrawerOpen) {
+//            drawer.closeDrawer()
+//        } else {
+//            super.onBackPressed()
+//        }
 
     }
 
@@ -363,7 +429,7 @@ class MainActivity2 : AppCompatActivity(),IMainActivity,DuoMenuView.OnMenuClickL
         if (fragment != null) {
             val fm = supportFragmentManager
             fm.beginTransaction()
-                .replace(R.id.container, fragment)
+                .add(R.id.container, fragment)
                 .commit()
             return true
         }
@@ -422,35 +488,34 @@ class MainActivity2 : AppCompatActivity(),IMainActivity,DuoMenuView.OnMenuClickL
     }
 
     override fun onGroupItemClick(userItem: UsersRoomEntity) {
+
         GROUP_USER_ID =userItem.id
+        val intent =Intent(this@MainActivity2,ChatActivity::class.java)
+        intent.putExtra("openChat","openUserChat")
+        intent.putExtra("chatsOpened","fromMessages")
+        intent.putExtra("userItem",userItem)
+        startActivity(intent)
 
-        val fragment=ChatFragment()
-
-        val bundle = Bundle()
-        bundle.putParcelable("userItem",userItem)
-        fragment.arguments=bundle
-
-        supportFragmentManager
-            .beginTransaction()
-            .addToBackStack("Groups Fragment")
-            .add(R.id.container, fragment)
-            .commit()
     }
 
     override fun onGroupItemClick(userItem: Users) {
         GROUP_USER_ID =userItem.id
 
-        val fragment=ChatFragment()
+        val intent =Intent(this@MainActivity2,ChatActivity::class.java)
+        intent.putExtra("openChat","openUserChat")
+        intent.putExtra("chatsOpened","fromGroups")
+        intent.putExtra("userItem",userItem)
+        startActivity(intent)
 
-        val bundle = Bundle()
-        bundle.putParcelable("userItem",userItem)
-        fragment.arguments=bundle
-
-        supportFragmentManager
-            .beginTransaction()
-            .addToBackStack("Groups Fragment")
-            .add(R.id.container, fragment)
-            .commit()
+//        val fragment=ChatFragment()
+//        val bundle = Bundle()
+//        bundle.putParcelable("userItem",userItem)
+//        fragment.arguments=bundle
+//
+//        supportFragmentManager
+//            .beginTransaction()
+//            .add(R.id.container, fragment)
+//            .commit()
     }
 
     override fun onLocationClick() {
@@ -469,28 +534,237 @@ class MainActivity2 : AppCompatActivity(),IMainActivity,DuoMenuView.OnMenuClickL
 
     }
 
-    override fun onFooterClicked() {}
-
-    override fun onHeaderClicked() {}
-
-    override fun onOptionClicked(position: Int, objectClicked: Any?) {
-        title = mTitles[position]
-        Log.d("MyTag", "Positin Clicked $position")
-
-        // Set the right options selected
-
-        // Set the right options selected
-        mMenuAdapter.setViewSelected(position, true)
-
-        // Navigate to the right fragment
-        when (position) {
-            0 -> loadFragment(HomeFragment())
-            1 -> loadFragment(SearchFragment())
-        }
-        drawer.closeDrawer()
+    override fun onSendFriendReqClick(userItem: Users) {
+        val currentUserId: String = firebaseAuth.currentUser?.uid!!
+        addUser(userItem,currentUserId)
     }
 
+    override fun onNotificationItemClick(notificationsItem: Notifications) {
+        TODO("Not yet implemented")
+    }
+
+    override fun onSearchPeopleItemClick(userItem: Users) {
+
+            val fragment = SearchPeopleContainer()
+            val fm = supportFragmentManager
+        val bundle = Bundle()
+        bundle.putString("openFriend", "openFriendSearch")
+        bundle.putParcelable("userItem",userItem)
+        fragment.arguments=bundle
+        loadFragment(fragment)
+
+    }
+
+    override fun onBookMarkItemClick(offerItem: Offer) {
+
+        val localDatabase: AppDatabase = AppDatabase.getInstance(this)!!
+
+//        val mapper = ObjectMapper() // jackson's objectmapper
+//        val pojo: MyPojo = mapper.convertValue(map, MyPojo::class.java)
+
+        val offerMap=HashMap<String,Any>()
+        offerMap["postId"]=offerItem.postId
+        offerMap["username"]=offerItem.username
+
+
+        firebaseAuth.currentUser?.uid?.let { it1 ->
+            firebaseFirestore
+                .collection("Users")
+                .document(it1)
+                .collection("Saved")
+                .document(offerItem.postId.trim())
+                .get().addOnSuccessListener { it2 ->
+                    if (!it2.exists()){
+                        firebaseAuth.currentUser?.uid?.let {
+                            firebaseFirestore
+                                .collection("Users")
+                                .document(it)
+                                .collection("Saved")
+                                .document(offerItem.postId.trim())
+                                .set(offerMap, SetOptions.merge()).addOnSuccessListener {
+                                    firebaseFirestore
+                                        .collection("Offers")
+                                        .document(offerItem.postId)
+                                        .get().addOnSuccessListener {
+                                            val offerPojo: OffersSavedRoomEntity? = it.toObject(OffersSavedRoomEntity::class.java)
+                                            CoroutineScope(Dispatchers.IO).launch {
+                                                if (offerPojo != null) {
+                                                    localDatabase.appDao()?.addOffer(offerPojo)
+                                                }
+                                            }
+                                        }
+
+
+                                    Toasty.success(this,"Saved",Toasty.LENGTH_SHORT,true).show()
+                                }
+
+                        }
+                    }else{
+                        firebaseAuth.currentUser?.uid?.let {
+                            firebaseFirestore
+                                .collection("Users")
+                                .document(it)
+                                .collection("Saved")
+                                .document(offerItem.postId.trim())
+                                .delete().addOnSuccessListener {
+
+                                    CoroutineScope(Dispatchers.IO).launch {
+                                        localDatabase.appDao()?.deleteOfferById(offerItem.postId)
+                                    }
+                                    Toasty.normal(this,"Removed",Toasty.LENGTH_SHORT).show()
+
+                                }
+                        }
+
+                    }
+
+                }
+        }
+    }
+
+
+
+    private fun addUser(userItem: Users,currentUserId: String) {
+        firebaseFirestore
+            .collection("Users")
+            .document(userItem.id)
+            .collection("Friends")
+            .document(currentUserId)
+            .get()
+            .addOnSuccessListener { documentSnapshot: DocumentSnapshot ->
+                if (!documentSnapshot.exists()) {
+
+                    firebaseFirestore
+                        .collection("Users")
+                        .document(userItem.id)
+                        .collection("Friend_Requests")
+                        .document(currentUserId)
+                        .get()
+                        .addOnSuccessListener { documentSnapshot1: DocumentSnapshot ->
+//                            if (holderr.friend_icon.getVisibility() != View.VISIBLE) {
+                                if (!documentSnapshot1.exists()) {
+                                    executeFriendReq(userItem,currentUserId)
+                                } else {
+                                     Toasty.normal(this@MainActivity2,"Friend Request already Sent",Toasty.LENGTH_SHORT).show()
+                                }
+//                            }
+//                            else {
+//                                Snackbar.make(view, usersList.get(position).getName()
+//                                    .toString() + " is already your friend", Snackbar.LENGTH_LONG).show()
+//                                notifyDataSetChanged()
+                            }
+                        }
+                }
+//        else {
+//                    usersList.removeAt(position)
+//                    notifyDataSetChanged()
+//                }
+            }
+//    }
+
+
+    private fun executeFriendReq(userItem: Users,currentUserId: String) {
+        val userMap = HashMap<String, Any?>()
+        FirebaseFirestore.getInstance()
+            .collection("Users")
+            .document(currentUserId)
+            .get()
+            .addOnSuccessListener { documentSnapshot: DocumentSnapshot ->
+                val email = documentSnapshot.getString("email")
+                userMap["name"] = documentSnapshot.getString("name")
+                userMap["id"] = documentSnapshot.getString("id")
+                userMap["email"] = email
+                userMap["image"] = documentSnapshot.getString("image")
+                userMap["tokens"] = documentSnapshot["token_ids"]
+                userMap["notification_id"] = System.currentTimeMillis().toString()
+                userMap["timestamp"] = System.currentTimeMillis().toString()
+
+                //Add to user
+                FirebaseFirestore.getInstance()
+                    .collection("Users")
+                    .document(userItem.id)
+                    .collection("Friend_Requests")
+                    .document(currentUserId)
+                    .set(userMap)
+                    .addOnSuccessListener {
+
+                        documentSnapshot.getString("name")?.let { it1 ->
+                            addToNotification(userItem.id, currentUserId,
+                    //                                documentSnapshot.getString("image"),
+                                it1,
+                                "Sent you friend request",
+                                "friend_req"
+                            )
+                        }
+
+                        Toasty.success(this@MainActivity2,"Friend Request Sent",Toasty.LENGTH_SHORT).show()
+                    }.addOnFailureListener { e: java.lang.Exception ->
+//                        holder.progressBar.setVisibility(View.GONE)
+                        Log.e("Error", e.message!!)
+                    }
+            }
+    }
+
+
+    private fun addToNotification(
+        UserItemId: String,
+        user_id: String,
+//        profile: String,
+        username: String,
+        message: String,
+        type: String
+    ) {
+        val map: MutableMap<String, Any> = java.util.HashMap()
+        map["id"] = user_id
+        map["username"] = username
+//        map["image"] = profile
+        map["message"] = message
+        map["timestamp"] = System.currentTimeMillis().toString()
+        map["type"] = type
+        map["action_id"] = user_id
+        if (UserItemId != user_id) {
+
+            firebaseFirestore.collection("Users")
+                .document(UserItemId)
+                .collection("Info_Notifications")
+                .add(map)
+                .addOnSuccessListener(OnSuccessListener { documentReference: DocumentReference? ->
+                    if (type == "friend_req") {
+//                        req_sent.setText("Friend request sent")
+                        Toasty.success(this, "Friend request sent.", Toasty.LENGTH_SHORT,true).show()
+                    } else { Toasty.success(this, "Friend request accepted", Toasty.LENGTH_SHORT, true).show()
+                    }
+                })
+                .addOnFailureListener(OnFailureListener { e: java.lang.Exception ->
+                    Log.e("Error", e.localizedMessage)
+                })
+        }
+    }
+
+
+
+//    override fun onFooterClicked() {}
+//
+//    override fun onHeaderClicked() {}
+//
+//    override fun onOptionClicked(position: Int, objectClicked: Any?) {
+////        title = mTitles[position]
+////        Log.d("MyTag", "Positin Clicked $position")
+////
+////        // Set the right options selected
+////
+////        // Set the right options selected
+////        mMenuAdapter.setViewSelected(position, true)
+////
+////        // Navigate to the right fragment
+////        when (position) {
+////            0 -> loadFragment(HomeFragment())
+////            1 -> loadFragment(SearchFragment())
+////        }
+////        drawer.closeDrawer()
+//    }
 }
+
 
 
     //        mNavDrawer = drawer_layout

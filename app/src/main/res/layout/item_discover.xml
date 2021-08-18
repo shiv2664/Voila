@@ -11,7 +11,7 @@
 
         <variable
             name="listener"
-            type="com.android.testproject1.IMainActivity" />
+            type="com.android.testproject1.interfaces.IMainActivity" />
 
     </data>
 
@@ -270,13 +270,27 @@
                                 android:layout_height="wrap_content" />
                         </RelativeLayout>
 
+                        <!--                        <com.github.ivbaranov.mfb.MaterialFavoriteButton-->
+                        <!--                            android:id="@+id/like_button"-->
+                        <!--                            app:mfb_animate_favorite="true"-->
+                        <!--                            app:mfb_animate_unfavorite="false"-->
+                        <!--                            app:mfb_rotation_duration="400"-->
+                        <!--                            app:mfb_rotation_angle="360"-->
+                        <!--                            app:mfb_bounce_duration="300"-->
+                        <!--                            android:layout_alignParentEnd="true"-->
+                        <!--                            android:layout_width="wrap_content"-->
+                        <!--                            android:layout_height="wrap_content"-->
+                        <!--                            app:mfb_not_favorite_image="@drawable/ic_bookmark_border_black_24dp"-->
+                        <!--                            app:mfb_favorite_image="@drawable/ic_baseline_bookmark_24" />-->
+
 
                         <ImageView
                             android:id="@+id/bookMark"
+                            android:onClick="@{()->listener.onBookMarkItemClick(offerItem)}"
                             android:layout_width="30dp"
                             android:layout_height="30dp"
                             android:layout_alignParentEnd="true"
-                            android:src="@drawable/ic_bookmark_border_black_24dp"/>
+                            android:src="@drawable/ic_bookmark_border_black_24dp" />
 
 
 
@@ -292,7 +306,7 @@
                             android:layout_marginEnd="10dp"
                             android:text="@{offerItem.name}"
                             android:maxLines="2"
-                            android:textSize="20sp"
+                            android:textSize="18sp"
                             android:id="@+id/title" />
 
 

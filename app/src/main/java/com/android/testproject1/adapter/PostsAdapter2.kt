@@ -1,7 +1,6 @@
 package com.android.testproject1.adapter
 
 import android.content.Context
-import android.text.Html
 import android.text.TextUtils
 import android.util.Log
 import android.view.LayoutInflater
@@ -10,12 +9,10 @@ import android.view.ViewGroup
 import androidx.databinding.ViewDataBinding
 import androidx.recyclerview.widget.RecyclerView
 import com.android.testproject1.BR
-import com.android.testproject1.IMainActivity
+import com.android.testproject1.interfaces.IMainActivity
 import com.android.testproject1.databinding.HomeRecyclerview3Binding
 import com.android.testproject1.model.MultipleImage
 import com.android.testproject1.model.Post
-import com.github.ivbaranov.mfb.MaterialFavoriteButton
-import com.github.ivbaranov.mfb.MaterialFavoriteButton.OnFavoriteAnimationEndListener
 import kotlinx.android.synthetic.main.home_recyclerview2.view.*
 import kotlinx.android.synthetic.main.home_recyclerview3.view.*
 import java.util.*
@@ -43,9 +40,10 @@ class PostsAdapter2(private val context: Context, private var postList: MutableL
     }
 
     fun updateData(newDataList: List<Post>) {
+        Log.d("MyTag","newdatalistt is : "+newDataList)
         postList.clear()
         postList.addAll(newDataList)
-        this.notifyDataSetChanged()
+        notifyDataSetChanged()
     }
 
     class BindingViewHolder(val itemBinding: ViewDataBinding)

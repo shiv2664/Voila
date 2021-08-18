@@ -6,10 +6,9 @@ import android.view.ViewGroup
 import androidx.databinding.ViewDataBinding
 import androidx.recyclerview.widget.RecyclerView
 import com.android.testproject1.BR
-import com.android.testproject1.IMainActivity
+import com.android.testproject1.interfaces.IMainActivity
 import com.android.testproject1.databinding.HomeRecyclerviewBinding
 import com.android.testproject1.model.Product
-import com.google.android.material.imageview.ShapeableImageView
 
 class ProductAdapter(private val context: Context,private var dataList2:MutableList<Product>):RecyclerView
 .Adapter<ProductAdapter.BindingViewHolder>() {
