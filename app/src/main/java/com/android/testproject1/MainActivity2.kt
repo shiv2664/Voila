@@ -16,7 +16,6 @@ import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.viewModelScope
 import com.afollestad.materialdialogs.MaterialDialog
 import com.android.testproject1.adapter.MenuAdapter
 import com.android.testproject1.fragments.*
@@ -26,7 +25,7 @@ import com.android.testproject1.model.Offer
 import com.android.testproject1.model.Users
 import com.android.testproject1.room.enteties.AppDatabase
 import com.android.testproject1.room.enteties.OffersSavedRoomEntity
-import com.android.testproject1.room.enteties.UsersRoomEntity
+import com.android.testproject1.room.enteties.UsersChatListEntity
 import com.google.android.gms.tasks.OnFailureListener
 import com.google.android.gms.tasks.OnSuccessListener
 import com.google.android.material.bottomnavigation.BottomNavigationView
@@ -44,8 +43,6 @@ import kotlinx.android.synthetic.main.drawer_menu.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import nl.psdcompany.duonavigationdrawer.views.DuoMenuView
-import nl.psdcompany.duonavigationdrawer.widgets.DuoDrawerToggle
 import java.util.*
 import kotlin.collections.ArrayList
 import kotlin.collections.HashMap
@@ -458,12 +455,12 @@ class MainActivity2 : AppCompatActivity(), IMainActivity {
             .commit()
     }
 
-    override fun onJoinItemClick(userItem: Users) {
-        val userId: String = userItem.id
+    override fun onJoinItemClick(userItem: UsersChatListEntity) {
+        val userId: String = userItem.createdBy
         val currentUserId: String = firebaseAuth.currentUser?.uid!!
 
-        val postMap: MutableMap<String, Any?> = HashMap()
-        postMap[currentUserId]=true
+//        val postMap: MutableMap<String, Any?> = HashMap()
+//        postMap[currentUserId]=true
 
         val fragment=GroupFragment()
 
@@ -479,6 +476,14 @@ class MainActivity2 : AppCompatActivity(), IMainActivity {
             .update("Members", FieldValue.arrayUnion(currentUserId))
             .addOnSuccessListener {
 
+                val offerMap=HashMap<String,Any>()
+                offerMap["postId"]=postId
+                offerMap["groupId"]=userId
+
+                firebaseFirestore.collection("Users")
+                    .document(currentUserId)
+                    .collection("Offers").document(postId).set(offerMap, SetOptions.merge())
+
                 supportFragmentManager
                     .beginTransaction()
                     .addToBackStack("Groups Fragment")
@@ -487,7 +492,7 @@ class MainActivity2 : AppCompatActivity(), IMainActivity {
             }
     }
 
-    override fun onGroupItemClick(userItem: UsersRoomEntity) {
+    override fun onGroupItemClick(userItem: UsersChatListEntity) {
 
         GROUP_USER_ID =userItem.id
         val intent =Intent(this@MainActivity2,ChatActivity::class.java)
@@ -622,6 +627,12 @@ class MainActivity2 : AppCompatActivity(), IMainActivity {
         }
     }
 
+    override fun onGroupOpenFromMessages(userItem: UsersChatListEntity) {
+        val intent=Intent(this,ChatActivity::class.java)
+        intent.putExtra("groupItem",userItem)
+        intent.putExtra("openChat","openGroupChat")
+        startActivity(intent)
+    }
 
 
     private fun addUser(userItem: Users,currentUserId: String) {

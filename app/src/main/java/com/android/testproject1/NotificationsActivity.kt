@@ -3,43 +3,22 @@ package com.android.testproject1
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.os.Parcelable
-import android.util.Log
 import android.view.Menu
-import android.view.MenuInflater
 import android.view.MenuItem
-import android.view.View
 import androidx.appcompat.widget.Toolbar
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.RecyclerView
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
-import androidx.swiperefreshlayout.widget.SwipeRefreshLayout.OnRefreshListener
 import com.afollestad.materialdialogs.MaterialDialog
 import com.android.testproject1.databinding.ActivityNotificationsBinding
 import com.android.testproject1.interfaces.IMainActivity
 import com.android.testproject1.model.Notifications
 import com.android.testproject1.model.Offer
 import com.android.testproject1.model.Users
-import com.android.testproject1.room.enteties.UsersRoomEntity
-import com.android.testproject1.viewmodels.MainActivityViewModel
+import com.android.testproject1.room.enteties.UsersChatListEntity
 import com.android.testproject1.viewmodels.NotificationsActivityViewModel
-import com.google.android.gms.tasks.OnFailureListener
-import com.google.android.gms.tasks.OnSuccessListener
-import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.firestore.DocumentChange
-import com.google.firebase.firestore.FirebaseFirestore
-import com.google.firebase.firestore.Query
-import com.google.firebase.firestore.QuerySnapshot
-import com.marcoscg.dialogsheet.DialogSheet
-import com.marcoscg.dialogsheet.DialogSheet.OnNegativeClickListener
-import com.marcoscg.dialogsheet.DialogSheet.OnPositiveClickListener
-import com.nguyenhoanglam.imagepicker.model.Config
-import com.nguyenhoanglam.imagepicker.ui.imagepicker.ImagePicker
-import es.dmoral.toasty.Toasty
 import kotlinx.android.synthetic.main.activity_notifications.*
-import java.lang.Exception
-import java.util.ArrayList
 
 class NotificationsActivity : AppCompatActivity(),IMainActivity {
 
@@ -52,6 +31,7 @@ class NotificationsActivity : AppCompatActivity(),IMainActivity {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
         binding =DataBindingUtil.setContentView(this,R.layout.activity_notifications)
 
         val toolbar = findViewById<Toolbar>(R.id.toolbar)
@@ -145,11 +125,11 @@ class NotificationsActivity : AppCompatActivity(),IMainActivity {
         TODO("Not yet implemented")
     }
 
-    override fun onJoinItemClick(userItem: Users) {
+    override fun onJoinItemClick(userItem: UsersChatListEntity) {
         TODO("Not yet implemented")
     }
 
-    override fun onGroupItemClick(userItem: UsersRoomEntity) {
+    override fun onGroupItemClick(userItem: UsersChatListEntity) {
         TODO("Not yet implemented")
     }
 
@@ -177,6 +157,10 @@ class NotificationsActivity : AppCompatActivity(),IMainActivity {
     }
 
     override fun onBookMarkItemClick(offerItem: Offer) {
+        TODO("Not yet implemented")
+    }
+
+    override fun onGroupOpenFromMessages(userItem: UsersChatListEntity) {
         TODO("Not yet implemented")
     }
 

@@ -401,7 +401,7 @@
                             android:layout_height="wrap_content"
                             android:text="Groups"
 
-                            app:backgroundTint="@color/colorAccentt"
+                            app:backgroundTint="?attr/colorAccent"
                             app:cornerRadius="10dp"
                             android:layout_alignParentEnd="true"
                             android:layout_marginTop="10dp"

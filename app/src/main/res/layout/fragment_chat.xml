@@ -76,13 +76,14 @@
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/messageRecyclerview"
-            android:layout_marginStart="5dp"
-            android:layout_marginEnd="5dp"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            app:bindChat="@{chatList}"
             android:layout_above="@id/btnSend"
-            android:layout_marginBottom="2dp"/>
+            android:layout_marginStart="5dp"
+            android:layout_marginEnd="5dp"
+            app:stackFromEnd="true"
+            android:layout_marginBottom="2dp"
+            app:bindChat="@{chatList}" />
 
         <RelativeLayout
             android:id="@+id/bottom"

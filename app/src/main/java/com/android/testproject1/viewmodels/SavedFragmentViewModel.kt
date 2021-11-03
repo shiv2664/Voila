@@ -10,7 +10,6 @@ import com.android.testproject1.Repository
 import com.android.testproject1.model.Post
 import com.android.testproject1.room.enteties.AppDatabase
 import com.android.testproject1.room.enteties.OffersSavedRoomEntity
-import com.android.testproject1.room.enteties.UsersRoomEntity
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.FirebaseFirestore

@@ -11,12 +11,14 @@ import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import com.android.testproject1.ChatActivity
+import com.android.testproject1.PaymentActivity
 import com.android.testproject1.R
 import com.android.testproject1.databinding.FragmentDetailsBinding
 import com.android.testproject1.databinding.FragmentGroupBinding
 import com.android.testproject1.model.GroupFragmentViewModel
 import com.android.testproject1.model.Post
 import com.android.testproject1.model.Users
+import com.android.testproject1.room.enteties.UsersChatListEntity
 import com.android.testproject1.viewmodels.DetailsFragmentViewModel
 import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.android.synthetic.main.fragment_group.*
@@ -27,6 +29,8 @@ class GroupFragment : Fragment() {
 
     private lateinit var mViewModel: GroupFragmentViewModel
     private lateinit var firestore: FirebaseFirestore
+
+     private lateinit var groupItem:UsersChatListEntity
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?): View {
@@ -44,12 +48,10 @@ class GroupFragment : Fragment() {
 //        setHasOptionsMenu(true)
 
         val bundle = this.arguments
-        val groupItem= bundle?.getParcelable<Users>("userItem")
+        groupItem = bundle?.getParcelable<UsersChatListEntity>("userItem")!!
 
 
-            if (groupItem != null) {
-                GroupsOnOfferFragment.postId?.let { mViewModel.loadGroupMembers(groupItem.id, it) }
-            }
+        groupItem.postId.let { mViewModel.loadGroupMembers(groupItem.createdBy, it) }
 
         mViewModel.getGroupList().observe(viewLifecycleOwner, {
             binding.userList=it
@@ -58,7 +60,7 @@ class GroupFragment : Fragment() {
         binding.extendedFabGroup.setOnClickListener {
 
             val intent=Intent(activity,ChatActivity::class.java)
-            intent.putExtra("userItem",groupItem)
+            intent.putExtra("groupItem",groupItem)
             intent.putExtra("openChat","openGroupChat")
             startActivity(intent)
 
@@ -73,6 +75,13 @@ class GroupFragment : Fragment() {
 //                .addToBackStack("Groups Fragment")
 //                .replace(R.id.container, fragment)
 //                .commit()
+        }
+
+        binding.checkoutButton.setOnClickListener {
+            val intent =Intent(requireActivity(),PaymentActivity::class.java)
+            intent.putExtra("groupItem",groupItem)
+            intent.putExtra("openChat","openGroupChat")
+            startActivity(intent)
         }
 
 

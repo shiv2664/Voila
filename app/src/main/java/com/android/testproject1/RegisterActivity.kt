@@ -11,7 +11,7 @@ import com.android.testproject1.interfaces.IMainActivity
 import com.android.testproject1.model.Notifications
 import com.android.testproject1.model.Offer
 import com.android.testproject1.model.Users
-import com.android.testproject1.room.enteties.UsersRoomEntity
+import com.android.testproject1.room.enteties.UsersChatListEntity
 import kotlinx.android.synthetic.main.activity_register.*
 
 class RegisterActivity : AppCompatActivity(), IMainActivity {
@@ -35,8 +35,8 @@ class RegisterActivity : AppCompatActivity(), IMainActivity {
     private fun textAnim(){
         val view=findViewById<View>(R.id.textView1)
         ObjectAnimator.ofFloat(view,View.ALPHA,0f,1f).apply { duration=2000 }.start()
-//        val view2=findViewById<View>(R.id.textView2)
-//        ObjectAnimator.ofFloat(view2,View.ALPHA,0f,1f).apply { duration=2000 }.start()
+        val view2=findViewById<View>(R.id.textView2)
+        ObjectAnimator.ofFloat(view2,View.ALPHA,0f,1f).apply { duration=2000 }.start()
 
     }
 
@@ -58,11 +58,11 @@ class RegisterActivity : AppCompatActivity(), IMainActivity {
         TODO("Not yet implemented")
     }
 
-    override fun onJoinItemClick(userItem: Users) {
+    override fun onJoinItemClick(userItem: UsersChatListEntity) {
         TODO("Not yet implemented")
     }
 
-    override fun onGroupItemClick(userItem: UsersRoomEntity) {
+    override fun onGroupItemClick(userItem: UsersChatListEntity) {
     }
 
     override fun onGroupItemClick(userItem: Users) {
@@ -86,6 +86,10 @@ class RegisterActivity : AppCompatActivity(), IMainActivity {
     }
 
     override fun onBookMarkItemClick(offerItem: Offer) {
+        TODO("Not yet implemented")
+    }
+
+    override fun onGroupOpenFromMessages(userItem: UsersChatListEntity) {
         TODO("Not yet implemented")
     }
 

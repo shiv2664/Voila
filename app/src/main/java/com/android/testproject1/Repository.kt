@@ -6,6 +6,7 @@ import androidx.lifecycle.MutableLiveData
 import com.android.testproject1.room.enteties.ChatRoomEntity
 import com.android.testproject1.model.Post
 import com.android.testproject1.model.Users
+import com.android.testproject1.room.enteties.UsersChatListEntity
 import com.google.firebase.auth.*
 import com.google.firebase.firestore.*
 import kotlinx.android.synthetic.main.activity_main.*
@@ -20,7 +21,7 @@ class Repository(private val application: Application)
     private val postList: MutableLiveData<MutableList<Post>> = MutableLiveData()
     private val userPostList: MutableLiveData<MutableList<Post>> = MutableLiveData()
     private val userList: MutableLiveData<MutableList<Users>> = MutableLiveData()
-    private val groupList: MutableLiveData<MutableList<Users>> = MutableLiveData()
+    private val groupList: MutableLiveData<MutableList<UsersChatListEntity>> = MutableLiveData()
     private val chatList: MutableLiveData<MutableList<ChatRoomEntity>> = MutableLiveData()
     private val groupChatList: MutableLiveData<MutableList<ChatRoomEntity>> = MutableLiveData()
     private val userChatList: MutableLiveData<MutableList<Users>> = MutableLiveData()
@@ -196,7 +197,7 @@ class Repository(private val application: Application)
 //                            arr.add(equalSplit[0])
 //                        }
 
-                        val list2 = mutableListOf<Users>()
+                        val list2 = mutableListOf<UsersChatListEntity>()
                         if (group != null) {
                             for (id in group) {
                                 id.trim()
@@ -205,8 +206,7 @@ class Repository(private val application: Application)
                                     .get()
                                     .addOnCompleteListener {
                                         if (it.isSuccessful) {
-                                            val objects2: List<Users> =
-                                                it.result?.toObjects(Users::class.java) as List<Users>
+                                            val objects2: List<UsersChatListEntity> = it.result?.toObjects(UsersChatListEntity::class.java) as List<UsersChatListEntity>
                                             list2.addAll(objects2)
                                             Log.d(myTAG, "Removed city: ${list2}")
                                             //                                    userList.value = list2
@@ -391,7 +391,7 @@ class Repository(private val application: Application)
     }
 
     @JvmName("getGroupList")
-    fun getGroupList(): MutableLiveData<MutableList<Users>> {
+    fun getGroupList(): MutableLiveData<MutableList<UsersChatListEntity>> {
         return groupList
     }
 

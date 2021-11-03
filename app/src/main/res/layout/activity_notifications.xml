@@ -67,7 +67,7 @@
                         app:srcCompat="@drawable/ic_notifications_black_24dp"
                         android:layout_width="100dp"
                         android:layout_height="100dp"
-                        app:tint="@color/colorAccentt" />
+                        app:tint="?attr/colorAccent" />
 
                     <TextView
                         android:id="@+id/default_title"

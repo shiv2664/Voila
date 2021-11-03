@@ -10,11 +10,11 @@
             type="com.android.testproject1.interfaces.IMainActivity" />
 
         <import type="java.util.List"/>
-        <import type="com.android.testproject1.model.Users"/>
+        <import type="com.android.testproject1.room.enteties.UsersChatListEntity"/>
 
         <variable
             name="userList"
-            type="List&lt;Users>"/>
+            type="List&lt;UsersChatListEntity>"/>
 
     </data>
 
@@ -65,7 +65,7 @@
             android:layout_height="wrap_content"
             android:layout_marginEnd="16dp"
             android:fontFamily="@font/segoe_ui_regular"
-            android:backgroundTint="@color/colorAccentt"
+            android:backgroundTint="?attr/colorAccent"
             android:textColor="@color/colorTextWhite"
             app:iconTint="@color/white"
             android:text="Create"

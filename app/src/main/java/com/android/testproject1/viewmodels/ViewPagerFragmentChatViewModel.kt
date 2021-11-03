@@ -8,7 +8,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.android.testproject1.Repository
 import com.android.testproject1.room.enteties.AppDatabase
-import com.android.testproject1.room.enteties.UsersRoomEntity
+import com.android.testproject1.room.enteties.UsersChatListEntity
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.coroutines.Dispatchers
@@ -20,7 +20,7 @@ class ViewPagerFragmentChatViewModel(application: Application) :AndroidViewModel
     private val localDatabase: AppDatabase = AppDatabase.getInstance(application)!!
     private val firebaseAuth: FirebaseAuth = FirebaseAuth.getInstance()
     private val db: FirebaseFirestore = FirebaseFirestore.getInstance()
-    private val userChatList = MutableLiveData<List<UsersRoomEntity>>()
+    private val userChatList = MutableLiveData<List<UsersChatListEntity>>()
     private val myTAG:String="MyTag"
     private var checkduplicate2:String?=null
     private val currentUserID= firebaseAuth.currentUser?.uid
@@ -28,7 +28,7 @@ class ViewPagerFragmentChatViewModel(application: Application) :AndroidViewModel
 
 
     @JvmName("userChatsList")
-    fun getUserChatsList(): LiveData<MutableList<UsersRoomEntity>>? {
+    fun getUserChatsList(): LiveData<MutableList<UsersChatListEntity>>? {
         return localDatabase.appDao()?.getUserChats()
     }
 
@@ -45,7 +45,7 @@ class ViewPagerFragmentChatViewModel(application: Application) :AndroidViewModel
                 if (checkduplicate2!=document.data.toString()) {
                     checkduplicate2=document.data.toString()
 
-                    val list2 = mutableListOf<UsersRoomEntity>()
+                    val list2 = mutableListOf<UsersChatListEntity>()
 
                     if (group != null) {
                         for (id in group) {
@@ -55,15 +55,15 @@ class ViewPagerFragmentChatViewModel(application: Application) :AndroidViewModel
                                 .get()
                                 .addOnCompleteListener {
                                     if (it.isSuccessful) {
-                                        val objects2: List<UsersRoomEntity> = it.result?.toObjects(UsersRoomEntity::class.java) as List<UsersRoomEntity>
+                                        val objects2: List<UsersChatListEntity> = it.result?.toObjects(UsersChatListEntity::class.java) as List<UsersChatListEntity>
                                         list2.addAll(objects2)
 //                                        Log.d(myTAG, "list in chatList is : $list2")
-                                        userChatList.postValue(list2)
+//                                        userChatList.postValue(list2)
 //                                        userChatList.value = snapshot!!.documents.map {
 //                                            it.toObject(PostRoomEntity::class.java)!!}
 
                                         viewModelScope.launch(Dispatchers.IO) {
-                                            localDatabase.appDao()?.insertUsersChats(list2)
+                                            localDatabase.appDao()?.insertUsersChatsList(list2)
                                         }
 
                                     }
@@ -80,5 +80,42 @@ class ViewPagerFragmentChatViewModel(application: Application) :AndroidViewModel
             Log.d(myTAG, "get failed with ", exception)
         }
 
+    }
+
+    fun loadUserGroups(){
+
+
+//        val docRef = currentUserID?.let { db.collection("ChatList").document(it) }
+        val docRef = currentUserID?.let { db.collection("Users").document(it).collection("Offers") }
+
+        Log.d(myTAG, "current user id is  "+currentUserID)
+
+        docRef?.get()?.addOnSuccessListener {
+
+            for (documentSnapshot in it) {
+                val groups: UsersChatListEntity = documentSnapshot.toObject(UsersChatListEntity::class.java)
+
+                Log.d(myTAG, "groups are "+groups.postId+" groups user id "+groups.groupId)
+
+                db.collection("Offers").document(groups.postId).collection("Groups").document(groups.groupId)
+                    .get().addOnSuccessListener {
+
+                        val groups2: UsersChatListEntity? = it.toObject(UsersChatListEntity::class.java)
+
+                        Log.d(myTAG,"groups2 is : "+ groups2)
+
+//                        localDatabase.appDao()?.deleteAllChatList()
+
+                        viewModelScope.launch(Dispatchers.IO) {
+//                            localDatabase.appDao()?.deleteAllChatList()
+                            if (groups2 != null) {
+                                localDatabase.appDao()?.insertUsersChats(groups2)
+                            }
+                        }
+
+                    }
+            }
+
+        }
     }
 }

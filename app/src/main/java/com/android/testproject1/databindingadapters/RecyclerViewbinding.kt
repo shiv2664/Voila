@@ -6,7 +6,7 @@ import com.android.testproject1.adapter.*
 import com.android.testproject1.model.*
 import com.android.testproject1.room.enteties.ChatRoomEntity
 import com.android.testproject1.room.enteties.OffersSavedRoomEntity
-import com.android.testproject1.room.enteties.UsersRoomEntity
+import com.android.testproject1.room.enteties.UsersChatListEntity
 
 
 @BindingAdapter("bindhomerecyclerview")
@@ -116,7 +116,7 @@ fun bindRecyclerView(view: RecyclerView, dataList:List<Post>?) {
 
 
 @BindingAdapter("bindDetailsRecyclerView")
-fun bindList(view: RecyclerView,usersList: List<Users>?){
+fun bindList(view: RecyclerView,usersList: List<UsersChatListEntity>?){
 
     if (usersList != null) {
         if (usersList.isEmpty())
@@ -170,9 +170,37 @@ fun bindPeopleSearchList(view: RecyclerView,usersList: List<Users>?){
 
 }
 
+@BindingAdapter("bindPtList")
+fun binPtList(view: RecyclerView,dataList: List<UsersChatListEntity>?){
+
+    if (dataList != null) {
+        if (dataList.isEmpty())
+            return
+    }
+
+    val linearLayoutManager = LinearLayoutManager(view.context)
+
+    val layoutManager = view.layoutManager
+    if (layoutManager == null) {
+        view.layoutManager = linearLayoutManager
+    }
+
+    var adapter:PaymentRecyclerviewAdapter?= view.adapter as PaymentRecyclerviewAdapter?
+
+    if (adapter == null) {
+        if (dataList != null) {
+            adapter = PaymentRecyclerviewAdapter(view.context,dataList.toMutableList())
+            view.adapter = adapter
+        }
+    }
+    if (dataList != null) {
+        adapter?.updateData(dataList)
+    }
+}
+
 
 @BindingAdapter("bindGroupList")
-fun bind(view: RecyclerView,usersList: List<Users>?){
+fun bind(view: RecyclerView,usersList: List<UsersChatListEntity>?){
 
     if (usersList != null) {
         if (usersList.isEmpty())
@@ -202,7 +230,7 @@ fun bind(view: RecyclerView,usersList: List<Users>?){
 
 
 @BindingAdapter("bindUserChatList")
-fun bindUserChatList(view: RecyclerView,usersList: List<UsersRoomEntity>?){
+fun bindUserChatList(view: RecyclerView,usersList: List<UsersChatListEntity>?){
 
     if (usersList != null) {
         if (usersList.isEmpty())
@@ -239,12 +267,14 @@ fun bindChat(view:RecyclerView,chatList:List<ChatRoomEntity>?) {
     }
 
     val linearLayoutManager = LinearLayoutManager(view.context)
-    linearLayoutManager.stackFromEnd = true
-
     val layoutManager = view.layoutManager
     if (layoutManager == null) {
         view.layoutManager = linearLayoutManager
+//        (view.layoutManager as LinearLayoutManager).stackFromEnd = true
     }
+
+//    linearLayoutManager.reverseLayout = true;
+    linearLayoutManager.stackFromEnd = true
 
     var adapter:ChatAdapter?= view.adapter as ChatAdapter?
 
@@ -252,12 +282,17 @@ fun bindChat(view:RecyclerView,chatList:List<ChatRoomEntity>?) {
         if (chatList != null) {
             adapter = ChatAdapter(view.context,chatList.toMutableList())
             view.adapter = adapter
+//            view.scrollToPosition(adapter.itemCount -1)
         }
     }
     if (chatList != null) {
-        adapter?.updateData(chatList)
+        adapter?.updateData(chatList.toMutableList())
         if (adapter != null) {
-            view.scrollToPosition(adapter.itemCount -1)
+            if(!view.canScrollVertically(1)){
+                // Its at bottom
+                view.scrollToPosition(adapter.itemCount -1)
+            }
+
         }
     }
 
@@ -288,7 +323,7 @@ fun bindGroupChat(view:RecyclerView,groupChatList:List<ChatRoomEntity>?) {
         }
     }
     if (groupChatList != null) {
-        adapter?.updateData(groupChatList)
+        adapter?.updateData(groupChatList.toMutableList())
         if (adapter != null) {
             view.scrollToPosition(adapter.itemCount -1)
         }

@@ -17,9 +17,10 @@
 
 
     <style name="AppTheme" parent="Theme.MaterialComponents.DayNight.NoActionBar">
-        <item name="colorPrimary">@color/colorPrimaryy</item>
-        <item name="colorPrimaryDark">@color/colorPrimaryDarkk</item>
-        <item name="colorAccent">@color/colorAccentt</item>
+        <item name="colorPrimary">@color/colorPrimaryNight</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryNightDark</item>
+        <item name="colorAccent">@color/colorAccentNight</item>
+        <item name="colorPrimaryVariant">@color/colorWhite</item>
 <!--        <item name="dialogSheetAccent">@color/colorAccentt</item>-->
         <item name="actionBarPopupTheme">@style/AppTheme.PopupOverlay</item>
     </style>
@@ -31,31 +32,32 @@
 
 
     <style name="AppTheme2" parent="Theme.MaterialComponents.DayNight.NoActionBar">
-        <item name="colorPrimary">@color/colorAccentt</item>
-        <item name="colorAccent">@color/colorAccentt</item>
+        <item name="colorPrimary">@color/colorAccentNight</item>
+        <item name="colorAccent">@color/colorAccentNight</item>
 <!--        <item name="dialogSheetAccent">@color/colorAccentt</item>-->
         <item name="actionBarPopupTheme">@style/AppTheme.PopupOverlay</item>
     </style>
 
     <style name="BottomNavigationBarTheme" parent="Theme.MaterialComponents.DayNight.NoActionBar">
-        <item name="colorPrimary">@color/colorAccentt</item>
-        <item name="colorAccent">@color/colorAccentt</item>
+        <item name="colorPrimary">@color/colorAccentNight</item>
+        <item name="colorAccent">@color/colorAccentNight</item>
         <item name="actionBarPopupTheme">@style/AppTheme.PopupOverlay</item>
 <!--        <item name="dialogSheetAccent">@color/colorAccentt</item>-->
     </style>
 
     <style name="LoginAppTheme" parent="Theme.MaterialComponents.DayNight.NoActionBar">
-        <item name="colorPrimary">@color/colorAccentt</item>
+        <item name="colorPrimary">@color/colorPrimaryNight</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorPrimaryVariant">@color/colorWhite</item>
 
 <!--        <item name="dialogSheetAccent">@color/colorAccentt</item>-->
-        <item name="colorAccent">@color/colorAccentt</item>
+        <item name="colorAccent">@color/colorAccentNight</item>
     </style>
 
     <style name="UpdateAppTheme" parent="Theme.MaterialComponents.DayNight.NoActionBar">
-        <item name="colorPrimary">@color/colorAccentt</item>
+        <item name="colorPrimary">@color/colorPrimaryNight</item>
 <!--        <item name="dialogSheetAccent">@color/colorAccentt</item>-->
-        <item name="colorAccent">@color/colorAccentt</item>
+        <item name="colorAccent">@color/colorAccentNight</item>
     </style>
 
     <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.MaterialComponents" />
@@ -63,8 +65,8 @@
     <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.MaterialComponents" />
 
     <style name="SplashAppTheme" parent="Theme.MaterialComponents.DayNight.NoActionBar">
-        <item name="colorAccent">@color/colorAccentt</item>
-        <item name="colorPrimary">@color/colorAccentt</item>
+        <item name="colorAccent">@color/colorAccentNight</item>
+        <item name="colorPrimary">@color/colorAccentNight</item>
 <!--        <item name="android:windowBackground">@drawable/splash_window_bg</item>-->
 <!--        <item name="dialogSheetAccent">@color/colorAccentt</item>-->
     </style>

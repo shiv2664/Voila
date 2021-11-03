@@ -106,26 +106,58 @@ class LoginViewModel(application: Application) : AndroidViewModel(application) {
                 if (task.isSuccessful) {
                     userLiveData.postValue(firebaseAuth.currentUser)
 
-                    FirebaseMessaging.getInstance().token.addOnCompleteListener {
-                        if(it.isComplete){
-                            val tokenId = it.result.toString()
-                            Log.d(myTAG, tokenId)
-                            val currentId = firebaseAuth.currentUser?.uid.toString()
-                            firebaseFirestore.collection("Tokens").document(currentId).get().addOnSuccessListener {
-                                val tokenMap2: MutableMap<String, Any> = HashMap()
-                                tokenMap2["id"] = tokenId
-                                firebaseFirestore.collection("Tokens")
-                                    .document(currentId)
-                                    .update(tokenMap2)
-                                    .addOnSuccessListener(OnSuccessListener<Void?> {
-                                        Log.d(myTAG, "token Updated")
+                    try{
 
-                                    }).addOnFailureListener(OnFailureListener {
-                                        Log.d(myTAG, "token NotUpdated")
-                                        Log.d(myTAG, it.localizedMessage.toString())
-                                    }) }
+                        FirebaseMessaging.getInstance().token.addOnCompleteListener {
+                            if(it.isComplete){
+                                if (it.isSuccessful){
+                                    val tokenId = it.result.toString()
+                                    Log.d(myTAG, tokenId)
+                                    val currentId = firebaseAuth.currentUser?.uid.toString()
+                                    firebaseFirestore.collection("Tokens").document(currentId).get().addOnSuccessListener {
+                                        val tokenMap2: MutableMap<String, Any> = HashMap()
+                                        tokenMap2["id"] = tokenId
+                                        firebaseFirestore.collection("Tokens")
+                                            .document(currentId)
+                                            .update(tokenMap2)
+                                            .addOnSuccessListener(OnSuccessListener<Void?> {
+                                                Log.d(myTAG, "token Updated")
+
+                                            }).addOnFailureListener(OnFailureListener {
+                                                Log.d(myTAG, "token NotUpdated")
+                                                Log.d(myTAG, ""+it.localizedMessage?.toString())
+                                            }) }
+                                }
+                                else{
+                                    Log.d(myTAG,"error is "+" ")
+                                }
+                            }
                         }
+
+                    }catch (e:Exception){
+                        Log.d(myTAG,"Exception is : "+e.localizedMessage)
                     }
+
+//                    FirebaseMessaging.getInstance().token.addOnCompleteListener {
+//                        if(it.isComplete){
+//                            val tokenId = it.result.toString()
+//                            Log.d(myTAG, tokenId)
+//                            val currentId = firebaseAuth.currentUser?.uid.toString()
+//                            firebaseFirestore.collection("Tokens").document(currentId).get().addOnSuccessListener {
+//                                val tokenMap2: MutableMap<String, Any> = HashMap()
+//                                tokenMap2["id"] = tokenId
+//                                firebaseFirestore.collection("Tokens")
+//                                    .document(currentId)
+//                                    .update(tokenMap2)
+//                                    .addOnSuccessListener(OnSuccessListener<Void?> {
+//                                        Log.d(myTAG, "token Updated")
+//
+//                                    }).addOnFailureListener(OnFailureListener {
+//                                        Log.d(myTAG, "token NotUpdated")
+//                                        Log.d(myTAG, it.localizedMessage.toString())
+//                                    }) }
+//                        }
+//                    }
 
 
                 } else if (!task.isSuccessful) {

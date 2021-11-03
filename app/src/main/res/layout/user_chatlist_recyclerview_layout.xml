@@ -6,7 +6,7 @@
 
         <variable
             name="userItem"
-            type="com.android.testproject1.room.enteties.UsersRoomEntity" />
+            type="com.android.testproject1.room.enteties.UsersChatListEntity" />
 
         <variable
             name="listener"
@@ -49,18 +49,18 @@
                 android:src="@drawable/person3"/>
 
             <LinearLayout
-                android:onClick="@{()->listener.onGroupItemClick(userItem)}"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_centerVertical="true"
-                android:layout_toEndOf="@id/profileImageIv"
-                android:layout_marginTop="15dp"
-                android:layout_marginBottom="15dp"
-                android:layout_marginLeft="15dp"
                 android:layout_marginStart="15dp"
-                android:layout_marginRight="15dp"
+                android:layout_marginLeft="15dp"
+                android:layout_marginTop="15dp"
                 android:layout_marginEnd="15dp"
+                android:layout_marginRight="15dp"
+                android:layout_marginBottom="15dp"
+                android:layout_toEndOf="@id/profileImageIv"
                 android:gravity="center_horizontal|start"
+                android:onClick="@{()->listener.onGroupItemClick(userItem)}"
                 android:orientation="vertical">
 
                 <!--                android:textColor="@color/primaryTextColor"-->
@@ -68,24 +68,24 @@
                     android:id="@+id/usernameTv"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textSize="15sp"
                     android:ellipsize="end"
                     android:lines="1"
-                    android:minLines="1"
                     android:maxLines="1"
-                    android:text="@{userItem.name}"/>
+                    android:minLines="1"
+                    android:text="@{userItem.name}"
+                    android:textSize="15sp" />
 
                 <!--                android:textColor="@color/secondaryTextColor"-->
                 <TextView
                     android:id="@+id/fullNameTv"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textSize="12sp"
                     android:ellipsize="end"
                     android:lines="1"
-                    android:minLines="1"
                     android:maxLines="1"
-                    android:text="Group Id"/>
+                    android:minLines="1"
+                    android:text="Group Id"
+                    android:textSize="12sp" />
 
             </LinearLayout>
 

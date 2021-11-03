@@ -16,7 +16,7 @@ import com.android.testproject1.interfaces.IMainActivity
 import com.android.testproject1.model.Notifications
 import com.android.testproject1.model.Offer
 import com.android.testproject1.model.Users
-import com.android.testproject1.room.enteties.UsersRoomEntity
+import com.android.testproject1.room.enteties.UsersChatListEntity
 import com.android.testproject1.viewmodels.MainActivityViewModel
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.firebase.auth.FirebaseAuth
@@ -147,7 +147,7 @@ class MainActivity : AppCompatActivity() , IMainActivity {
 
     }
 
-    override fun onJoinItemClick(userItem: Users) {
+    override fun onJoinItemClick(userItem: UsersChatListEntity) {
         TODO("Not yet implemented")
 
 //        val userId: String = userItem.id
@@ -180,7 +180,7 @@ class MainActivity : AppCompatActivity() , IMainActivity {
 
     }
 
-    override fun onGroupItemClick(userItem: UsersRoomEntity) {
+    override fun onGroupItemClick(userItem: UsersChatListEntity) {
     }
 
     override fun onGroupItemClick(userItem: Users) {
@@ -217,6 +217,10 @@ class MainActivity : AppCompatActivity() , IMainActivity {
     }
 
     override fun onBookMarkItemClick(offerItem: Offer) {
+        TODO("Not yet implemented")
+    }
+
+    override fun onGroupOpenFromMessages(userItem: UsersChatListEntity) {
         TODO("Not yet implemented")
     }
 

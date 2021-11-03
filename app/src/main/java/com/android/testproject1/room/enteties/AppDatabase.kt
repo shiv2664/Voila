@@ -5,12 +5,10 @@ import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
-import androidx.room.migration.Migration
-import androidx.sqlite.db.SupportSQLiteDatabase
 import com.android.testproject1.typeconverters.TypeConvertersClass
 
 
-@Database(entities = [PostRoomEntity::class,UsersRoomEntity::class,OffersSavedRoomEntity::class,ChatRoomEntity::class], version = 4)
+@Database(entities = [PostRoomEntity::class,UsersChatListEntity::class,OffersSavedRoomEntity::class,ChatRoomEntity::class], version = 4)
 @TypeConverters(TypeConvertersClass::class)
 abstract class AppDatabase : RoomDatabase() {
     abstract fun appDao(): AppDao?

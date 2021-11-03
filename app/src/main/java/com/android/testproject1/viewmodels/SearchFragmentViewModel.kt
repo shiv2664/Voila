@@ -31,11 +31,11 @@ class SearchFragmentViewModel(application: Application) : AndroidViewModel(appli
 
         val query: Query = if (lastResult == null) {
             db.collection("Offers").orderBy("timestamp", Query.Direction.DESCENDING)
-                .limit(5)
+                .limit(10)
         } else {
             db.collection("Offers").orderBy("timestamp", Query.Direction.DESCENDING)
                 .startAfter(lastResult?.toObject(Post::class.java)?.timestamp)
-                .limit(5)
+                .limit(10)
         }
 
 

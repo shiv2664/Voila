@@ -6,7 +6,7 @@
 
         <variable
             name="userItem"
-            type="com.android.testproject1.model.Users" />
+            type="com.android.testproject1.room.enteties.UsersChatListEntity" />
 
         <variable
             name="listener"

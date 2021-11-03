@@ -83,9 +83,18 @@ class GroupsOnOfferFragment : Fragment() {
 
 
                 firebaseFirestore.collection("Offers").document(postId)
-                    .collection("Groups").document(currentUserId!!).set(postMap, SetOptions.merge()).addOnSuccessListener {
+                    .collection("Groups").document(currentUserId!!).
+                    set(postMap, SetOptions.merge()).addOnSuccessListener {
 
-                        firebaseFirestore.collection("Posts").document(postId)
+                        val offerMap=HashMap<String,Any>()
+                        offerMap["postId"]=postId
+                        offerMap["groupId"]= currentUserId!!
+
+                        firebaseFirestore.collection("Users")
+                            .document(currentUserId!!)
+                            .collection("Offers").document(postId).set(offerMap, SetOptions.merge())
+
+                        firebaseFirestore.collection("Offers").document(postId)
                             .collection("Groups").document(currentUserId!!)
                             .update("Members", FieldValue.arrayUnion("$currentUserId"))
 

@@ -5,6 +5,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.databinding.ViewDataBinding
+import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.android.testproject1.BR
 import com.android.testproject1.interfaces.IMainActivity
@@ -48,15 +49,45 @@ class ChatAdapter(private val context: Context, private var chats: MutableList<C
 
     }
 
-    fun updateData(newChatList: List<ChatRoomEntity>) {
-        Log.d("MyTag size before ",chats.size.toString())
-        chats.clear()
-        Log.d("MyTag ",chats.size.toString())
-        chats.addAll(newChatList)
-        this.notifyDataSetChanged()
-        Log.d("MyTag","notifyDataSetChanged")
+    fun updateData(newChatList: MutableList<ChatRoomEntity>) {
+//        Log.d("MyTag size before ",chats.size.toString())
+//        chats.clear()
+        Log.d("MyTag ", " new Chat List : "+newChatList)
+//        chats.addAll(newChatList)
+//        notifyDataSetChanged()
+//        Log.d("MyTag","notifyDataSetChanged")
+
+        val oldList=chats
+        val diffUtil:DiffUtil.DiffResult=DiffUtil.calculateDiff(ChatItemDiffCallback(
+            oldList,newChatList
+        ))
+        chats=newChatList
+        diffUtil.dispatchUpdatesTo(this)
     }
 
+
+    class ChatItemDiffCallback(
+        var oldChatList :List<ChatRoomEntity>,
+        var newChatList:List<ChatRoomEntity>
+    ): DiffUtil.Callback() {
+        override fun getOldListSize(): Int {
+           return  oldChatList.size
+        }
+
+        override fun getNewListSize(): Int {
+            return newChatList.size
+        }
+
+        override fun areItemsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean {
+
+            return  (oldChatList[oldItemPosition].MessageId== newChatList[newItemPosition].MessageId)
+        }
+
+        override fun areContentsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean {
+
+            return  (oldChatList[oldItemPosition] == newChatList[newItemPosition])
+        }
+    }
 
 
 

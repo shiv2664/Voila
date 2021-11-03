@@ -7,6 +7,7 @@ import androidx.lifecycle.MutableLiveData
 import com.android.testproject1.Repository
 import com.android.testproject1.model.Post
 import com.android.testproject1.model.Users
+import com.android.testproject1.room.enteties.UsersChatListEntity
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.DocumentChange
 import com.google.firebase.firestore.DocumentSnapshot
@@ -19,12 +20,12 @@ class GroupsOnFragmentViewModel(application: Application) :AndroidViewModel(appl
     private val myTag="MyTag"
 
     private var lastResult: DocumentSnapshot? = null
-    private val userList: MutableLiveData<MutableList<Users>> = MutableLiveData()
-    private val list2 = mutableListOf<Users>()
+    private val userList: MutableLiveData<MutableList<UsersChatListEntity>> = MutableLiveData()
+    private val list2 = mutableListOf<UsersChatListEntity>()
     private var checkduplicate:String?=null
 
     @JvmName("getUserList")
-    fun getUserList(): MutableLiveData<MutableList<Users>> {
+    fun getUserList(): MutableLiveData<MutableList<UsersChatListEntity>> {
         return userList
     }
 
@@ -45,26 +46,32 @@ class GroupsOnFragmentViewModel(application: Application) :AndroidViewModel(appl
         query.get()
             .addOnSuccessListener { queryDocumentSnapshots ->
                 for (documentSnapshot in queryDocumentSnapshots) {
-//                    val users: Users = documentSnapshot.toObject(Users::class.java)
+                    val users: UsersChatListEntity = documentSnapshot.toObject(UsersChatListEntity::class.java)
+
+                    list2.add(users)
+                    userList.postValue(list2)
+
+//                    val objects2: List<UsersChatListEntity> = it.result?.toObjects(UsersChatListEntity::class.java) as List<UsersChatListEntity>
+//
 
 //                    Log.d(myTag, "query Snapshot  ${documentSnapshot.id}")
-                    db.collection("Users")
-                        .whereEqualTo("id",documentSnapshot.id)
-                        .get()
-                        .addOnCompleteListener {
-                            if (it.isSuccessful){
-                                val objects2: List<Users> = it.result?.toObjects(Users::class.java) as List<Users>
-
-                                if (checkduplicate!=documentSnapshot.data.toString()) {
-                                    checkduplicate = documentSnapshot.data.toString()
-
-                                    list2.addAll(objects2)
-                                    Log.d(myTag, "List 2 is : $list2")
-                                    userList.postValue(list2)
-                                }
-
-                            }
-                        }
+//                    db.collection("Users")
+//                        .whereEqualTo("id",documentSnapshot.id)
+//                        .get()
+//                        .addOnCompleteListener {
+//                            if (it.isSuccessful){
+//                                val objects2: List<UsersChatListEntity> = it.result?.toObjects(UsersChatListEntity::class.java) as List<UsersChatListEntity>
+//
+//                                if (checkduplicate!=documentSnapshot.data.toString()) {
+//                                    checkduplicate = documentSnapshot.data.toString()
+//
+//                                    list2.addAll(objects2)
+//                                    Log.d(myTag, "List 2 is : $list2")
+//                                    userList.postValue(list2)
+//                                }
+//
+//                            }
+//                        }
 
                 }
 

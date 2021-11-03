@@ -26,6 +26,9 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
+            android:name=".PaymentActivity"
+            android:exported="true" />
+        <activity
             android:name=".ChatActivity"
             android:exported="true" />
         <activity
@@ -44,7 +47,8 @@
         <activity android:name=".MainActivity" />
         <activity
             android:name=".RegisterActivity"
-            android:theme="@style/LoginAppTheme" />
+            android:theme="@style/LoginAppTheme"
+            />
 
         <service
             android:name=".services.UploadServicePosts"

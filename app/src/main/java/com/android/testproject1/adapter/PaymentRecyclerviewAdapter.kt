@@ -7,28 +7,16 @@ import android.view.ViewGroup
 import androidx.databinding.ViewDataBinding
 import androidx.recyclerview.widget.RecyclerView
 import com.android.testproject1.BR
-import com.android.testproject1.databinding.UserChatlistGroupBinding
+import com.android.testproject1.databinding.PaymentRecyclerviewItemBinding
 import com.android.testproject1.interfaces.IMainActivity
-import com.android.testproject1.databinding.UserChatlistRecyclerviewLayoutBinding
 import com.android.testproject1.room.enteties.UsersChatListEntity
 
-class UserChatListAdapter(private val context: Context, private var userList: MutableList<UsersChatListEntity>): RecyclerView
-.Adapter<UserChatListAdapter.BindingViewHolder>() {
+class PaymentRecyclerviewAdapter(private val context: Context, private var userList: MutableList<UsersChatListEntity>): RecyclerView
+.Adapter<PaymentRecyclerviewAdapter.BindingViewHolder>() {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BindingViewHolder {
 
-        if (viewType==0){
-            val rooView: ViewDataBinding = UserChatlistRecyclerviewLayoutBinding.inflate(LayoutInflater
-                .from(context),parent,false)
-            return BindingViewHolder(rooView)
-
-        } else{
-            val rooView2: ViewDataBinding = UserChatlistGroupBinding.inflate(LayoutInflater
-                .from(context),parent,false)
-            return BindingViewHolder(rooView2)
-
-        }
-
-
+        val rooView: ViewDataBinding = PaymentRecyclerviewItemBinding.inflate(LayoutInflater.from(context),parent,false)
+        return BindingViewHolder(rooView)
     }
 
     override fun onBindViewHolder(holder: BindingViewHolder, position: Int) {
@@ -43,17 +31,6 @@ class UserChatListAdapter(private val context: Context, private var userList: Mu
         Log.d("MyTag is", userList.size.toString())
         return userList.size
 
-    }
-
-    override fun getItemViewType(position: Int): Int {
-
-       if ( userList[position].viewType=="group"){
-           return 1
-       }else if (userList[position].viewType=="user"){
-           return 0
-       }
-
-        return super.getItemViewType(position)
     }
 
     fun updateData(newUserList: List<UsersChatListEntity>) {

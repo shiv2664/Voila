@@ -42,7 +42,7 @@
             app:cardElevation="7dp"
             android:visibility="gone"
             app:cardUseCompatPadding="true"
-            app:cardBackgroundColor="@color/colorAccentt"
+            app:cardBackgroundColor="?attr/colorAccent"
             android:foreground="?selectableItemBackground"
             android:layout_gravity="center_horizontal"
             app:cardCornerRadius="20dp"

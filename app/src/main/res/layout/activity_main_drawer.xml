@@ -44,7 +44,7 @@
                 android:layout_height="wrap_content"
                 android:onClick="onViewProfileClicked"
                 android:text="View profile"
-                android:textColor="@color/colorAccentt"
+                android:textColor="?attr/colorAccent"
                 tools:ignore="MissingPrefix" />
 
         </LinearLayout>

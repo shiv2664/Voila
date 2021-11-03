@@ -53,9 +53,9 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:id="@+id/username"
+                    android:id="@+id/name_holder"
                     android:textSize="18sp"
-                    android:textColor="#fff"
+                    android:textColor="@color/black"
                     android:textStyle="bold"
                     android:layout_marginStart="25dp"/>
 

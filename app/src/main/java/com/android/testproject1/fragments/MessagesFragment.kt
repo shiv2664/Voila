@@ -40,6 +40,7 @@ class MessagesFragment : Fragment() {
             this, ViewModelProvider.AndroidViewModelFactory
                 .getInstance(requireActivity().application)
         ).get(ViewPagerFragmentChatViewModel::class.java)
+        mViewModel.loadUserGroups()
 
         mViewModel.loadUserChatList()
 

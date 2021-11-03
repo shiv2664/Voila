@@ -119,8 +119,8 @@
                     android:layout_width="match_parent"
                     android:hint="Enter the offer"
                     android:layout_marginEnd="10dp"
-                    app:boxStrokeColor="@color/colorAccentt"
-                    app:hintTextColor="@color/colorAccentt"
+                    app:boxStrokeColor="?attr/colorAccent"
+                    app:hintTextColor="?attr/colorAccent"
                     android:layout_marginStart="10dp"
                     style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                     android:layout_height="wrap_content">
@@ -139,8 +139,8 @@
                     android:hint="Some description about the offer"
                     android:layout_marginEnd="10dp"
                     android:layout_marginStart="10dp"
-                    app:boxStrokeColor="@color/colorAccentt"
-                    app:hintTextColor="@color/colorAccentt"
+                    app:boxStrokeColor="?attr/colorAccent"
+                    app:hintTextColor="?attr/colorAccent"
                     style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                     android:layout_height="wrap_content">
 
@@ -166,8 +166,8 @@
                         android:hint="People(Min)(Req)"
                         android:layout_marginEnd="10dp"
                         android:layout_marginStart="10dp"
-                        app:boxStrokeColor="@color/colorAccentt"
-                        app:hintTextColor="@color/colorAccentt"
+                        app:boxStrokeColor="?attr/colorAccent"
+                        app:hintTextColor="?attr/colorAccent"
                         android:layout_weight="1"
                         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                         android:layout_height="wrap_content">
@@ -187,8 +187,8 @@
                         android:layout_marginEnd="10dp"
                         android:layout_marginStart="10dp"
                         android:layout_weight="1"
-                        app:boxStrokeColor="@color/colorAccentt"
-                        app:hintTextColor="@color/colorAccentt"
+                        app:boxStrokeColor="?attr/colorAccent"
+                        app:hintTextColor="?attr/colorAccent"
                         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                         android:layout_height="wrap_content">
 
@@ -214,8 +214,8 @@
                         android:hint="₹Discounted Price"
                         android:layout_marginEnd="10dp"
                         android:layout_marginStart="10dp"
-                        app:boxStrokeColor="@color/colorAccentt"
-                        app:hintTextColor="@color/colorAccentt"
+                        app:boxStrokeColor="?attr/colorAccent"
+                        app:hintTextColor="?attr/colorAccent"
                         android:layout_weight="1"
                         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                         android:layout_height="wrap_content">
@@ -235,8 +235,8 @@
                         android:layout_marginEnd="10dp"
                         android:layout_marginStart="10dp"
                         android:layout_weight="1"
-                        app:boxStrokeColor="@color/colorAccentt"
-                        app:hintTextColor="@color/colorAccentt"
+                        app:boxStrokeColor="?attr/colorAccent"
+                        app:hintTextColor="?attr/colorAccent"
                         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                         android:layout_height="wrap_content">
 
@@ -255,8 +255,8 @@
                         android:id="@+id/CityInputLauout"
                         android:layout_marginEnd="10dp"
                         android:layout_marginStart="10dp"
-                        app:boxStrokeColor="@color/colorAccentt"
-                        app:hintTextColor="@color/colorAccentt"
+                        app:boxStrokeColor="?attr/colorAccent"
+                        app:hintTextColor="?attr/colorAccent"
                         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"

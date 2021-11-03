@@ -37,37 +37,41 @@
             android:layout_gravity="center"
             android:visibility="gone"/>
 
-        <com.google.android.material.bottomappbar.BottomAppBar
-            android:id="@+id/bottomAppBar"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="bottom"
-            app:elevation="8dp"
-            app:fabAlignmentMode="center"
-            app:fabCradleRoundedCornerRadius="32dp"
-            app:fabCradleMargin="10dp"
-            app:backgroundTint="@color/lightgrey"
-            app:fabCradleVerticalOffset="18dp"
-            app:buttonGravity="bottom">
+<!--        app:backgroundTint="@color/lightgrey"-->
+<!--        <com.google.android.material.bottomappbar.BottomAppBar-->
+<!--            android:id="@+id/bottomAppBar"-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:layout_gravity="bottom"-->
+<!--            app:elevation="8dp"-->
+<!--            app:fabAlignmentMode="center"-->
+<!--            app:fabCradleRoundedCornerRadius="32dp"-->
+<!--            app:fabCradleMargin="10dp"-->
+<!--            android:background="@drawable/bottom_nav_background"-->
+<!--            app:fabCradleVerticalOffset="18dp"-->
+<!--            app:buttonGravity="bottom">-->
+<!--        </com.google.android.material.bottomappbar.BottomAppBar>-->
             <!--            app:backgroundTint="@color/greybackground"-->
 
-            <com.google.android.material.bottomnavigation.BottomNavigationView
-                android:id="@+id/bottomNav"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_gravity="bottom"
-                android:background="@color/lightgrey"
-                app:menu="@menu/bottom_menu"
-                android:layout_marginEnd="16dp"
-                app:itemIconTint="@color/bottom_nav_selector" />
-
-        </com.google.android.material.bottomappbar.BottomAppBar>
+        <com.google.android.material.bottomnavigation.BottomNavigationView
+            android:id="@+id/bottomNav"
+            android:layout_gravity="bottom"
+            android:layout_marginStart="10dp"
+            android:layout_marginEnd="10dp"
+            app:elevation="8dp"
+            android:layout_marginBottom="2dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/bottom_nav_background"
+            app:menu="@menu/bottom_menu"
+            app:itemIconTint="@color/bottom_nav_selector" />
+        <!--        android:layout_marginEnd="16dp"-->
 
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
 
-<!--            app:footer="@layout/duo_view_footer"-->
-<!--    <nl.psdcompany.duonavigationdrawer.views.DuoDrawerLayout-->
-<!--        android:id="@+id/drawer"-->
+    <!--            app:footer="@layout/duo_view_footer"-->
+    <!--    <nl.psdcompany.duonavigationdrawer.views.DuoDrawerLayout-->
+    <!--        android:id="@+id/drawer"-->
 <!--        android:layout_width="match_parent"-->
 <!--        android:layout_height="match_parent">-->
 

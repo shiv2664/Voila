@@ -2,7 +2,6 @@ package com.android.testproject1.room.enteties
 
 import androidx.lifecycle.LiveData
 import androidx.room.*
-import com.android.testproject1.fragments.GroupsOnOfferFragment
 
 @Dao
 interface AppDao {
@@ -17,10 +16,16 @@ interface AppDao {
 
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun insertUsersChats(UserChatEntity: MutableList<UsersRoomEntity>)
+    fun insertUsersChatsList(UserChatEntity: MutableList<UsersChatListEntity>)
 
-    @Query("Select * from UsersRoomEntity")
-    fun getUserChats(): LiveData<MutableList<UsersRoomEntity>>
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    fun insertUsersChats(UserChatEntity: UsersChatListEntity)
+
+    @Query("Select * from UsersChatListEntity")
+    fun getUserChats(): LiveData<MutableList<UsersChatListEntity>>
+
+    @Query("Delete from UsersChatListEntity")
+    fun deleteAllChatList()
 
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
@@ -39,8 +44,14 @@ interface AppDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insertMessageList(chatRoomEntity: List<ChatRoomEntity>)
 
-    @Query("Select * From ChatRoomEntity where chatKey= :chatKey order by timestamp")
-    fun getMessages(chatKey: String): LiveData<MutableList<ChatRoomEntity>>
+    @Query("Select * From ChatRoomEntity where chatKey= :chatKey order by timestamp ")
+    fun getMessages(chatKey: String): LiveData<List<ChatRoomEntity>>
+
+//    @Query("Select * From ChatRoomEntity where chatKey= :chatKey order by timestamp ")
+//    fun getMessagesList(chatKey: String): List<ChatRoomEntity>
+
+    @Query("Select * From ChatRoomEntity where postId= :postId AND groupId= :groupId order by timestamp ")
+    fun getGroupMessages(postId: String,groupId: String): LiveData<List<ChatRoomEntity>>
 
     @Query("Select * from ChatRoomEntity")
     fun getMessagesAll(): List<ChatRoomEntity>

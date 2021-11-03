@@ -14,7 +14,7 @@
         tools:context=".RegisterActivity"
         android:orientation="vertical"
         android:weightSum="4"
-        android:background="@color/colorAccentt">
+        android:background="?attr/colorPrimary">
 
         <RelativeLayout
             android:layout_width="match_parent"

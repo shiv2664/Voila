@@ -10,8 +10,9 @@ import com.android.testproject1.BR
 import com.android.testproject1.interfaces.IMainActivity
 import com.android.testproject1.databinding.GroupRecyclerviewLayoutBinding
 import com.android.testproject1.model.Users
+import com.android.testproject1.room.enteties.UsersChatListEntity
 
-class GroupAdapter(private val context: Context, private var userList: MutableList<Users>): RecyclerView
+class GroupAdapter(private val context: Context, private var userList: MutableList<UsersChatListEntity>): RecyclerView
 .Adapter<GroupAdapter.BindingViewHolder>() {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BindingViewHolder {
 
@@ -33,7 +34,7 @@ class GroupAdapter(private val context: Context, private var userList: MutableLi
 
     }
 
-    fun updateData(newUserList: List<Users>) {
+    fun updateData(newUserList: List<UsersChatListEntity>) {
             Log.d("MyTag size before ", userList.size.toString())
             userList.clear()
             Log.d("MyTag ", userList.size.toString())

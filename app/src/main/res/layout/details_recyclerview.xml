@@ -6,7 +6,7 @@
 
         <variable
             name="userItem"
-            type="com.android.testproject1.model.Users" />
+            type="com.android.testproject1.room.enteties.UsersChatListEntity" />
 
         <variable
             name="listener"
@@ -84,7 +84,7 @@
                     android:lines="1"
                     android:maxLines="1"
                     android:minLines="1"
-                    android:text="Group Id"
+                    android:text="@{userItem.username}"
                     android:textSize="12sp" />
 
             </LinearLayout>

@@ -10,6 +10,6 @@
         android:bottomRightRadius="10dp" />
 
     <solid
-        android:color="@color/colorAccentt" />
+        android:color="?attr/colorAccent" />
 
 </shape>

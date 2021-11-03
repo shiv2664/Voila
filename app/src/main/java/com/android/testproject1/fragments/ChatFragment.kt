@@ -6,24 +6,28 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.AbsListView
 import android.widget.Toast
-import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.viewModelScope
-import com.android.testproject1.R
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.android.testproject1.databinding.FragmentChatBinding
 import com.android.testproject1.model.Users
-import com.android.testproject1.room.enteties.UsersRoomEntity
+import com.android.testproject1.room.enteties.ChatRoomEntity
+import com.android.testproject1.room.enteties.UsersChatListEntity
 import com.android.testproject1.viewmodels.ChatFragmentViewModel
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.CollectionReference
 import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.SetOptions
+import kotlinx.android.synthetic.main.fragment_chat.*
+import kotlinx.android.synthetic.main.fragment_home.*
+import kotlinx.android.synthetic.main.notifications_item.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import java.util.HashMap
-import java.util.zip.Inflater
 
 class ChatFragment : Fragment() {
 
@@ -35,6 +39,12 @@ class ChatFragment : Fragment() {
     private lateinit var firebseauth: FirebaseAuth
     private lateinit var mViewModel:ChatFragmentViewModel
     private var checkChatList:Boolean=false
+    private var checkKeyboard:Boolean=false
+
+    var isScrolling = false
+    var currentItems = 0
+    var totalItems:Int = 0
+    var scrollOutItems:Int = 0
 
     companion object {
         var chatKey: String? = null
@@ -48,13 +58,13 @@ class ChatFragment : Fragment() {
         val chatsOpened=bundle?.getString("chatsOpened")
 
         if (chatsOpened=="fromGroups"){
-            val groupItem= bundle.getParcelable<Users>("userItem")
+            val groupItem= bundle.getParcelable<UsersChatListEntity>("userItem")
             Log.d("MyTag","userItem is : "+groupItem?.id)
             if (groupItem != null) {
                 userId=groupItem.id
             }
         }else if (chatsOpened=="fromMessages"){
-            val groupItem= bundle.getParcelable<UsersRoomEntity>("userItem")
+            val groupItem= bundle.getParcelable<UsersChatListEntity>("userItem")
             if (groupItem != null) {
                 userId=groupItem.id
             }
@@ -77,9 +87,18 @@ class ChatFragment : Fragment() {
         mViewModel = ViewModelProvider(this, ViewModelProvider.AndroidViewModelFactory.getInstance(requireActivity().application))
             .get(ChatFragmentViewModel::class.java)
 
-        mViewModel.getChatList().observe(viewLifecycleOwner, {
-            binding.chatList = it
-        })
+        CoroutineScope(Dispatchers.IO).launch {}
+
+        chatKey?.let {
+            mViewModel.getChatList(it)?.observe(viewLifecycleOwner, {
+                binding.chatList = it
+            })
+        }
+
+
+
+
+
 
         chatreference.collection("Users").document(currentUserId).get().addOnSuccessListener {
             if (it!=null){
@@ -136,8 +155,45 @@ class ChatFragment : Fragment() {
 
         }
 
+        chatKey?.let { mViewModel.queryLoad(it) }
+
+        binding.messageRecyclerview.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+            override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
+                super.onScrollStateChanged(recyclerView, newState)
+                if (newState == AbsListView.OnScrollListener.SCROLL_STATE_TOUCH_SCROLL) {
+                    isScrolling = true
+                }
+            }
+
+            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+                super.onScrolled(recyclerView, dx, dy)
+                currentItems = messageRecyclerview.layoutManager?.childCount!!
+                totalItems = messageRecyclerview.layoutManager?.itemCount!!
+                scrollOutItems = (messageRecyclerview.layoutManager as LinearLayoutManager).findFirstVisibleItemPosition()
+
+                Log.d("MyTag"," currentItems : $currentItems  totalItems : $totalItems scrollOutItems :$scrollOutItems")
+
+                if (isScrolling && currentItems + scrollOutItems == totalItems) {
+                    isScrolling = false
+//                    mViewModel.removelistener()
+                    chatKey?.let { mViewModel.queryLoad(it) }
+                }
+
+
+
+            }
+        })
+
+        //                if(!recyclerView.canScrollVertically()) {
+//                    // LOAD MORE
+//                    chatKey?.let { mViewModel.loadChat(it) }
+//                }
+
+
         return binding.root
     }
+
+
 
 
     private fun sendMessage(sender: String?, receiver: String?, message: String?) {
@@ -145,10 +201,10 @@ class ChatFragment : Fragment() {
             Toast.makeText(activity, "Message Can't be sent", Toast.LENGTH_SHORT).show()
         } else {
 
-            val chatRef = chatKey?.let { chatreference.collection("Chats").document(it).collection("UserChats") }
+            val chatRef = chatKey?.let { chatreference.collection("Chats")
+                .document(it).collection("UserChats") }
 
             val messageID = chatRef?.document()?.id
-
             val hashMap = HashMap<String?, Any?>()
             hashMap["sender"] = sender
             hashMap["receiver"] = receiver
@@ -160,14 +216,71 @@ class ChatFragment : Fragment() {
             hashMap["id"] =messageID
 
             if (messageID != null) {
-                chatRef.document(messageID).set(hashMap, SetOptions.merge())
+
+//                checkPendingWrites(hashMap,chatRef,messageID,sender!!,receiver!!,message!!)
+                chatRef.document(messageID).set(hashMap, SetOptions.merge()).addOnSuccessListener {
+
+                    chatRef.document(messageID).get().addOnSuccessListener {
+
+                        val chat: ChatRoomEntity? = it?.toObject(ChatRoomEntity::class.java)
+                        val hashMap2 = HashMap<String?, Any?>()
+                        hashMap2["sender"] = sender
+                        hashMap2["receiver"] = receiver
+                        hashMap2["message"] = message
+                        hashMap2["name"] = name
+                        hashMap2["timestamp"] = chat?.timestamp
+                        hashMap2["isseen"] = false
+                        hashMap2["chatKey"] = chatKey
+                        hashMap2["id"] =messageID
+
+                        chatRef.document("recentMessage").set(hashMap2)
+
+
+                    }
+                }
+
+//                chatRef.document("recentMessage").set(hashMap)
             }
             Log.d("MyTag","chatRef Doc Id : "+messageID)
 
         }
     }
 
+    private fun checkPendingWrites(hashMap: HashMap<String?, Any?>,chatRef: CollectionReference
+                                   ,messageID:String,sender:String,receiver:String,message:String) {
 
+        chatRef.document("recentMessage").get().addOnSuccessListener {
+            if (it!=null){
+                if (!it.metadata.hasPendingWrites()){
+
+                    chatRef.document("recentMessage").set(hashMap).addOnSuccessListener {
+
+                        chatRef.document("recentMessage").get().addOnSuccessListener {
+
+                            val chat: ChatRoomEntity? = it?.toObject(ChatRoomEntity::class.java)
+                            val hashMap2 = HashMap<String?, Any?>()
+                            val timestamp= chat?.timestamp
+                            hashMap2["sender"] = sender
+                            hashMap2["receiver"] = receiver
+                            hashMap2["message"] = message
+                            hashMap2["name"] = name
+                            hashMap2["timestamp"] = timestamp
+                            hashMap2["isseen"] = false
+                            hashMap2["chatKey"] = chatKey
+                            hashMap2["id"] =messageID
+
+                            chatRef.document("recentMessage2").set(hashMap)
+
+                        }
+
+                    }
+                }else{
+                    checkPendingWrites(hashMap,chatRef,messageID,sender,receiver,message)
+                }
+            }
+        }
+
+    }
 
 
 }

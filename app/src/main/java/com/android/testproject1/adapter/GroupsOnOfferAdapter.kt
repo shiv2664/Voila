@@ -10,8 +10,9 @@ import com.android.testproject1.BR
 import com.android.testproject1.interfaces.IMainActivity
 import com.android.testproject1.databinding.DetailsRecyclerviewBinding
 import com.android.testproject1.model.Users
+import com.android.testproject1.room.enteties.UsersChatListEntity
 
-class GroupsOnOfferAdapter(private val context: Context, private var userList: MutableList<Users>): RecyclerView
+class GroupsOnOfferAdapter(private val context: Context, private var userList: MutableList<UsersChatListEntity>): RecyclerView
     .Adapter<GroupsOnOfferAdapter.BindingViewHolder>() {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BindingViewHolder {
 
@@ -33,7 +34,7 @@ class GroupsOnOfferAdapter(private val context: Context, private var userList: M
 
     }
 
-    fun updateData(newUserList: List<Users>) {
+    fun updateData(newUserList: List<UsersChatListEntity>) {
         if (userList!=newUserList) {
             Log.d("MyTag", " size before userList in Details " + userList.size.toString())
             Log.d("MyTag", " size before newUserList in Details " + newUserList.size.toString())

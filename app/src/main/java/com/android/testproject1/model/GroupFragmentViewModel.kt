@@ -5,12 +5,13 @@ import android.util.Log
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
 import com.android.testproject1.Repository
+import com.android.testproject1.room.enteties.UsersChatListEntity
 import com.google.firebase.auth.FirebaseUser
 
 class GroupFragmentViewModel(application: Application) : AndroidViewModel(application) {
 
     private val authAppRepository: Repository = Repository(application)
-    private val groupList: MutableLiveData<MutableList<Users>> = authAppRepository.getGroupList()
+    private val groupList: MutableLiveData<MutableList<UsersChatListEntity>> = authAppRepository.getGroupList()
 
 
 
@@ -22,7 +23,7 @@ class GroupFragmentViewModel(application: Application) : AndroidViewModel(applic
     }
 
     @JvmName("getGroupList")
-    fun getGroupList(): MutableLiveData<MutableList<Users>> {
+    fun getGroupList(): MutableLiveData<MutableList<UsersChatListEntity>> {
         return groupList
     }
 

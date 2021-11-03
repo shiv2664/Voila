@@ -25,231 +25,226 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:layout_centerVertical="true">
+                android:layout_centerVertical="true"
+                android:orientation="vertical">
 
                 <com.google.android.material.textfield.TextInputLayout
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="40dp"
                     android:layout_marginEnd="40dp"
-                    app:boxStrokeColor="@color/colorAccentt"
-                    app:hintTextColor="@color/colorAccentt"
                     android:hint="Name"
-                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
+                    app:boxStrokeColor="?attr/colorAccent"
+                    app:hintTextColor="?attr/colorAccent">
 
                     <EditText
                         android:id="@+id/signUpFullName"
-                        android:inputType="textEmailAddress"
-                        android:singleLine="true"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        />
+                        android:inputType="textEmailAddress"
+                        android:singleLine="true" />
 
                 </com.google.android.material.textfield.TextInputLayout>
 
 
-<!--                <EditText-->
-<!--                    android:id="@+id/signUpFullName"-->
-<!--                    android:layout_width="match_parent"-->
-<!--                    android:gravity="center_vertical"-->
-<!--                    android:inputType="textCapWords"-->
-<!--                    android:singleLine="true"-->
-<!--                    android:textSize="16sp"-->
-<!--                    android:drawableTint="@color/colorTextBlack"-->
-<!--                    android:textColorHint="@color/colorPlaceholder"-->
-<!--                    android:drawableEnd="@drawable/user_icon"-->
-<!--                    android:layout_marginTop="20dp"-->
-<!--                    android:textColor="@color/colorTextBlack"-->
-<!--                    android:paddingLeft="26dp"-->
-<!--                    android:paddingRight="26dp"-->
-<!--                    android:fontFamily="@font/seg_ui_semibold"-->
-<!--                    android:background="@drawable/edit_text_background"-->
-<!--                    android:layout_height="52dp"-->
-<!--                    android:layout_marginLeft="48dp"-->
-<!--                    android:layout_marginRight="48dp"-->
-<!--                    android:hint="Full Name"-->
-<!--                    />-->
+                <!--                <EditText-->
+                <!--                    android:id="@+id/signUpFullName"-->
+                <!--                    android:layout_width="match_parent"-->
+                <!--                    android:gravity="center_vertical"-->
+                <!--                    android:inputType="textCapWords"-->
+                <!--                    android:singleLine="true"-->
+                <!--                    android:textSize="16sp"-->
+                <!--                    android:drawableTint="@color/colorTextBlack"-->
+                <!--                    android:textColorHint="@color/colorPlaceholder"-->
+                <!--                    android:drawableEnd="@drawable/user_icon"-->
+                <!--                    android:layout_marginTop="20dp"-->
+                <!--                    android:textColor="@color/colorTextBlack"-->
+                <!--                    android:paddingLeft="26dp"-->
+                <!--                    android:paddingRight="26dp"-->
+                <!--                    android:fontFamily="@font/seg_ui_semibold"-->
+                <!--                    android:background="@drawable/edit_text_background"-->
+                <!--                    android:layout_height="52dp"-->
+                <!--                    android:layout_marginLeft="48dp"-->
+                <!--                    android:layout_marginRight="48dp"-->
+                <!--                    android:hint="Full Name"-->
+                <!--                    />-->
 
                 <com.google.android.material.textfield.TextInputLayout
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="40dp"
                     android:layout_marginEnd="40dp"
-                    app:boxStrokeColor="@color/colorAccentt"
-                    app:hintTextColor="@color/colorAccentt"
                     android:hint="Email"
-                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
+                    app:boxStrokeColor="?attr/colorAccent"
+                    app:hintTextColor="?attr/colorAccent">
 
                     <EditText
                         android:id="@+id/signUpEmailID"
-                        android:inputType="textEmailAddress"
-                        android:singleLine="true"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        />
+                        android:inputType="textEmailAddress"
+                        android:singleLine="true" />
 
                 </com.google.android.material.textfield.TextInputLayout>
 
 
-<!--                <EditText-->
-<!--                    android:hint="EmailID"-->
-<!--                    android:id="@+id/signUpEmailID"-->
-<!--                    android:textColorHint="@color/colorPlaceholder"-->
-<!--                    android:layout_marginTop="20dp"-->
-<!--                    android:drawableEnd="@drawable/user_icon"-->
-<!--                    android:drawableTint="@color/colorTextBlack"-->
-<!--                    android:textColor="@color/colorTextBlack"-->
-<!--                    android:paddingLeft="26dp"-->
-<!--                    android:paddingRight="26dp"-->
-<!--                    android:inputType="textEmailAddress"-->
-<!--                    android:fontFamily="@font/seg_ui_semibold"-->
-<!--                    android:background="@drawable/edit_text_background"-->
-<!--                    android:layout_width="match_parent"-->
-<!--                    android:layout_height="52dp"-->
-<!--                    android:layout_marginLeft="48dp"-->
-<!--                    android:layout_marginRight="48dp"-->
-<!--                    android:textSize="16sp"-->
-<!--                    />-->
+                <!--                <EditText-->
+                <!--                    android:hint="EmailID"-->
+                <!--                    android:id="@+id/signUpEmailID"-->
+                <!--                    android:textColorHint="@color/colorPlaceholder"-->
+                <!--                    android:layout_marginTop="20dp"-->
+                <!--                    android:drawableEnd="@drawable/user_icon"-->
+                <!--                    android:drawableTint="@color/colorTextBlack"-->
+                <!--                    android:textColor="@color/colorTextBlack"-->
+                <!--                    android:paddingLeft="26dp"-->
+                <!--                    android:paddingRight="26dp"-->
+                <!--                    android:inputType="textEmailAddress"-->
+                <!--                    android:fontFamily="@font/seg_ui_semibold"-->
+                <!--                    android:background="@drawable/edit_text_background"-->
+                <!--                    android:layout_width="match_parent"-->
+                <!--                    android:layout_height="52dp"-->
+                <!--                    android:layout_marginLeft="48dp"-->
+                <!--                    android:layout_marginRight="48dp"-->
+                <!--                    android:textSize="16sp"-->
+                <!--                    />-->
 
                 <com.google.android.material.textfield.TextInputLayout
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="40dp"
                     android:layout_marginEnd="40dp"
-                    app:boxStrokeColor="@color/colorAccentt"
-                    app:hintTextColor="@color/colorAccentt"
                     android:hint="Phone Number"
-                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
+                    app:boxStrokeColor="?attr/colorAccent"
+                    app:hintTextColor="?attr/colorAccent">
 
                     <EditText
                         android:id="@+id/signUpMobileNumber"
-                        android:inputType="phone"
-                        android:singleLine="true"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        />
+                        android:inputType="phone"
+                        android:singleLine="true" />
 
                 </com.google.android.material.textfield.TextInputLayout>
 
-<!--                <EditText-->
-<!--                    android:id="@+id/signUpMobileNumber"-->
-<!--                    android:layout_width="fill_parent"-->
-<!--                    android:drawablePadding="8dp"-->
-<!--                    android:gravity="center_vertical"-->
-<!--                    android:inputType="phone"-->
-<!--                    android:singleLine="true"-->
-<!--                    android:textSize="16sp"-->
-<!--                    android:layout_marginTop="20dp"-->
-<!--                    android:drawableTint="@color/colorTextBlack"-->
-<!--                    android:textColorHint="@color/colorPlaceholder"-->
-<!--                    android:drawableEnd="@drawable/user_icon"-->
-<!--                    android:textColor="@color/colorTextBlack"-->
-<!--                    android:paddingLeft="26dp"-->
-<!--                    android:paddingRight="26dp"-->
-<!--                    android:fontFamily="@font/seg_ui_semibold"-->
-<!--                    android:background="@drawable/edit_text_background"-->
-<!--                    android:layout_height="52dp"-->
-<!--                    android:layout_marginLeft="48dp"-->
-<!--                    android:layout_marginRight="48dp"-->
-<!--                    android:hint="Phone Number"-->
-<!--                    />-->
+                <!--                <EditText-->
+                <!--                    android:id="@+id/signUpMobileNumber"-->
+                <!--                    android:layout_width="fill_parent"-->
+                <!--                    android:drawablePadding="8dp"-->
+                <!--                    android:gravity="center_vertical"-->
+                <!--                    android:inputType="phone"-->
+                <!--                    android:singleLine="true"-->
+                <!--                    android:textSize="16sp"-->
+                <!--                    android:layout_marginTop="20dp"-->
+                <!--                    android:drawableTint="@color/colorTextBlack"-->
+                <!--                    android:textColorHint="@color/colorPlaceholder"-->
+                <!--                    android:drawableEnd="@drawable/user_icon"-->
+                <!--                    android:textColor="@color/colorTextBlack"-->
+                <!--                    android:paddingLeft="26dp"-->
+                <!--                    android:paddingRight="26dp"-->
+                <!--                    android:fontFamily="@font/seg_ui_semibold"-->
+                <!--                    android:background="@drawable/edit_text_background"-->
+                <!--                    android:layout_height="52dp"-->
+                <!--                    android:layout_marginLeft="48dp"-->
+                <!--                    android:layout_marginRight="48dp"-->
+                <!--                    android:hint="Phone Number"-->
+                <!--                    />-->
 
 
                 <com.google.android.material.textfield.TextInputLayout
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="40dp"
                     android:layout_marginEnd="40dp"
-                    app:boxStrokeColor="@color/colorAccentt"
-                    app:hintTextColor="@color/colorAccentt"
                     android:hint="Password"
-                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
+                    app:boxStrokeColor="?attr/colorAccent"
+                    app:hintTextColor="?attr/colorAccent">
 
                     <EditText
                         android:id="@+id/signUpPassword"
-                        android:inputType="textPassword"
-                        android:singleLine="true"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        />
+                        android:inputType="textPassword"
+                        android:singleLine="true" />
 
                 </com.google.android.material.textfield.TextInputLayout>
 
 
-<!--                <EditText-->
-<!--                    android:id="@+id/signUpPassword"-->
-<!--                    android:layout_width="fill_parent"-->
-<!--                    android:drawablePadding="8dp"-->
-<!--                    android:gravity="center_vertical"-->
-<!--                    android:inputType="textPassword"-->
-<!--                    android:singleLine="true"-->
-<!--                    android:textSize="16sp"-->
-<!--                    android:drawableTint="@color/colorTextBlack"-->
-<!--                    android:textColorHint="@color/colorPlaceholder"-->
-<!--                    android:drawableEnd="@drawable/user_icon"-->
-<!--                    android:layout_marginTop="20dp"-->
-<!--                    android:textColor="@color/colorTextBlack"-->
-<!--                    android:paddingLeft="26dp"-->
-<!--                    android:paddingRight="26dp"-->
-<!--                    android:fontFamily="@font/seg_ui_semibold"-->
-<!--                    android:background="@drawable/edit_text_background"-->
-<!--                    android:layout_height="52dp"-->
-<!--                    android:layout_marginLeft="48dp"-->
-<!--                    android:layout_marginRight="48dp"-->
-<!--                    android:hint="Password"-->
-<!--                    />-->
+                <!--                <EditText-->
+                <!--                    android:id="@+id/signUpPassword"-->
+                <!--                    android:layout_width="fill_parent"-->
+                <!--                    android:drawablePadding="8dp"-->
+                <!--                    android:gravity="center_vertical"-->
+                <!--                    android:inputType="textPassword"-->
+                <!--                    android:singleLine="true"-->
+                <!--                    android:textSize="16sp"-->
+                <!--                    android:drawableTint="@color/colorTextBlack"-->
+                <!--                    android:textColorHint="@color/colorPlaceholder"-->
+                <!--                    android:drawableEnd="@drawable/user_icon"-->
+                <!--                    android:layout_marginTop="20dp"-->
+                <!--                    android:textColor="@color/colorTextBlack"-->
+                <!--                    android:paddingLeft="26dp"-->
+                <!--                    android:paddingRight="26dp"-->
+                <!--                    android:fontFamily="@font/seg_ui_semibold"-->
+                <!--                    android:background="@drawable/edit_text_background"-->
+                <!--                    android:layout_height="52dp"-->
+                <!--                    android:layout_marginLeft="48dp"-->
+                <!--                    android:layout_marginRight="48dp"-->
+                <!--                    android:hint="Password"-->
+                <!--                    />-->
 
                 <com.google.android.material.textfield.TextInputLayout
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="40dp"
                     android:layout_marginEnd="40dp"
-                    app:boxStrokeColor="@color/colorAccentt"
-                    app:hintTextColor="@color/colorAccentt"
                     android:hint="Confirm Password"
-                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
+                    app:boxStrokeColor="?attr/colorAccent"
+                    app:hintTextColor="?attr/colorAccent">
 
                     <EditText
                         android:id="@+id/signUpConfirmPassword"
-                        android:inputType="textPassword"
-                        android:singleLine="true"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        />
+                        android:inputType="textPassword"
+                        android:singleLine="true" />
 
                 </com.google.android.material.textfield.TextInputLayout>
 
-<!--                <EditText-->
-<!--                    android:id="@+id/signUpConfirmPassword"-->
-<!--                    android:layout_width="fill_parent"-->
-<!--                    android:drawablePadding="8dp"-->
-<!--                    android:gravity="center_vertical"-->
-<!--                    android:inputType="textPassword"-->
-<!--                    android:singleLine="true"-->
-<!--                    android:textSize="16sp"-->
-<!--                    android:drawableTint="@color/colorTextBlack"-->
-<!--                    android:textColorHint="@color/colorPlaceholder"-->
-<!--                    android:drawableEnd="@drawable/user_icon"-->
-<!--                    android:layout_marginTop="20dp"-->
-<!--                    android:textColor="@color/colorTextBlack"-->
-<!--                    android:paddingLeft="26dp"-->
-<!--                    android:paddingRight="26dp"-->
-<!--                    android:fontFamily="@font/seg_ui_semibold"-->
-<!--                    android:background="@drawable/edit_text_background"-->
-<!--                    android:layout_height="52dp"-->
-<!--                    android:layout_marginLeft="48dp"-->
-<!--                    android:layout_marginRight="48dp"-->
-<!--                    android:hint="Confirm Password"-->
-<!--                    />-->
+                <!--                <EditText-->
+                <!--                    android:id="@+id/signUpConfirmPassword"-->
+                <!--                    android:layout_width="fill_parent"-->
+                <!--                    android:drawablePadding="8dp"-->
+                <!--                    android:gravity="center_vertical"-->
+                <!--                    android:inputType="textPassword"-->
+                <!--                    android:singleLine="true"-->
+                <!--                    android:textSize="16sp"-->
+                <!--                    android:drawableTint="@color/colorTextBlack"-->
+                <!--                    android:textColorHint="@color/colorPlaceholder"-->
+                <!--                    android:drawableEnd="@drawable/user_icon"-->
+                <!--                    android:layout_marginTop="20dp"-->
+                <!--                    android:textColor="@color/colorTextBlack"-->
+                <!--                    android:paddingLeft="26dp"-->
+                <!--                    android:paddingRight="26dp"-->
+                <!--                    android:fontFamily="@font/seg_ui_semibold"-->
+                <!--                    android:background="@drawable/edit_text_background"-->
+                <!--                    android:layout_height="52dp"-->
+                <!--                    android:layout_marginLeft="48dp"-->
+                <!--                    android:layout_marginRight="48dp"-->
+                <!--                    android:hint="Confirm Password"-->
+                <!--                    />-->
 
                 <CheckBox
-                    android:buttonTint="@color/colorBlack"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="48dp"
-                    android:layout_marginEnd="48dp"
                     android:layout_marginTop="18dp"
+                    android:layout_marginEnd="48dp"
+                    android:buttonTint="@color/colorBlack"
                     android:fontFamily="@font/seg_ui_semibold"
                     android:text="@string/terms_conditions"
                     android:textColor="@color/colorPlaceholder"
@@ -258,27 +253,26 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:weightSum="2"
-                    android:layout_marginTop="24dp"
                     android:layout_marginLeft="48dp"
-                    android:layout_marginRight="48dp">
+                    android:layout_marginTop="24dp"
+                    android:layout_marginRight="48dp"
+                    android:orientation="horizontal"
+                    android:weightSum="2">
 
                     <com.google.android.material.button.MaterialButton
                         android:id="@+id/signUp"
-                        app:backgroundTint="@null"
-                        android:background="@drawable/button_background2"
                         android:layout_width="0dp"
                         android:layout_height="52dp"
+                        android:layout_marginBottom="26dp"
                         android:layout_weight="2"
+                        android:background="@drawable/button_background2"
+                        android:fontFamily="@font/seg_ui_semibold"
                         android:text="Sign Up"
                         android:textAllCaps="false"
                         android:textColor="@color/colorTextWhite"
                         android:textSize="16dp"
-                        android:fontFamily="@font/seg_ui_semibold"
-                        android:layout_marginBottom="26dp"
-                        />
-<!--                    android:onClick="@{()->listener.onSignUpButtonClick()}"-->
+                        app:backgroundTint="@null" />
+                    <!--                    android:onClick="@{()->listener.onSignUpButtonClick()}"-->
 
                 </LinearLayout>
 

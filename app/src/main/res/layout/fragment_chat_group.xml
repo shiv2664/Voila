@@ -75,13 +75,13 @@
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/chatGroupRecyclerview"
-            android:layout_marginStart="5dp"
-            android:layout_marginEnd="5dp"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            app:bindGroupChat="@{groupChatList}"
             android:layout_above="@id/btnSend2"
-            android:layout_marginBottom="2dp"/>
+            android:layout_marginStart="5dp"
+            android:layout_marginEnd="5dp"
+            android:layout_marginBottom="2dp"
+            app:bindGroupChat="@{groupChatList}" />
 
         <RelativeLayout
             android:id="@+id/bottom"
