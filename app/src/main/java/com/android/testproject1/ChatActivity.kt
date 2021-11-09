@@ -154,6 +154,10 @@ class ChatActivity : AppCompatActivity() ,IMainActivity {
         TODO("Not yet implemented")
     }
 
+    override fun onPlaceOrderClick(offerItem: Offer) {
+        TODO("Not yet implemented")
+    }
+
     override fun onJoinItemClick(userItem: UsersChatListEntity) {
         TODO("Not yet implemented")
     }

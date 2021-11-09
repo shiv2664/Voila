@@ -48,6 +48,15 @@ import kotlin.collections.ArrayList
 import kotlin.collections.HashMap
 
 
+import androidx.fragment.app.FragmentManager
+import androidx.navigation.NavController
+import androidx.navigation.fragment.NavHostFragment
+import androidx.navigation.ui.NavigationUI
+import androidx.navigation.ui.setupWithNavController
+
+
+//import android.R
+
 //DuoMenuView.OnMenuClickListener
 class MainActivity2 : AppCompatActivity(), IMainActivity {
 
@@ -77,6 +86,17 @@ class MainActivity2 : AppCompatActivity(), IMainActivity {
 
     var stringCheck:String?=null
 
+    var doubleBackToExitPressedOnce = false
+    private lateinit var navController: NavController
+    private val fragment1: Fragment = SearchFragment()
+    private val fragment2: Fragment = MessagesFragment()
+    private val fragment3: Fragment = ProfileFragment()
+    private val fm: FragmentManager = supportFragmentManager
+    var active = fragment1
+    private lateinit var navigation: BottomNavigationView
+    var idOrder:String?=null
+
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main2)
@@ -101,7 +121,8 @@ class MainActivity2 : AppCompatActivity(), IMainActivity {
                 .commit()
 
         }else{
-            loadFragment(HomeFragment())
+//            loadFragment(HomeFragment())
+//            loadFragment(SearchFragment())
         }
 
         firebaseAuth= FirebaseAuth.getInstance()
@@ -118,27 +139,28 @@ class MainActivity2 : AppCompatActivity(), IMainActivity {
         )
 
 
+        
         mBottomSheetDialog = BottomSheetDialog(this)
         val sheetView = layoutInflater.inflate(R.layout.bottom_sheet_dialog, null)
         mBottomSheetDialog.setContentView(sheetView)
 
-        val bottomNavigationView = bottomNav
-        bottomNavigationView.background = null
-        loadFragment(HomeFragment())
-
-        bottomNavigationView.setOnNavigationItemSelectedListener(BottomNavigationView.OnNavigationItemSelectedListener { menuItem ->
-            when (menuItem.itemId) {
-                R.id.home ->{
-                    toolbar.title="Voila"
-                    return@OnNavigationItemSelectedListener loadFragment(HomeFragment())}
-                R.id.search -> return@OnNavigationItemSelectedListener loadFragment(SearchFragment())
-                R.id.notifications -> return@OnNavigationItemSelectedListener loadFragment(MessagesFragment())
-                R.id.profile -> return@OnNavigationItemSelectedListener loadFragment(ProfileFragment())
-                R.id.NewPost -> return@OnNavigationItemSelectedListener loadFragment(Friends())
-
-            }
-            false
-        })
+//        val bottomNavigationView = bottomNav
+//        bottomNavigationView.background = null
+////        loadFragment(HomeFragment())
+//        loadFragment(SearchFragment())
+//        bottomNavigationView.setOnNavigationItemSelectedListener(BottomNavigationView.OnNavigationItemSelectedListener { menuItem ->
+//            when (menuItem.itemId)
+//            {
+//                R.id.search -> return@OnNavigationItemSelectedListener loadFragment(SearchFragment())
+//
+////                    return@OnNavigationItemSelectedListener loadFragment(HomeFragment())}
+//                R.id.notifications -> return@OnNavigationItemSelectedListener loadFragment(MessagesFragment())
+//                R.id.profile -> return@OnNavigationItemSelectedListener loadFragment(ProfileFragment())
+////                R.id.NewPost -> return@OnNavigationItemSelectedListener loadFragment(Friends())
+//
+//            }
+//            false
+//        })
 
 
         val buttonPostPhoto: LinearLayout = sheetView.findViewById(R.id.postImage)
@@ -157,6 +179,78 @@ class MainActivity2 : AppCompatActivity(), IMainActivity {
 //            val intent=Intent(this,CreateOffer::class.java)
 //            startActivity(intent)
         }
+
+//        navigation = bottomNav
+//        setFragment(fragment1, "1", 0);
+//
+//        val bottomNavigationView=bottomNav
+
+//        bottomNavigationView.setOnNavigationItemSelectedListener(BottomNavigationView.OnNavigationItemSelectedListener { menuItem ->
+//            when (menuItem.itemId)
+//            {
+//                R.id.search -> {
+//                    setFragment(fragment1, "1", 0)
+//                    return@OnNavigationItemSelectedListener true
+//                }
+//                R.id.notifications -> {
+//                    setFragment(fragment2, "2", 1)
+//                    return@OnNavigationItemSelectedListener true
+//                }
+//                R.id.profile -> {
+//                    setFragment(fragment3, "3", 2)
+//                    return@OnNavigationItemSelectedListener true
+//                }
+//            }
+//            false
+//        })
+
+
+//        val mOnNavigationItemSelectedListener = BottomNavigationView.OnNavigationItemSelectedListener { item ->
+//                when (item.itemId) {
+//                    R.id.search -> {
+//                        setFragment(fragment1, "1", 0)
+//                        return@OnNavigationItemSelectedListener true
+//                    }
+//                    R.id.notifications -> {
+//                        setFragment(fragment2, "2", 1)
+//                        return@OnNavigationItemSelectedListener true
+//                    }
+//                    R.id.profile -> {
+//                        setFragment(fragment3, "3", 2)
+//                        return@OnNavigationItemSelectedListener true
+//                    }
+//                }
+//                false
+//            }
+
+        val bottomNavigation=bottomNav
+        val navHost = supportFragmentManager.findFragmentById(R.id.fragmentContainerView2) as NavHostFragment
+        navController = navHost.navController
+        NavigationUI.setupWithNavController(toolbar, navController)
+        bottomNavigation.setupWithNavController(navController)
+//        bottomNavigation.setOnNavigationItemReselectedListener {
+//            "Reselect blocked."
+//        }
+
+//        toolbar.setNavigationOnClickListener {
+//            when (navController.currentDestination?.id) {
+//                R.id.search, R.id.notifications, R.id.profile -> {
+//                    if (onBackPressedDispatcher.hasEnabledCallbacks())
+//                        onBackPressedDispatcher.onBackPressed()
+//                    else
+//                        navController.navigateUp()
+//                }
+//                else -> navController.navigateUp()
+//            }
+//        }
+
+
+
+
+
+
+
+
 
         checkTabDashboard=true
 
@@ -231,6 +325,40 @@ class MainActivity2 : AppCompatActivity(), IMainActivity {
 //        duoMenuView.adapter = mMenuAdapter
 
     }
+
+//    private fun initNavigation() {
+//        val navHost = supportFragmentManager.findFragmentById(R.id.container) as NavHostFragment
+//        navController = navHost.navController
+//        NavigationUI.setupWithNavController(binding.toolbar, navController)
+//        binding.bottomNavigation.setupWithNavController(navController)
+//        binding.bottomNavigation.setOnNavigationItemReselectedListener {
+//            "Reselect blocked."
+//        }
+//
+//        binding.toolbar.setNavigationOnClickListener {
+//            when (navController.currentDestination?.id) {
+//                R.id.searchFragment, R.id.gamesFragment, R.id.notificationsFragment -> {
+//                    if (onBackPressedDispatcher.hasEnabledCallbacks())
+//                        onBackPressedDispatcher.onBackPressed()
+//                    else
+//                        navController.navigateUp()
+//                }
+//                else -> navController.navigateUp()
+//            }
+//        }
+//    }
+
+    private fun setFragment(fragment: Fragment, tag: String?, position: Int) {
+//        val fm = supportFragmentManager
+        if (fragment.isAdded) {
+            fm.beginTransaction().hide(active).show(fragment).commit()
+        } else {
+            fm.beginTransaction().add(R.id.container, fragment, tag).commit()
+        }
+        navigation.menu.getItem(position)?.isChecked = true
+        active = fragment
+    }
+
 
     private fun startPickImage() {
         imagesList1.clear()
@@ -420,6 +548,17 @@ class MainActivity2 : AppCompatActivity(), IMainActivity {
 //            super.onBackPressed()
 //        }
 
+//        if (active == fragment1) {
+//            if (doubleBackToExitPressedOnce) {
+//                super.onBackPressed();
+//                return;
+//            }
+//            this.doubleBackToExitPressedOnce = true;
+//            Toast.makeText(this, "Please click BACK again to exit", Toast.LENGTH_SHORT).show();
+//        } else {
+//            setFragment(fragment1, "1", 0);
+//        }
+
     }
 
     private fun loadFragment(fragment: Fragment?): Boolean {
@@ -453,6 +592,35 @@ class MainActivity2 : AppCompatActivity(), IMainActivity {
             .addToBackStack("Groups On Offer Fragment")
             .add(R.id.container, fragment, "GroupsOnOffer")
             .commit()
+    }
+
+    override fun onPlaceOrderClick(offerItem: Offer) {
+
+        val currentUserId: String = firebaseAuth.currentUser?.uid!!
+
+        MaterialDialog.Builder(this)
+            .title("Confirm")
+            .content("Confirm order request?")
+            .positiveText("Yes")
+            .negativeText("No")
+            .cancelable(true)
+            .canceledOnTouchOutside(false)
+            .neutralText("Cancel")
+            .onPositive { _, _ ->
+                addOrder(offerItem.userId,currentUserId,offerItem.title)
+//                    binding.refreshLayout.isRefreshing=true
+//                mViewModel.deleteAll()
+//                    binding.refreshLayout.isRefreshing=false
+
+
+            }
+            .onNegative { dialog, _ ->
+                dialog.dismiss()
+            }.show()
+
+
+
+
     }
 
     override fun onJoinItemClick(userItem: UsersChatListEntity) {
@@ -634,6 +802,50 @@ class MainActivity2 : AppCompatActivity(), IMainActivity {
         startActivity(intent)
     }
 
+    private fun addOrder(userItem: String, currentUserId: String,itemName:String){
+
+//        firebaseFirestore
+//            .collection("Users")
+//            .document(userItem.id)
+//            .collection("Friends")
+//            .document(currentUserId)
+//            .get()
+//            .addOnSuccessListener { documentSnapshot: DocumentSnapshot ->
+//                if (!documentSnapshot.exists()) {
+
+
+        executeOrder(userItem,currentUserId,itemName)
+
+//                    firebaseFirestore
+//                        .collection("Users")
+//                        .document(userItem)
+//                        .collection("Orders")
+//                        .document(currentUserId)
+//                        .get()
+//                        .addOnSuccessListener { documentSnapshot1: DocumentSnapshot ->
+////                            if (holderr.friend_icon.getVisibility() != View.VISIBLE) {
+//                            if (!documentSnapshot1.exists()) {
+//                                executeOrder(userItem,currentUserId)
+//                            } else {
+//                                Toasty.normal(this@MainActivity2,"Order already Sent",Toasty.LENGTH_SHORT).show()
+//                            }
+////                            }
+////                            else {
+////                                Snackbar.make(view, usersList.get(position).getName()
+////                                    .toString() + " is already your friend", Snackbar.LENGTH_LONG).show()
+////                                notifyDataSetChanged()
+//                        }
+
+    //                }
+//            }
+
+    //        else {
+//                    usersList.removeAt(position)
+//                    notifyDataSetChanged()
+//                }
+
+    }
+
 
     private fun addUser(userItem: Users,currentUserId: String) {
         firebaseFirestore
@@ -673,6 +885,55 @@ class MainActivity2 : AppCompatActivity(), IMainActivity {
             }
 //    }
 
+
+    private fun executeOrder(userItem: String, currentUserId: String,itemName:String){
+
+        val userMap = HashMap<String, Any?>()
+        FirebaseFirestore.getInstance()
+            .collection("Users")
+            .document(currentUserId)
+            .get()
+            .addOnSuccessListener { documentSnapshot: DocumentSnapshot ->
+                val email = documentSnapshot.getString("email")
+                userMap["name"] = documentSnapshot.getString("name")
+                userMap["id"] = documentSnapshot.getString("id")
+                userMap["email"] = email
+                userMap["image"] = documentSnapshot.getString("image")
+//                userMap["tokens"] = documentSnapshot["token_ids"]
+                userMap["notification_id"] = System.currentTimeMillis().toString()
+                userMap["orderName"] =itemName
+                userMap["timestamp"] = System.currentTimeMillis().toString()
+
+               idOrder= firebaseFirestore.collection("Users")
+                    .document(userItem)
+                    .collection("Orders").document().id
+                //Add to user
+                FirebaseFirestore.getInstance()
+                    .collection("Users")
+                    .document(userItem)
+                    .collection("Orders")
+//                    .document(currentUserId)
+                    .document(idOrder!!)
+                    .set(userMap, SetOptions.merge())
+                    .addOnSuccessListener {
+
+                        documentSnapshot.getString("name")?.let { it1 ->
+                            addToNotification(userItem, currentUserId,
+                                //                                documentSnapshot.getString("image"),
+                                it1,
+                                "Sent you order request for",
+                                "order_req",itemName
+                            )
+                        }
+
+                        Toasty.success(this@MainActivity2,"Order Request Sent",Toasty.LENGTH_SHORT).show()
+                    }.addOnFailureListener { e: java.lang.Exception ->
+//                        holder.progressBar.setVisibility(View.GONE)
+                        Log.e("Error", e.message!!)
+                    }
+            }
+
+    }
 
     private fun executeFriendReq(userItem: Users,currentUserId: String) {
         val userMap = HashMap<String, Any?>()
@@ -723,7 +984,8 @@ class MainActivity2 : AppCompatActivity(), IMainActivity {
 //        profile: String,
         username: String,
         message: String,
-        type: String
+        type: String,
+        itemName: String=""
     ) {
         val map: MutableMap<String, Any> = java.util.HashMap()
         map["id"] = user_id
@@ -733,22 +995,79 @@ class MainActivity2 : AppCompatActivity(), IMainActivity {
         map["timestamp"] = System.currentTimeMillis().toString()
         map["type"] = type
         map["action_id"] = user_id
+        if(type=="order_req"){
+            map["orderName"] =itemName
+        }
         if (UserItemId != user_id) {
 
-            firebaseFirestore.collection("Users")
-                .document(UserItemId)
-                .collection("Info_Notifications")
-                .add(map)
-                .addOnSuccessListener(OnSuccessListener { documentReference: DocumentReference? ->
-                    if (type == "friend_req") {
+            if (type=="order_req"){
+
+                idOrder?.let {
+                    firebaseFirestore.collection("Users")
+                        .document(UserItemId)
+                        .collection("Info_Notifications")
+                        .document(it)
+                        .set(map, SetOptions.merge()).addOnSuccessListener {
+
+                            Toasty.success(this, "Order request sent.", Toasty.LENGTH_SHORT,true).show()
+                        }
+                        .addOnFailureListener(OnFailureListener { e: java.lang.Exception ->
+                            Log.e("Error", e.localizedMessage)
+                        })
+                }
+
+            }else{
+
+                firebaseFirestore.collection("Users")
+                    .document(UserItemId)
+                    .collection("Info_Notifications")
+                    .add(map)
+                    .addOnSuccessListener(OnSuccessListener { documentReference: DocumentReference? ->
+                        if (type == "friend_req") {
 //                        req_sent.setText("Friend request sent")
-                        Toasty.success(this, "Friend request sent.", Toasty.LENGTH_SHORT,true).show()
-                    } else { Toasty.success(this, "Friend request accepted", Toasty.LENGTH_SHORT, true).show()
-                    }
-                })
-                .addOnFailureListener(OnFailureListener { e: java.lang.Exception ->
-                    Log.e("Error", e.localizedMessage)
-                })
+                            Toasty.success(this, "Friend request sent.", Toasty.LENGTH_SHORT,true).show()
+                        }
+//                    else if (type == "order_req"){
+//                        Toasty.success(this, "Order request sent.", Toasty.LENGTH_SHORT,true).show()
+//                    }
+//                    else { Toasty.success(this, "Friend request accepted", Toasty.LENGTH_SHORT, true).show()
+//                    }
+//                    if (type == "order_req") {
+////                        req_sent.setText("Friend request sent")
+//                        Toasty.success(this, "Order request sent.", Toasty.LENGTH_SHORT,true).show()
+//                    }
+//                    else { Toasty.success(this, "Order request accepted", Toasty.LENGTH_SHORT, true).show()
+//                    }
+                    })
+                    .addOnFailureListener(OnFailureListener { e: java.lang.Exception ->
+                        Log.e("Error", e.localizedMessage)
+                    })
+
+            }
+//            firebaseFirestore.collection("Users")
+//                .document(UserItemId)
+//                .collection("Info_Notifications")
+//                .add(map)
+//                .addOnSuccessListener(OnSuccessListener { documentReference: DocumentReference? ->
+//                    if (type == "friend_req") {
+////                        req_sent.setText("Friend request sent")
+//                        Toasty.success(this, "Friend request sent.", Toasty.LENGTH_SHORT,true).show()
+//                    }
+////                    else if (type == "order_req"){
+////                        Toasty.success(this, "Order request sent.", Toasty.LENGTH_SHORT,true).show()
+////                    }
+////                    else { Toasty.success(this, "Friend request accepted", Toasty.LENGTH_SHORT, true).show()
+////                    }
+////                    if (type == "order_req") {
+//////                        req_sent.setText("Friend request sent")
+////                        Toasty.success(this, "Order request sent.", Toasty.LENGTH_SHORT,true).show()
+////                    }
+////                    else { Toasty.success(this, "Order request accepted", Toasty.LENGTH_SHORT, true).show()
+////                    }
+//                })
+//                .addOnFailureListener(OnFailureListener { e: java.lang.Exception ->
+//                    Log.e("Error", e.localizedMessage)
+//                })
         }
     }
 

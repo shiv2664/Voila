@@ -5,21 +5,26 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.FragmentManager
+import androidx.navigation.fragment.findNavController
 import androidx.viewpager2.widget.ViewPager2
 import com.android.testproject1.R
 import com.android.testproject1.adapter.ViewPager2Adapter
 import com.android.testproject1.anim.DepthPageTransform
 import com.android.testproject1.databinding.FragmentProfileBinding
-import com.android.testproject1.databindingadapters.bind
+import com.android.testproject1.model.Users
 import com.google.android.material.tabs.TabLayout
-import kotlinx.android.synthetic.main.activity_main.*
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.FirebaseFirestore
+
 
 class ProfileFragment : Fragment() {
 
     private lateinit var binding:FragmentProfileBinding
-   private lateinit var adapter:ViewPager2Adapter
+    private lateinit var adapter:ViewPager2Adapter
+    private lateinit var firebaseFirestore: FirebaseFirestore
+    private lateinit var firebaseAuth: FirebaseAuth
+
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
@@ -28,7 +33,10 @@ class ProfileFragment : Fragment() {
 //        requireActivity().bottomNav.menu.getItem(4).isChecked=true
 
         val fmc: FragmentManager = childFragmentManager
+        firebaseFirestore= FirebaseFirestore.getInstance()
+        firebaseAuth= FirebaseAuth.getInstance()
 
+        val userItem=firebaseAuth.currentUser?.uid
 //        val toolbar = binding.toolbarProfile
 //        (activity as AppCompatActivity).setSupportActionBar(toolbar)
 //        (activity as AppCompatActivity).supportActionBar?.title = "Profile"
@@ -55,17 +63,29 @@ class ProfileFragment : Fragment() {
             }
         })
 
+        if (userItem != null) {
+            firebaseFirestore
+                .collection("Users")
+                .document(userItem)
+                .get().addOnSuccessListener {
+                    binding.name.text=it.getString("name")
+                }
+
+        }
+
 
         binding.editProfileBtn.setOnClickListener {
 
-            val fragment:Fragment=EditProfileFragment()
-            requireActivity()
-                .supportFragmentManager
-                .beginTransaction()
-                .addToBackStack("Message Fragment")
-                .setCustomAnimations(R.anim.right_enter,R.anim.left_out)
-                .replace(R.id.container, fragment)
-                .commit()
+            findNavController().navigate(R.id.action_profileFragment_to_editProfileFragment)
+
+//            val fragment:Fragment=EditProfileFragment()
+//            requireActivity()
+//                .supportFragmentManager
+//                .beginTransaction()
+//                .addToBackStack("Message Fragment")
+//                .setCustomAnimations(R.anim.right_enter,R.anim.left_out)
+//                .replace(R.id.container, fragment)
+//                .commit()
 
         }
 

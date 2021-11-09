@@ -9,6 +9,7 @@ interface IMainActivity {
 //    fun onLoginButtonCLick()
     fun onRegisterClick()
     fun onRecyclerViewItemClick(offerItem: Offer)
+    fun onPlaceOrderClick(offerItem: Offer)
     fun onJoinItemClick(userItem:UsersChatListEntity)
     fun onGroupItemClick(userItem: UsersChatListEntity)
     fun onGroupItemClick(userItem: Users)

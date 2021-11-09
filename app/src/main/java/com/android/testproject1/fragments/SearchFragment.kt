@@ -36,11 +36,11 @@ class SearchFragment : Fragment() {
 
         binding.productExploreList = DataProvider.productExploreList
 
-        val toolbar = binding.toolbarSearch
-        (activity as AppCompatActivity).setSupportActionBar(toolbar)
-        (activity as AppCompatActivity).supportActionBar?.setTitle(R.string.Explore)
-        toolbar.inflateMenu(R.menu.menuhome)
-        setHasOptionsMenu(true)
+//        val toolbar = binding.toolbarSearch
+//        (activity as AppCompatActivity).setSupportActionBar(toolbar)
+//        (activity as AppCompatActivity).supportActionBar?.setTitle(R.string.Explore)
+//        toolbar.inflateMenu(R.menu.menuhome)
+//        setHasOptionsMenu(true)
 
 
         return binding.root

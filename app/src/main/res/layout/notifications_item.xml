@@ -72,6 +72,12 @@
                     android:text="@{notificationItem.message}" />
 
                 <TextView
+                    android:id="@+id/body_sub"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@{notificationItem.orderName}" />
+
+                <TextView
                     android:id="@+id/timestamp"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content" />

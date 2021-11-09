@@ -12,8 +12,8 @@
         android:layout_height="match_parent"
         android:paddingBottom="10dp">
 
+<!--        context?.theme?.applyStyle(R.style.AppTheme, true);-->
         <RelativeLayout
-            android:background="@color/colorPrimary"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:paddingBottom="10dp">
@@ -28,11 +28,11 @@
                     android:layout_height="wrap_content">
                     <androidx.appcompat.widget.Toolbar
                         android:id="@+id/toolbarPostOffer"
-                        app:titleTextColor="@color/black"
+                        app:titleTextColor="@color/colorWhite"
                         android:layout_width="match_parent"
                         android:layout_height="?attr/actionBarSize"
                         android:elevation="4dp"
-                        android:background="@color/colorPrimary"
+                        android:background="?attr/colorPrimary"
                         app:theme="@style/ToolbarColoredBackArrow" />
                 </com.google.android.material.appbar.AppBarLayout>
 
@@ -161,9 +161,10 @@
                     android:orientation="horizontal"
                     android:weightSum="2">
 
+<!--                    android:hint="People(Min)(Req)"-->
                     <com.google.android.material.textfield.TextInputLayout
                         android:layout_width="match_parent"
-                        android:hint="People(Min)(Req)"
+                        android:hint="Minimum Quantity(Eligible)"
                         android:layout_marginEnd="10dp"
                         android:layout_marginStart="10dp"
                         app:boxStrokeColor="?attr/colorAccent"
@@ -181,25 +182,26 @@
 
                     </com.google.android.material.textfield.TextInputLayout>
 
-                    <com.google.android.material.textfield.TextInputLayout
-                        android:layout_width="match_parent"
-                        android:hint="People(Max)(Opt)"
-                        android:layout_marginEnd="10dp"
-                        android:layout_marginStart="10dp"
-                        android:layout_weight="1"
-                        app:boxStrokeColor="?attr/colorAccent"
-                        app:hintTextColor="?attr/colorAccent"
-                        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-                        android:layout_height="wrap_content">
+<!--                    android:hint="People(Max)(Opt)"-->
+<!--                    <com.google.android.material.textfield.TextInputLayout-->
+<!--                        android:layout_width="match_parent"-->
+<!--                        android:hint="People(Max)(Opt)"-->
+<!--                        android:layout_marginEnd="10dp"-->
+<!--                        android:layout_marginStart="10dp"-->
+<!--                        android:layout_weight="1"-->
+<!--                        app:boxStrokeColor="?attr/colorAccent"-->
+<!--                        app:hintTextColor="?attr/colorAccent"-->
+<!--                        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"-->
+<!--                        android:layout_height="wrap_content">-->
 
-                        <EditText
-                            android:id="@+id/MaxPeople"
-                            android:maxLines="5"
-                            android:inputType="number"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content" />
+<!--                        <EditText-->
+<!--                            android:id="@+id/MaxPeople"-->
+<!--                            android:maxLines="5"-->
+<!--                            android:inputType="number"-->
+<!--                            android:layout_width="match_parent"-->
+<!--                            android:layout_height="wrap_content" />-->
 
-                    </com.google.android.material.textfield.TextInputLayout>
+<!--                    </com.google.android.material.textfield.TextInputLayout>-->
 
                 </LinearLayout>
 
@@ -222,7 +224,7 @@
 
                         <EditText
                             android:id="@+id/DiscountedPrice"
-                            android:maxLines="5"
+                            android:maxLines="1"
                             android:inputType="numberDecimal"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content" />
@@ -242,7 +244,7 @@
 
                         <EditText
                             android:id="@+id/OriginalPrice"
-                            android:maxLines="5"
+                            android:maxLines="1"
                             android:inputType="numberDecimal"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content" />

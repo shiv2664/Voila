@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/navigation"
+    app:startDestination="@id/searchFragment2">
+
+    <fragment
+        android:id="@+id/searchFragment2"
+        android:name="com.android.testproject1.fragments.SearchFragment"
+        android:label="SearchFragment" />
+    <fragment
+        android:id="@+id/profileFragment"
+        android:name="com.android.testproject1.fragments.ProfileFragment"
+        android:label="ProfileFragment" >
+        <action
+            android:id="@+id/action_profileFragment_to_editProfileFragment"
+            app:destination="@id/editProfileFragment"
+            app:enterAnim="@anim/right_enter"
+            app:exitAnim="@anim/left_out" />
+    </fragment>
+    <fragment
+        android:id="@+id/messagesFragment"
+        android:name="com.android.testproject1.fragments.MessagesFragment"
+        android:label="MessagesFragment" />
+    <fragment
+        android:id="@+id/editProfileFragment"
+        android:name="com.android.testproject1.fragments.EditProfileFragment"
+        android:label="EditProfileFragment" />
+</navigation>

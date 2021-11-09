@@ -10,4 +10,5 @@ data class Notifications(var id: String? = "",
                          var message: String? = "",
                          var timestamp: String? = "",
                          var type: String? = "",
+                         var orderName:String?="",
                          var action_id: String? =""):Parcelable

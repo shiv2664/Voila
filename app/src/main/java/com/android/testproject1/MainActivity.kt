@@ -61,17 +61,17 @@ class MainActivity : AppCompatActivity() , IMainActivity {
         checkPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE,STORAGE_PERMISSION_CODE)
         checkPermission(Manifest.permission.READ_EXTERNAL_STORAGE, READ_PERMISSION_CODE)
 
-        bottomNavigationView.setOnNavigationItemSelectedListener(BottomNavigationView.OnNavigationItemSelectedListener { menuItem ->
-            when (menuItem.itemId) {
-                R.id.home -> return@OnNavigationItemSelectedListener loadFragment(HomeFragment())
-                R.id.search -> return@OnNavigationItemSelectedListener loadFragment(SearchFragment())
-                R.id.notifications -> return@OnNavigationItemSelectedListener loadFragment(MessagesFragment())
-                R.id.profile -> return@OnNavigationItemSelectedListener loadFragment(ProfileFragment())
-                R.id.NewPost -> return@OnNavigationItemSelectedListener loadFragment(CreatePost())
-
-            }
-            false
-        })
+//        bottomNavigationView.setOnNavigationItemSelectedListener(BottomNavigationView.OnNavigationItemSelectedListener { menuItem ->
+//            when (menuItem.itemId) {
+////                R.id.home -> return@OnNavigationItemSelectedListener loadFragment(HomeFragment())
+//                R.id.search -> return@OnNavigationItemSelectedListener loadFragment(SearchFragment())
+//                R.id.notifications -> return@OnNavigationItemSelectedListener loadFragment(MessagesFragment())
+//                R.id.profile -> return@OnNavigationItemSelectedListener loadFragment(ProfileFragment())
+////                R.id.NewPost -> return@OnNavigationItemSelectedListener loadFragment(CreatePost())
+//
+//            }
+//            false
+//        })
 
     }
 
@@ -145,6 +145,10 @@ class MainActivity : AppCompatActivity() , IMainActivity {
 //            .commit()
 
 
+    }
+
+    override fun onPlaceOrderClick(offerItem: Offer) {
+        TODO("Not yet implemented")
     }
 
     override fun onJoinItemClick(userItem: UsersChatListEntity) {

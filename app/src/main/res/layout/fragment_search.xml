@@ -53,119 +53,119 @@
                 app:expandedTitleTextAppearance="@style/TransparentText">
 <!--                android:theme="@style/MaterialAlertDialog.MaterialComponents.Title.Text.CenterStacked"-->
 
-                <LinearLayout
-                    android:layout_alignParentTop="true"
-                    android:layout_marginTop="2dp"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:paddingTop="2dp"
-                    android:background="@color/white"
-                    android:orientation="vertical">
+<!--                <LinearLayout-->
+<!--                    android:layout_alignParentTop="true"-->
+<!--                    android:layout_marginTop="2dp"-->
+<!--                    android:layout_width="match_parent"-->
+<!--                    android:layout_height="match_parent"-->
+<!--                    android:paddingTop="2dp"-->
+<!--                    android:background="@color/white"-->
+<!--                    android:orientation="vertical">-->
 
-                    <TextView
-                        android:id="@+id/trending_textview"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginLeft="16dp"
-                        android:layout_marginRight="16dp"
-                        android:layout_marginTop="8dp"
-                        android:layout_marginBottom="8dp"
-                        android:fontFamily="@font/calibri"
-                        android:text="Trending Categories"
-                        android:textColor="#000000"
-                        android:textSize="18sp"
-                        android:textStyle="bold" />
-
-
+<!--                    <TextView-->
+<!--                        android:id="@+id/trending_textview"-->
+<!--                        android:layout_width="match_parent"-->
+<!--                        android:layout_height="wrap_content"-->
+<!--                        android:layout_marginLeft="16dp"-->
+<!--                        android:layout_marginRight="16dp"-->
+<!--                        android:layout_marginTop="8dp"-->
+<!--                        android:layout_marginBottom="8dp"-->
+<!--                        android:fontFamily="@font/calibri"-->
+<!--                        android:text="Trending Categories"-->
+<!--                        android:textColor="#000000"-->
+<!--                        android:textSize="18sp"-->
+<!--                        android:textStyle="bold" />-->
 
 
-                    <HorizontalScrollView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginBottom="8dp"
-                        android:scrollbars="none">
-
-                        <LinearLayout
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:orientation="horizontal">
-                            <!--                        android:layoutAnimation="@anim/layout_animation_fall_down"-->
-
-                            <com.google.android.material.imageview.ShapeableImageView
-                                android:layout_width="220dp"
-                                android:layout_height="110dp"
-                                android:layout_marginStart="8dp"
-                                android:layout_marginEnd="4dp"
-                                android:scaleType="fitXY"
-                                app:shapeAppearanceOverlay="@style/roundimageview"
-                                android:src="@drawable/kerala" />
-
-                            <com.google.android.material.imageview.ShapeableImageView
-                                android:layout_width="220dp"
-                                android:layout_height="110dp"
-                                android:layout_marginStart="4dp"
-                                android:layout_marginEnd="8dp"
-                                android:scaleType="fitXY"
-                                app:shapeAppearanceOverlay="@style/roundimageview"
-                                android:src="@drawable/rajasthan" />
-
-                            <com.google.android.material.imageview.ShapeableImageView
-                                android:layout_width="220dp"
-                                android:layout_height="110dp"
-                                android:layout_marginStart="4dp"
-                                android:layout_marginEnd="8dp"
-                                android:scaleType="fitXY"
-                                app:shapeAppearanceOverlay="@style/roundimageview"
-                                android:src="@drawable/assam" />
-
-                        </LinearLayout>
-
-                    </HorizontalScrollView>
 
 
-                    <HorizontalScrollView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginBottom="8dp"
-                        android:scrollbars="none">
+<!--                    <HorizontalScrollView-->
+<!--                        android:layout_width="match_parent"-->
+<!--                        android:layout_height="wrap_content"-->
+<!--                        android:layout_marginBottom="8dp"-->
+<!--                        android:scrollbars="none">-->
 
-                        <LinearLayout
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:orientation="horizontal">
-                            <!--                        android:layoutAnimation="@anim/layout_animation_fall_down"-->
+<!--                        <LinearLayout-->
+<!--                            android:layout_width="wrap_content"-->
+<!--                            android:layout_height="wrap_content"-->
+<!--                            android:orientation="horizontal">-->
+<!--                            &lt;!&ndash;                        android:layoutAnimation="@anim/layout_animation_fall_down"&ndash;&gt;-->
+
+<!--                            <com.google.android.material.imageview.ShapeableImageView-->
+<!--                                android:layout_width="220dp"-->
+<!--                                android:layout_height="110dp"-->
+<!--                                android:layout_marginStart="8dp"-->
+<!--                                android:layout_marginEnd="4dp"-->
+<!--                                android:scaleType="fitXY"-->
+<!--                                app:shapeAppearanceOverlay="@style/roundimageview"-->
+<!--                                android:src="@drawable/kerala" />-->
+
+<!--                            <com.google.android.material.imageview.ShapeableImageView-->
+<!--                                android:layout_width="220dp"-->
+<!--                                android:layout_height="110dp"-->
+<!--                                android:layout_marginStart="4dp"-->
+<!--                                android:layout_marginEnd="8dp"-->
+<!--                                android:scaleType="fitXY"-->
+<!--                                app:shapeAppearanceOverlay="@style/roundimageview"-->
+<!--                                android:src="@drawable/rajasthan" />-->
+
+<!--                            <com.google.android.material.imageview.ShapeableImageView-->
+<!--                                android:layout_width="220dp"-->
+<!--                                android:layout_height="110dp"-->
+<!--                                android:layout_marginStart="4dp"-->
+<!--                                android:layout_marginEnd="8dp"-->
+<!--                                android:scaleType="fitXY"-->
+<!--                                app:shapeAppearanceOverlay="@style/roundimageview"-->
+<!--                                android:src="@drawable/assam" />-->
+
+<!--                        </LinearLayout>-->
+
+<!--                    </HorizontalScrollView>-->
 
 
-                            <com.google.android.material.imageview.ShapeableImageView
-                                android:layout_width="220dp"
-                                android:layout_height="110dp"
-                                android:layout_marginStart="8dp"
-                                android:layout_marginEnd="4dp"
-                                android:scaleType="fitXY"
-                                app:shapeAppearanceOverlay="@style/roundimageview"
-                                android:src="@drawable/goa" />
+<!--                    <HorizontalScrollView-->
+<!--                        android:layout_width="match_parent"-->
+<!--                        android:layout_height="wrap_content"-->
+<!--                        android:layout_marginBottom="8dp"-->
+<!--                        android:scrollbars="none">-->
 
-                            <com.google.android.material.imageview.ShapeableImageView
-                                android:layout_width="220dp"
-                                android:layout_height="110dp"
-                                android:layout_marginStart="4dp"
-                                android:layout_marginEnd="8dp"
-                                android:scaleType="fitXY"
-                                app:shapeAppearanceOverlay="@style/roundimageview"
-                                android:src="@drawable/kashmir" />
+<!--                        <LinearLayout-->
+<!--                            android:layout_width="wrap_content"-->
+<!--                            android:layout_height="wrap_content"-->
+<!--                            android:orientation="horizontal">-->
+<!--                            &lt;!&ndash;                        android:layoutAnimation="@anim/layout_animation_fall_down"&ndash;&gt;-->
 
-                            <com.google.android.material.imageview.ShapeableImageView
-                                android:layout_width="220dp"
-                                android:layout_height="110dp"
-                                android:layout_marginStart="4dp"
-                                android:layout_marginEnd="8dp"
-                                android:scaleType="fitXY"
-                                app:shapeAppearanceOverlay="@style/roundimageview"
-                                android:src="@drawable/mp" />
 
-                        </LinearLayout>
-                    </HorizontalScrollView>
-                </LinearLayout>
+<!--                            <com.google.android.material.imageview.ShapeableImageView-->
+<!--                                android:layout_width="220dp"-->
+<!--                                android:layout_height="110dp"-->
+<!--                                android:layout_marginStart="8dp"-->
+<!--                                android:layout_marginEnd="4dp"-->
+<!--                                android:scaleType="fitXY"-->
+<!--                                app:shapeAppearanceOverlay="@style/roundimageview"-->
+<!--                                android:src="@drawable/goa" />-->
+
+<!--                            <com.google.android.material.imageview.ShapeableImageView-->
+<!--                                android:layout_width="220dp"-->
+<!--                                android:layout_height="110dp"-->
+<!--                                android:layout_marginStart="4dp"-->
+<!--                                android:layout_marginEnd="8dp"-->
+<!--                                android:scaleType="fitXY"-->
+<!--                                app:shapeAppearanceOverlay="@style/roundimageview"-->
+<!--                                android:src="@drawable/kashmir" />-->
+
+<!--                            <com.google.android.material.imageview.ShapeableImageView-->
+<!--                                android:layout_width="220dp"-->
+<!--                                android:layout_height="110dp"-->
+<!--                                android:layout_marginStart="4dp"-->
+<!--                                android:layout_marginEnd="8dp"-->
+<!--                                android:scaleType="fitXY"-->
+<!--                                app:shapeAppearanceOverlay="@style/roundimageview"-->
+<!--                                android:src="@drawable/mp" />-->
+
+<!--                        </LinearLayout>-->
+<!--                    </HorizontalScrollView>-->
+<!--                </LinearLayout>-->
 
 
                 <androidx.appcompat.widget.Toolbar
