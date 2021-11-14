@@ -22,6 +22,7 @@ import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.UploadTask
 import com.nguyenhoanglam.imagepicker.model.Image
 import es.dmoral.toasty.Toasty
+import kotlinx.android.synthetic.main.activity_create_offer.*
 import java.io.ByteArrayOutputStream
 import java.io.File
 import java.io.IOException
@@ -64,6 +65,8 @@ class UploadServiceOffers : Service() {
 
                 val title=intent.getStringExtra("title")
 
+                val minPeople=intent.getStringExtra("minPeople")
+
                 val originalPrice=intent.getStringExtra("originalPrice")
 
                 val discountedPrice=intent.getStringExtra("discountedPrice")
@@ -90,8 +93,10 @@ class UploadServiceOffers : Service() {
                             if (originalPrice != null) {
                                 if (discountedPrice != null) {
                                     if (city != null) {
-                                        uploadImages(notificationId, 0, imagesList, currentId, description,
-                                            uploadedImagesUrl, postID,title,originalPrice,discountedPrice,city)
+                                        if (minPeople != null) {
+                                            uploadImages(notificationId, 0, imagesList, currentId, description,
+                                                uploadedImagesUrl, postID,title,originalPrice,discountedPrice,city,minPeople)
+                                        }
 
                                         Log.d(myTag,"Nothing is null")
                                     }
@@ -188,7 +193,8 @@ class UploadServiceOffers : Service() {
         title: String,
         originalPrice:String,
         discountPrice:String,
-        city:String
+        city:String,
+        minPeople:String="1"
     ) {
         val imgCount = index + 1
 
@@ -268,7 +274,7 @@ class UploadServiceOffers : Service() {
                                 description,
                                 uploadedImagesUrl,
                                 postID,
-                                title,originalPrice, discountPrice,city)
+                                title,originalPrice, discountPrice,city,minPeople)
                         } else {
                             uploadPost(
                                 notification_id,
@@ -276,7 +282,7 @@ class UploadServiceOffers : Service() {
                                 description,
                                 uploadedImagesUrl,
                                 postID,
-                                title,originalPrice,discountPrice,city)
+                                title,originalPrice,discountPrice,city,minPeople)
                         }
                     } catch (e: Exception) {
                         e.printStackTrace()
@@ -285,7 +291,7 @@ class UploadServiceOffers : Service() {
                             currentUser_id,
                             description,
                             uploadedImagesUrl, postID,
-                            title, originalPrice, discountPrice,city)
+                            title, originalPrice, discountPrice,city,minPeople)
                     }
                 }
                 .addOnFailureListener { obj: Exception -> obj.printStackTrace() }
@@ -321,7 +327,7 @@ class UploadServiceOffers : Service() {
         description: String?,
         uploadedImagesUrl: ArrayList<String>?,
         postID: String,
-        title:String,originalPrice:String,discountPrice:String,city: String) {
+        title:String,originalPrice:String,discountPrice:String,city: String,minPeople: String) {
         if (uploadedImagesUrl!!.isNotEmpty()) {
             if (count == 1) {
                 notifyProgress(
@@ -406,7 +412,7 @@ class UploadServiceOffers : Service() {
                     postMap["usersRated"] = "0"
                     postMap["addressMap"] = "none"
                     postMap["offerCategory"] = ""
-                    postMap["minPeople"] = ""
+                    postMap["minPeople"] = minPeople
                     postMap["maxPeople"] = ""
 
                     userPostMap[postID]=true

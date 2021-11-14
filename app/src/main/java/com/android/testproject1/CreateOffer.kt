@@ -155,6 +155,8 @@ class CreateOffer : AppCompatActivity() {
 
                 intent.putExtra("offerId", offerID)
 
+                intent.putExtra("minPeople",MinPeople.text.toString().trim())
+
                 intent.putExtra("discountedPrice",DiscountedPrice.text.toString().trim())
 
                 intent.putExtra("originalPrice",OriginalPrice.text.toString().trim() )

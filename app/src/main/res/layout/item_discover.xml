@@ -12,6 +12,9 @@
         <variable
             name="listener"
             type="com.android.testproject1.interfaces.IMainActivity" />
+        <variable
+            name="layout"
+            type="com.android.testproject1.adapter.SearchAdapter2.BindingViewHolder" />
 
     </data>
 
@@ -117,10 +120,11 @@
                             android:layout_height="wrap_content"
                             android:layout_alignParentStart="true"
                             android:layout_marginStart="10dp"
-                            android:textColor="@color/colorWhite"
                             android:layout_marginEnd="10dp"
+                            android:onClick="@{()->listener.onProfileOpenedDiscover(offerItem)}"
                             android:maxLines="2"
                             android:text="Tipsy"
+                            android:textColor="@color/colorWhite"
                             android:textSize="18sp"
                             android:textStyle="bold" />
 
@@ -201,6 +205,18 @@
                             android:textSize="18sp"
                             android:textStyle="bold" />
 
+                        <TextView
+                            android:id="@+id/price_total"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:visibility="gone" />
+
+                        <TextView
+                            android:id="@+id/order_quantity_total"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:visibility="gone" />
+
                     </RelativeLayout>
 
                     <!--                    <RelativeLayout-->
@@ -251,7 +267,8 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content">
 
-<!--                        android:text="@{`Eligibility : `+offerItem.minPeople+`+ People`}"-->
+                        <!--                        android:text="@{`Eligibility : `+offerItem.minPeople+`+ People`}"-->
+<!--                        android:text="@{`Quantity : `+offerItem.minPeople+` `}"-->
                         <TextView
                             android:layout_centerVertical="true"
                             android:layout_alignParentStart="true"
@@ -260,17 +277,32 @@
                             android:fontFamily="sans-serif-light"
                             android:textStyle="bold"
                             android:layout_marginEnd="10dp"
-                            android:text="@{`Quantity : `+offerItem.minPeople+` `}"
+                            android:text="Quantity"
                             android:maxLines="1"
                             android:textSize="16sp"
-                            android:id="@+id/eligiblity" />
+                            android:id="@+id/eligibility" />
+
+                        <com.shalan.mohamed.itemcounterview.IncDecView
+                            android:id="@+id/itemCounter"
+                            android:layout_width="120dp"
+                            android:layout_height="wrap_content"
+                            android:layout_toEndOf="@+id/eligibility"
+                            app:border_color="?attr/colorAccent"
+                            app:border_width="5dp"
+                            app:counterValueColor="@android:color/holo_orange_dark"
+                            app:dec_icon="@drawable/ic_remove"
+                            app:inc_dec_button_color="@color/blue"
+                            app:inc_icon="@drawable/ic_add"
+                            app:startCounterValue="1" />
+
 
                         <RelativeLayout
+                            android:visibility="gone"
                             android:id="@+id/locationLayout"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginEnd="20dp"
-                            android:layout_toEndOf="@id/eligiblity"
+                            android:layout_toEndOf="@id/eligibility"
                             android:background="@drawable/round_white"
                             android:padding="5dp">
 
@@ -432,6 +464,8 @@
                             app:backgroundTint="?attr/colorAccent"
                             app:cornerRadius="10dp" />
 
+<!--                        android:onClick="@={()->listener.onPlaceOrderClick(offerItem,((Integer.parseInt(offerItem.discountPrice)) * (Integer.parseInt(itemCounter.counterValue))))}"-->
+<!--&lt;!&ndash;                        &ndash;&gt;(Integer.parseInt(DiscountedPrice.text.toString()))-->
                         <com.google.android.material.button.MaterialButton
                             android:id="@+id/order_product"
                             style="@style/Widget.MaterialComponents.Button.OutlinedButton"
@@ -440,7 +474,7 @@
                             android:layout_alignParentEnd="true"
                             android:layout_marginTop="10dp"
                             android:layout_marginBottom="20dp"
-                            android:onClick="@{()->listener.onPlaceOrderClick(offerItem)}"
+                            android:onClick="@{()->listener.onPlaceOrderClick(offerItem,priceTotal.getText().toString(),orderQuantityTotal.getText().toString())}"
                             android:text="Place Order"
                             android:textColor="@color/colorWhite"
                             app:backgroundTint="?attr/colorAccent"

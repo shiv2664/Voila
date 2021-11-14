@@ -51,8 +51,11 @@ import kotlin.collections.HashMap
 import androidx.fragment.app.FragmentManager
 import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
+import androidx.navigation.fragment.findNavController
 import androidx.navigation.ui.NavigationUI
 import androidx.navigation.ui.setupWithNavController
+import com.google.android.material.button.MaterialButton
+import kotlinx.android.synthetic.main.fragment_profile_opened.*
 
 
 //import android.R
@@ -531,11 +534,15 @@ class MainActivity2 : AppCompatActivity(), IMainActivity {
         if (id == R.id.Post) {
 //            loadFragment(CreatePost())
             mBottomSheetDialog.show()
+            return true
         }else if (id==R.id.notification){
             val intent=Intent(this@MainActivity2,NotificationsActivity::class.java)
             startActivity(intent)
+            return true
         }
-        return super.onOptionsItemSelected(item)
+
+        return NavigationUI.onNavDestinationSelected(item, navController) || super.onOptionsItemSelected(item)
+//        return super.onOptionsItemSelected(item)
     }
 
 
@@ -594,8 +601,10 @@ class MainActivity2 : AppCompatActivity(), IMainActivity {
             .commit()
     }
 
-    override fun onPlaceOrderClick(offerItem: Offer) {
+    override fun onPlaceOrderClick(offerItem: Offer, Total: String, Quantity: String) {
 
+        Log.d(myTag, "Total is$Total")
+        Log.d(myTag, "Quantity is $Quantity")
         val currentUserId: String = firebaseAuth.currentUser?.uid!!
 
         MaterialDialog.Builder(this)
@@ -607,7 +616,7 @@ class MainActivity2 : AppCompatActivity(), IMainActivity {
             .canceledOnTouchOutside(false)
             .neutralText("Cancel")
             .onPositive { _, _ ->
-                addOrder(offerItem.userId,currentUserId,offerItem.title)
+                addOrder(offerItem.userId,currentUserId,offerItem.title,Total,Quantity)
 //                    binding.refreshLayout.isRefreshing=true
 //                mViewModel.deleteAll()
 //                    binding.refreshLayout.isRefreshing=false
@@ -621,6 +630,30 @@ class MainActivity2 : AppCompatActivity(), IMainActivity {
 
 
 
+    }
+
+    override fun onAcceptClick(
+        notificationsItem: Notifications,
+        reject: MaterialButton,
+        accept: MaterialButton,
+        cancel: MaterialButton,
+        ready: MaterialButton
+    ) {
+        TODO("Not yet implemented")
+    }
+
+    override fun onOrderReadyClick(
+        notificationsItem: Notifications,
+        cancel: MaterialButton,
+        ready: MaterialButton,
+        waiting: MaterialButton
+    ) {
+        TODO("Not yet implemented")
+    }
+
+    override fun onProfileOpenedDiscover(offerItem: Offer) {
+
+        navController.navigate(R.id.action_searchFragment2_to_profileFragment)
     }
 
     override fun onJoinItemClick(userItem: UsersChatListEntity) {
@@ -802,7 +835,7 @@ class MainActivity2 : AppCompatActivity(), IMainActivity {
         startActivity(intent)
     }
 
-    private fun addOrder(userItem: String, currentUserId: String,itemName:String){
+    private fun addOrder(userItem: String, currentUserId: String,itemName:String,price: String,Quantity: String){
 
 //        firebaseFirestore
 //            .collection("Users")
@@ -814,7 +847,11 @@ class MainActivity2 : AppCompatActivity(), IMainActivity {
 //                if (!documentSnapshot.exists()) {
 
 
-        executeOrder(userItem,currentUserId,itemName)
+        if (userItem!=currentUserId) {
+            executeOrder(userItem, currentUserId, itemName, price, Quantity)
+        }else{
+            Toasty.error(this,"Error",Toasty.LENGTH_SHORT,true).show()
+        }
 
 //                    firebaseFirestore
 //                        .collection("Users")
@@ -886,7 +923,14 @@ class MainActivity2 : AppCompatActivity(), IMainActivity {
 //    }
 
 
-    private fun executeOrder(userItem: String, currentUserId: String,itemName:String){
+    private fun executeOrder(userItem: String, currentUserId: String,itemName:String,price: String,Quantity: String){
+
+        idOrder= firebaseFirestore.collection("Users")
+            .document(userItem)
+            .collection("Orders").document().id
+
+        val messageText:String="Order Request"
+        val type:String ="order_req"
 
         val userMap = HashMap<String, Any?>()
         FirebaseFirestore.getInstance()
@@ -895,34 +939,51 @@ class MainActivity2 : AppCompatActivity(), IMainActivity {
             .get()
             .addOnSuccessListener { documentSnapshot: DocumentSnapshot ->
                 val email = documentSnapshot.getString("email")
-                userMap["name"] = documentSnapshot.getString("name")
+                userMap["username"] = documentSnapshot.getString("name")
                 userMap["id"] = documentSnapshot.getString("id")
                 userMap["email"] = email
                 userMap["image"] = documentSnapshot.getString("image")
 //                userMap["tokens"] = documentSnapshot["token_ids"]
                 userMap["notification_id"] = System.currentTimeMillis().toString()
                 userMap["orderName"] =itemName
-                userMap["timestamp"] = System.currentTimeMillis().toString()
+                userMap["status"] ="Pending"
+                userMap["message"] =messageText
+                userMap["type"] =type
+                userMap["price"]=price
+                userMap["Quantity"]=Quantity
+                userMap["orderFrom"]=currentUserId
+                userMap["orderTo"]=userItem
+                userMap["idOrder"]=idOrder
+                userMap["timestamp"] =FieldValue.serverTimestamp()
 
-               idOrder= firebaseFirestore.collection("Users")
-                    .document(userItem)
-                    .collection("Orders").document().id
+//               idOrder= firebaseFirestore.collection("Users")
+//                    .document(userItem)
+//                    .collection("Orders").document().id
                 //Add to user
-                FirebaseFirestore.getInstance()
+
+
+                firebaseFirestore
                     .collection("Users")
                     .document(userItem)
                     .collection("Orders")
 //                    .document(currentUserId)
                     .document(idOrder!!)
-                    .set(userMap, SetOptions.merge())
+                    .set(userMap, SetOptions.merge()).continueWith {
+                        firebaseFirestore
+                            .collection("Users")
+                            .document(currentUserId)
+                            .collection("Orders")
+//                    .document(currentUserId)
+                            .document(idOrder!!).set(userMap,SetOptions.merge())
+                    }
                     .addOnSuccessListener {
 
                         documentSnapshot.getString("name")?.let { it1 ->
                             addToNotification(userItem, currentUserId,
                                 //                                documentSnapshot.getString("image"),
                                 it1,
-                                "Sent you order request for",
-                                "order_req",itemName
+                                messageText,
+                                type,itemName,price,Quantity
                             )
                         }
 
@@ -949,7 +1010,7 @@ class MainActivity2 : AppCompatActivity(), IMainActivity {
                 userMap["image"] = documentSnapshot.getString("image")
                 userMap["tokens"] = documentSnapshot["token_ids"]
                 userMap["notification_id"] = System.currentTimeMillis().toString()
-                userMap["timestamp"] = System.currentTimeMillis().toString()
+                userMap["timestamp"] = FieldValue.serverTimestamp()
 
                 //Add to user
                 FirebaseFirestore.getInstance()
@@ -980,25 +1041,33 @@ class MainActivity2 : AppCompatActivity(), IMainActivity {
 
     private fun addToNotification(
         UserItemId: String,
-        user_id: String,
+        currentUserId: String,
 //        profile: String,
         username: String,
         message: String,
         type: String,
-        itemName: String=""
+        itemName: String="",
+        price:String="",
+        Quantity: String="1"
     ) {
         val map: MutableMap<String, Any> = java.util.HashMap()
-        map["id"] = user_id
+        map["id"] = currentUserId
         map["username"] = username
 //        map["image"] = profile
         map["message"] = message
-        map["timestamp"] = System.currentTimeMillis().toString()
+        map["timestamp"] = FieldValue.serverTimestamp()
         map["type"] = type
-        map["action_id"] = user_id
+        map["action_id"] = currentUserId
         if(type=="order_req"){
             map["orderName"] =itemName
+            map["status"] ="Pending"
+            map["price"]=price
+            map["orderFrom"]=currentUserId
+            map["orderTo"]=UserItemId
+            map["idOrder"]= idOrder.toString()
+            map["Quantity"]=Quantity
         }
-        if (UserItemId != user_id) {
+        if (UserItemId != currentUserId) {
 
             if (type=="order_req"){
 
@@ -1009,7 +1078,7 @@ class MainActivity2 : AppCompatActivity(), IMainActivity {
                         .document(it)
                         .set(map, SetOptions.merge()).addOnSuccessListener {
 
-                            Toasty.success(this, "Order request sent.", Toasty.LENGTH_SHORT,true).show()
+                            Toasty.success(this, "Order request Sent.", Toasty.LENGTH_SHORT,true).show()
                         }
                         .addOnFailureListener(OnFailureListener { e: java.lang.Exception ->
                             Log.e("Error", e.localizedMessage)
@@ -1025,7 +1094,7 @@ class MainActivity2 : AppCompatActivity(), IMainActivity {
                     .addOnSuccessListener(OnSuccessListener { documentReference: DocumentReference? ->
                         if (type == "friend_req") {
 //                        req_sent.setText("Friend request sent")
-                            Toasty.success(this, "Friend request sent.", Toasty.LENGTH_SHORT,true).show()
+                            Toasty.success(this, "Friend request Sent.", Toasty.LENGTH_SHORT,true).show()
                         }
 //                    else if (type == "order_req"){
 //                        Toasty.success(this, "Order request sent.", Toasty.LENGTH_SHORT,true).show()

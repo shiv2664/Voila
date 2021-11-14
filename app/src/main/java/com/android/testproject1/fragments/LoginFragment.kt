@@ -50,6 +50,8 @@ class LoginFragment : Fragment() {
             signInUser(binding)
         }
 
+
+
         return binding.root
     }
 

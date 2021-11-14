@@ -10,7 +10,6 @@ import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
-import com.android.testproject1.fragments.CreatePost
 import com.android.testproject1.fragments.*
 import com.android.testproject1.interfaces.IMainActivity
 import com.android.testproject1.model.Notifications
@@ -18,7 +17,7 @@ import com.android.testproject1.model.Offer
 import com.android.testproject1.model.Users
 import com.android.testproject1.room.enteties.UsersChatListEntity
 import com.android.testproject1.viewmodels.MainActivityViewModel
-import com.google.android.material.bottomnavigation.BottomNavigationView
+import com.google.android.material.button.MaterialButton
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.android.synthetic.main.activity_main.*
@@ -147,7 +146,30 @@ class MainActivity : AppCompatActivity() , IMainActivity {
 
     }
 
-    override fun onPlaceOrderClick(offerItem: Offer) {
+    override fun onPlaceOrderClick(offerItem: Offer, Total: String, Quantity: String) {
+        TODO("Not yet implemented")
+    }
+
+    override fun onAcceptClick(
+        notificationsItem: Notifications,
+        reject: MaterialButton,
+        accept: MaterialButton,
+        cancel: MaterialButton,
+        ready: MaterialButton
+    ) {
+        TODO("Not yet implemented")
+    }
+
+    override fun onOrderReadyClick(
+        notificationsItem: Notifications,
+        cancel: MaterialButton,
+        ready: MaterialButton,
+        waiting: MaterialButton
+    ) {
+        TODO("Not yet implemented")
+    }
+
+    override fun onProfileOpenedDiscover(offerItem: Offer) {
         TODO("Not yet implemented")
     }
 

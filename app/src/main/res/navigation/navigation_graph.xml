@@ -1,17 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/navigation"
+    android:label="Saved"
     app:startDestination="@id/searchFragment2">
 
     <fragment
         android:id="@+id/searchFragment2"
         android:name="com.android.testproject1.fragments.SearchFragment"
-        android:label="SearchFragment" />
+        android:label="Search">
+        <action
+            android:id="@+id/action_searchFragment2_to_profileFragment"
+            app:destination="@id/profileFragment" />
+    </fragment>
     <fragment
         android:id="@+id/profileFragment"
         android:name="com.android.testproject1.fragments.ProfileFragment"
-        android:label="ProfileFragment" >
+        android:label="Profile">
         <action
             android:id="@+id/action_profileFragment_to_editProfileFragment"
             app:destination="@id/editProfileFragment"
@@ -21,9 +27,29 @@
     <fragment
         android:id="@+id/messagesFragment"
         android:name="com.android.testproject1.fragments.MessagesFragment"
-        android:label="MessagesFragment" />
+        android:label="Messages" />
     <fragment
         android:id="@+id/editProfileFragment"
         android:name="com.android.testproject1.fragments.EditProfileFragment"
-        android:label="EditProfileFragment" />
+        android:label="Edit Profile" />
+    <fragment
+        android:id="@+id/orderHistoryFragment"
+        android:name="com.android.testproject1.fragments.OrderHistoryFragment"
+        android:label="Orders History"
+        tools:layout="@layout/fragment_order_history" />
+    <fragment
+        android:id="@+id/profileOpened"
+        android:name="com.android.testproject1.fragments.ProfileOpened"
+        android:label="Profile">
+        <action
+            android:id="@+id/action_profileOpened_to_editProfileFragment"
+            app:destination="@id/editProfileFragment" />
+        <action
+            android:id="@+id/action_profileOpened_to_viewPagerFragmentSaved"
+            app:destination="@id/viewPagerFragmentSaved" />
+    </fragment>
+    <fragment
+        android:id="@+id/viewPagerFragmentSaved"
+        android:name="com.android.testproject1.fragments.ViewPagerFragmentSaved"
+        android:label="Saved" />
 </navigation>

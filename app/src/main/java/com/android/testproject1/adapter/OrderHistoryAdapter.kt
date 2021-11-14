@@ -3,23 +3,22 @@ package com.android.testproject1.adapter
 import android.content.Context
 import android.util.Log
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.ViewDataBinding
 import androidx.recyclerview.widget.RecyclerView
 import com.android.testproject1.BR
 import com.android.testproject1.databinding.NotificationsItemBinding
+import com.android.testproject1.databinding.OrderHistoryItemBinding
 import com.android.testproject1.interfaces.IMainActivity
 import com.android.testproject1.model.Notifications
-import kotlinx.android.synthetic.main.home_recyclerview3.view.*
-import kotlinx.android.synthetic.main.notifications_item.view.*
 
-class NotificationsAdapter(private val context: Context, private var notificationList: MutableList<Notifications>):
-    RecyclerView.Adapter<NotificationsAdapter.BindingViewHolder>() {
+class OrderHistoryAdapter(private val context: Context, private var notificationList: MutableList<Notifications>):
+
+    RecyclerView.Adapter<OrderHistoryAdapter.BindingViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BindingViewHolder {
 
-        val rooView: ViewDataBinding = NotificationsItemBinding.inflate(LayoutInflater.from(context),parent,false)
+        val rooView: ViewDataBinding = OrderHistoryItemBinding.inflate(LayoutInflater.from(context),parent,false)
         return BindingViewHolder(rooView)
     }
 

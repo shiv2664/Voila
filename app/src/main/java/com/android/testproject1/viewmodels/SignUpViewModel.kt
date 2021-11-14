@@ -107,7 +107,7 @@ class SignUpViewModel(application: Application) : AndroidViewModel(application) 
                             FirebaseMessaging.getInstance().token.addOnCompleteListener {
                                 if(it.isComplete){
                                     val tokenId = it.result.toString()
-                                    Log.d(myTAG, tokenId)
+//                                    Log.d(myTAG, tokenId)
                                     val currentId = firebaseAuth.currentUser?.uid.toString()
 
                                     firebaseFirestore.collection("Tokens").document(currentId)
@@ -118,7 +118,7 @@ class SignUpViewModel(application: Application) : AndroidViewModel(application) 
                                             .document(currentId)
                                             .set(tokenMap2)
                                             .addOnSuccessListener(OnSuccessListener<Void?> {
-                                                Log.d(myTAG, "token Updated")
+//                                                Log.d(myTAG, "token Updated")
 
                                             }).addOnFailureListener(OnFailureListener {
                                                 Log.d(myTAG, "token NotUpdated")

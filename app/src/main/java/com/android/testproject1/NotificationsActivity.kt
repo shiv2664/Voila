@@ -5,6 +5,8 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
+import android.view.View
+import android.widget.Toast
 import androidx.appcompat.widget.Toolbar
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.ViewModelProvider
@@ -18,7 +20,7 @@ import com.android.testproject1.model.Offer
 import com.android.testproject1.model.Users
 import com.android.testproject1.room.enteties.UsersChatListEntity
 import com.android.testproject1.viewmodels.NotificationsActivityViewModel
-import kotlinx.android.synthetic.main.activity_notifications.*
+import com.google.android.material.button.MaterialButton
 
 class NotificationsActivity : AppCompatActivity(),IMainActivity {
 
@@ -125,7 +127,36 @@ class NotificationsActivity : AppCompatActivity(),IMainActivity {
         TODO("Not yet implemented")
     }
 
-    override fun onPlaceOrderClick(offerItem: Offer) {
+    override fun onPlaceOrderClick(offerItem: Offer, Total: String, Quantity: String) {
+        TODO("Not yet implemented")
+    }
+
+    override fun onAcceptClick(
+        notificationsItem: Notifications,
+        reject: MaterialButton,
+        accept: MaterialButton,
+        cancel: MaterialButton,
+        ready: MaterialButton
+    ) {
+        reject.visibility=View.GONE
+        accept.visibility=View.GONE
+
+        cancel.visibility=View.VISIBLE
+        ready.visibility=View.VISIBLE
+    }
+
+    override fun onOrderReadyClick(
+        notificationsItem: Notifications,
+        cancel: MaterialButton,
+        ready: MaterialButton,
+        waiting: MaterialButton
+    ) {
+        cancel.visibility=View.GONE
+        ready.visibility=View.GONE
+        waiting.visibility=View.VISIBLE
+    }
+
+    override fun onProfileOpenedDiscover(offerItem: Offer) {
         TODO("Not yet implemented")
     }
 

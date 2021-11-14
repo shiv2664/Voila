@@ -27,9 +27,9 @@
                 android:id="@+id/time"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="18:19"
                 android:layout_below="@+id/show_message"
-                android:layout_toStartOf="@+id/Delivered" />
+                android:layout_toStartOf="@+id/Delivered"
+                android:text="@{chatMessage.timestamp.toLocaleString()}" />
 
             <ImageView
                 android:id="@+id/Delivered"

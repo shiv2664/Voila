@@ -80,8 +80,8 @@ class Dashboard : Fragment(), BottomNavigationView.OnNavigationItemSelectedListe
             .setPositiveButton(
                 "Send again"
             ) { v: View? ->
-                FirebaseAuth.getInstance().currentUser.sendEmailVerification()
-                    .addOnSuccessListener { aVoid: Void? ->
+                FirebaseAuth.getInstance().currentUser?.sendEmailVerification()
+                    ?.addOnSuccessListener { aVoid: Void? ->
                         Toasty.success(
                             requireView().context,
                             "Verification email sent",
@@ -89,7 +89,7 @@ class Dashboard : Fragment(), BottomNavigationView.OnNavigationItemSelectedListe
                             true
                         ).show()
                     }
-                    .addOnFailureListener { e: Exception ->
+                    ?.addOnFailureListener { e: Exception ->
                         Log.e(
                             "Error",
                             e.message!!

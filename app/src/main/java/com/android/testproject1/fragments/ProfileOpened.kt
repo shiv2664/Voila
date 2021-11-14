@@ -11,7 +11,9 @@ import android.view.ViewGroup
 import android.widget.Button
 import android.widget.LinearLayout
 import android.widget.TextView
+import androidx.navigation.fragment.findNavController
 import com.afollestad.materialdialogs.MaterialDialog
+import com.android.testproject1.R
 import com.android.testproject1.databinding.FragmentProfileOpenedBinding
 import com.google.android.gms.tasks.OnFailureListener
 import com.google.android.gms.tasks.OnSuccessListener
@@ -49,19 +51,21 @@ class ProfileOpened : Fragment() {
     ): View {
         binding= FragmentProfileOpenedBinding.inflate(inflater,container,false)
 
-        val bundle2 = this.arguments
-        if (bundle2 != null) {
-            id = bundle2.getString("iD")
-//            Log.d("MyTag", "id Profile Opened  is not null : $id")
-        } else {
-            Toasty.error(requireActivity(), "Error retrieving information.", Toasty.LENGTH_SHORT, true).show()
-            requireActivity().finish()
-        }
+//        val bundle2 = this.arguments
+//        if (bundle2 != null) {
+//            id = bundle2.getString("iD")
+////            Log.d("MyTag", "id Profile Opened  is not null : $id")
+//        } else {
+//            Toasty.error(requireActivity(), "Error retrieving information.", Toasty.LENGTH_SHORT, true).show()
+//            requireActivity().finish()
+//        }
 //        Log.d("MyTag", "id Profile Opened  is : $id")
 
         mFirestore= FirebaseFirestore.getInstance()
         mFirebaseAuth= FirebaseAuth.getInstance()
         currentUserID=mFirebaseAuth.currentUser?.uid
+
+        id=currentUserID
 
         req_sent= binding.friendSent
         remove_friend= binding.friendYes
@@ -70,6 +74,20 @@ class ProfileOpened : Fragment() {
 
         binding.sendMessage.setOnClickListener {
 
+        }
+
+        binding.editProfileBtn.setOnClickListener {
+            findNavController().navigate(R.id.action_profileOpened_to_editProfileFragment)
+        }
+        binding.editImageButton.setOnClickListener {
+            findNavController().navigate(R.id.action_profileOpened_to_editProfileFragment)
+        }
+
+        binding.saved.setOnClickListener {
+            findNavController().navigate(R.id.action_profileOpened_to_viewPagerFragmentSaved)
+        }
+        binding.savedImage.setOnClickListener {
+            findNavController().navigate(R.id.action_profileOpened_to_viewPagerFragmentSaved)
         }
 
 
@@ -93,62 +111,62 @@ class ProfileOpened : Fragment() {
             }
 
 
-        currentUserID?.let {
-            id?.let { it1 ->
-                mFirestore.collection("Users")
-                    .document(it)
-                    .collection("Friends")
-                    .document(it1)
-                    .get()
-                    .addOnSuccessListener(OnSuccessListener<DocumentSnapshot> { documentSnapshot ->
-                        if (documentSnapshot.exists()) {
-                            req_sent.visibility = View.GONE
-                            showRemoveButton()
-                        } else {
-                            mFirestore.collection("Users")
-                                .document(id!!)
-                                .collection("Friend_Requests")
-                                .document(currentUserID!!)
-                                .get()
-                                .addOnSuccessListener(OnSuccessListener<DocumentSnapshot> { documentSnapshot ->
-                                    if (!documentSnapshot.exists()) {
-                                        mFirestore.collection("Users")
-                                            .document(currentUserID!!)
-                                            .collection("Friend_Requests")
-                                            .document(id!!)
-                                            .get()
-                                            .addOnSuccessListener(OnSuccessListener<DocumentSnapshot> { documentSnapshot ->
-                                                if (documentSnapshot.exists()) {
-                                                    req_sent.setVisibility(View.GONE)
-                                                    showRequestLayout()
-                                                } else {
-                                                    req_sent.setVisibility(View.GONE)
-                                                    showAddButton()
-                                                }
-                                            })
-                                            .addOnFailureListener(OnFailureListener { e ->
-                                                Log.w(
-                                                    "error",
-                                                    "fail",
-                                                    e
-                                                )
-                                            })
-                                    } else {
-                                        req_sent.setText("Friend request sent")
-                                        req_sent.setVisibility(View.VISIBLE)
-                                        req_sent.setAlpha(0.0f)
-                                        req_sent.animate()
-                                            .setDuration(200)
-                                            .alpha(1.0f)
-                                            .start()
-                                    }
-                                })
-                                .addOnFailureListener(OnFailureListener { e -> Log.w("error", "fail", e) })
-                        }
-                    })
-                    .addOnFailureListener(OnFailureListener { e -> Log.w("error", "fail", e) })
-            }
-        }
+//        currentUserID?.let {
+//            id?.let { it1 ->
+//                mFirestore.collection("Users")
+//                    .document(it)
+//                    .collection("Friends")
+//                    .document(it1)
+//                    .get()
+//                    .addOnSuccessListener(OnSuccessListener<DocumentSnapshot> { documentSnapshot ->
+//                        if (documentSnapshot.exists()) {
+//                            req_sent.visibility = View.GONE
+//                            showRemoveButton()
+//                        } else {
+//                            mFirestore.collection("Users")
+//                                .document(id!!)
+//                                .collection("Friend_Requests")
+//                                .document(currentUserID!!)
+//                                .get()
+//                                .addOnSuccessListener(OnSuccessListener<DocumentSnapshot> { documentSnapshot ->
+//                                    if (!documentSnapshot.exists()) {
+//                                        mFirestore.collection("Users")
+//                                            .document(currentUserID!!)
+//                                            .collection("Friend_Requests")
+//                                            .document(id!!)
+//                                            .get()
+//                                            .addOnSuccessListener(OnSuccessListener<DocumentSnapshot> { documentSnapshot ->
+//                                                if (documentSnapshot.exists()) {
+//                                                    req_sent.setVisibility(View.GONE)
+//                                                    showRequestLayout()
+//                                                } else {
+//                                                    req_sent.setVisibility(View.GONE)
+//                                                    showAddButton()
+//                                                }
+//                                            })
+//                                            .addOnFailureListener(OnFailureListener { e ->
+//                                                Log.w(
+//                                                    "error",
+//                                                    "fail",
+//                                                    e
+//                                                )
+//                                            })
+//                                    } else {
+//                                        req_sent.text = "Friend request sent"
+//                                        req_sent.visibility = View.VISIBLE
+//                                        req_sent.alpha = 0.0f
+//                                        req_sent.animate()
+//                                            .setDuration(200)
+//                                            .alpha(1.0f)
+//                                            .start()
+//                                    }
+//                                })
+//                                .addOnFailureListener(OnFailureListener { e -> Log.w("error", "fail", e) })
+//                        }
+//                    })
+//                    .addOnFailureListener(OnFailureListener { e -> Log.w("error", "fail", e) })
+//            }
+//        }
 
         return binding.root
     }

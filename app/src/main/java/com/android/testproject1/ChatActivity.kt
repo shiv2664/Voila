@@ -1,6 +1,5 @@
 package com.android.testproject1
 
-import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
@@ -14,8 +13,8 @@ import com.android.testproject1.model.Notifications
 import com.android.testproject1.model.Offer
 import com.android.testproject1.model.Users
 import com.android.testproject1.room.enteties.UsersChatListEntity
+import com.google.android.material.button.MaterialButton
 import kotlinx.android.synthetic.main.activity_chat.*
-import kotlinx.android.synthetic.main.drawer_menu.*
 
 class ChatActivity : AppCompatActivity() ,IMainActivity {
 
@@ -154,7 +153,30 @@ class ChatActivity : AppCompatActivity() ,IMainActivity {
         TODO("Not yet implemented")
     }
 
-    override fun onPlaceOrderClick(offerItem: Offer) {
+    override fun onPlaceOrderClick(offerItem: Offer, Total: String, Quantity: String) {
+        TODO("Not yet implemented")
+    }
+
+    override fun onAcceptClick(
+        notificationsItem: Notifications,
+        reject: MaterialButton,
+        accept: MaterialButton,
+        cancel: MaterialButton,
+        ready: MaterialButton
+    ) {
+        TODO("Not yet implemented")
+    }
+
+    override fun onOrderReadyClick(
+        notificationsItem: Notifications,
+        cancel: MaterialButton,
+        ready: MaterialButton,
+        waiting: MaterialButton
+    ) {
+        TODO("Not yet implemented")
+    }
+
+    override fun onProfileOpenedDiscover(offerItem: Offer) {
         TODO("Not yet implemented")
     }
 

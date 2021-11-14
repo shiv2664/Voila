@@ -37,7 +37,7 @@ class HomeFragmentViewModel(application: Application): AndroidViewModel(applicat
         loadNotes()
     }
 
-    fun loadNotes() {
+    private fun loadNotes() {
 
         Log.d(myTAG,"last result is : "+lastResult?.toObject(Post::class.java)?.postId)
 

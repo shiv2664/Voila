@@ -1,5 +1,6 @@
 package com.android.testproject1.databindingadapters
 
+import android.graphics.drawable.GradientDrawable
 import androidx.databinding.BindingAdapter
 import androidx.recyclerview.widget.*
 import com.android.testproject1.adapter.*
@@ -67,6 +68,7 @@ fun bindNotificationsRecyclerView(view: RecyclerView, dataList:List<Notification
 
     view.itemAnimator = DefaultItemAnimator()
 //    view.addItemDecoration(DividerItemDecoration(view.context, DividerItemDecoration.VERTICAL))
+
     view.setHasFixedSize(true)
 
     var adapter:NotificationsAdapter?= view.adapter as NotificationsAdapter?
@@ -74,6 +76,41 @@ fun bindNotificationsRecyclerView(view: RecyclerView, dataList:List<Notification
     if (adapter == null) {
         if (dataList != null) {
             adapter = NotificationsAdapter(view.context,dataList.toMutableList())
+            view.adapter = adapter
+        }
+    }
+    if (dataList != null) {
+        adapter?.updateData(dataList)
+    }
+
+}
+
+
+
+@BindingAdapter("bindorderrecyclerview")
+fun bindOrderHistoryRecyclerView(view: RecyclerView, dataList:List<Notifications>?) {
+
+//    if (dataList != null) {
+//        if (dataList.isEmpty())
+//            return
+//    }
+
+    val linearLayoutManager = LinearLayoutManager(view.context)
+    val layoutManager = view.layoutManager
+    if (layoutManager == null) {
+        view.layoutManager = linearLayoutManager
+    }
+
+    view.itemAnimator = DefaultItemAnimator()
+//    view.addItemDecoration(DividerItemDecoration(view.context, DividerItemDecoration.VERTICAL))
+
+    view.setHasFixedSize(true)
+
+    var adapter:OrderHistoryAdapter?= view.adapter as OrderHistoryAdapter?
+
+    if (adapter == null) {
+        if (dataList != null) {
+            adapter = OrderHistoryAdapter(view.context,dataList.toMutableList())
             view.adapter = adapter
         }
     }

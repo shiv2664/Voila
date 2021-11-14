@@ -12,6 +12,7 @@ class App : Application() {
     companion object{
         val CHANNEL_ID = "exampleServiceChannel"
         val CHANNEL_ID2 = "exampleServiceChannel2"
+        val FCM_CHANNEL_ID = "fcmChannel"
 
         private var appContext: Context? = null
         fun getAppContext(): Context? {
@@ -25,6 +26,7 @@ class App : Application() {
         appContext = applicationContext
         createNotificationChannel()
         createNotificationChannel2()
+        createNotificationChannel3()
     }
 
     private fun createNotificationChannel() {
@@ -50,4 +52,18 @@ class App : Application() {
             manager.createNotificationChannel(serviceChannel2)
         }
     }
+
+    private fun createNotificationChannel3() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            val fcmChannel = NotificationChannel(
+                FCM_CHANNEL_ID,
+                "FCM_Channel",
+                NotificationManager.IMPORTANCE_HIGH
+            )
+            val manager = getSystemService(NotificationManager::class.java)
+            manager.createNotificationChannel(fcmChannel)
+        }
+    }
+
+
 }

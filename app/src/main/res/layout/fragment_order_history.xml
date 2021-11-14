@@ -1,14 +1,34 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context=".fragments.OrderHistoryFragment">
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <!-- TODO: Update blank fragment layout -->
-    <TextView
+    <data>
+
+        <variable
+            name="listener"
+            type="com.android.testproject1.interfaces.IMainActivity" />
+
+        <import type="java.util.List"/>
+        <import type="com.android.testproject1.model.Notifications"/>
+
+        <variable
+            name="dataList"
+            type="List&lt;Notifications>"/>
+
+    </data>
+
+    <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:text="@string/hello_blank_fragment" />
+        tools:context=".fragments.OrderHistoryFragment">
 
-</FrameLayout>
+        <!-- TODO: Update blank fragment layout -->
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/order_history_recyclerview"
+            android:layout_width="match_parent"
+            app:bindorderrecyclerview="@{dataList}"
+            android:layout_height="match_parent" />
+
+    </FrameLayout>
+</layout>

@@ -1,35 +1,17 @@
 package com.android.testproject1
 
-import android.content.Intent
-import android.graphics.Color
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.view.View
 import androidx.databinding.DataBindingUtil
-import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.ViewModelProvider
-import com.android.testproject1.databinding.ActivityNotificationsBinding
 import com.android.testproject1.databinding.ActivityPaymentBinding
 import com.android.testproject1.interfaces.IMainActivity
 import com.android.testproject1.model.Notifications
 import com.android.testproject1.model.Offer
 import com.android.testproject1.model.Users
 import com.android.testproject1.room.enteties.UsersChatListEntity
-import com.android.testproject1.viewmodels.NotificationsActivityViewModel
 import com.android.testproject1.viewmodels.PaymentActivityViewModel
-import com.github.mikephil.charting.animation.Easing
-import com.github.mikephil.charting.components.Legend
-import com.github.mikephil.charting.data.Entry
-import com.github.mikephil.charting.data.PieData
-import com.github.mikephil.charting.data.PieDataSet
-import com.github.mikephil.charting.data.PieEntry
-import com.github.mikephil.charting.formatter.PercentFormatter
-import com.github.mikephil.charting.highlight.Highlight
-import com.github.mikephil.charting.listener.OnChartValueSelectedListener
-import com.github.mikephil.charting.utils.ColorTemplate
-import com.github.mikephil.charting.utils.MPPointF
-import com.mikhaellopez.circularprogressbar.CircularProgressBar
-import kotlinx.android.synthetic.main.activity_payment.*
+import com.google.android.material.button.MaterialButton
 
 class PaymentActivity : AppCompatActivity(),IMainActivity {
 
@@ -213,7 +195,30 @@ class PaymentActivity : AppCompatActivity(),IMainActivity {
         TODO("Not yet implemented")
     }
 
-    override fun onPlaceOrderClick(offerItem: Offer) {
+    override fun onPlaceOrderClick(offerItem: Offer, Total: String, Quantity: String) {
+        TODO("Not yet implemented")
+    }
+
+    override fun onAcceptClick(
+        notificationsItem: Notifications,
+        reject: MaterialButton,
+        accept: MaterialButton,
+        cancel: MaterialButton,
+        ready: MaterialButton
+    ) {
+        TODO("Not yet implemented")
+    }
+
+    override fun onOrderReadyClick(
+        notificationsItem: Notifications,
+        cancel: MaterialButton,
+        ready: MaterialButton,
+        waiting: MaterialButton
+    ) {
+        TODO("Not yet implemented")
+    }
+
+    override fun onProfileOpenedDiscover(offerItem: Offer) {
         TODO("Not yet implemented")
     }
 

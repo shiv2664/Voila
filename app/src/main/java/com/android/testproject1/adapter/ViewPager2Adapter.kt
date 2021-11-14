@@ -15,7 +15,7 @@ class ViewPager2Adapter(fragmentManager: FragmentManager, lifecycle: Lifecycle) 
 
         when (position) {
             0 -> { return ViewpagerFragmentPosts() }
-            1 -> {return ViewPagerFragmentSaved() }
+//            1 -> {return ViewPagerFragmentSaved() }
         }
 
         return ViewpagerFragmentPosts()
@@ -23,6 +23,6 @@ class ViewPager2Adapter(fragmentManager: FragmentManager, lifecycle: Lifecycle) 
     }
 
     override fun getItemCount(): Int {
-        return 2
+        return 1
     }
 }
