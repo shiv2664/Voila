@@ -155,7 +155,8 @@ class CreateOffer : AppCompatActivity() {
 
                 intent.putExtra("offerId", offerID)
 
-                intent.putExtra("minPeople",MinPeople.text.toString().trim())
+//                intent.putExtra("minPeople",MinPeople.text.toString().trim())
+                intent.putExtra("minPeople","1")
 
                 intent.putExtra("discountedPrice",DiscountedPrice.text.toString().trim())
 
@@ -163,7 +164,8 @@ class CreateOffer : AppCompatActivity() {
 
                 intent.putExtra("title",descriptionTextTitle.text.toString().trim())
 
-                intent.putExtra("city",City.text.toString().trim())
+//                intent.putExtra("city",City.text.toString().trim())
+                intent.putExtra("city","Panipat")
 
                 intent.putExtra("description",descriptionTextMain.text.toString().trim())
 

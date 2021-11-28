@@ -9,24 +9,24 @@ import kotlinx.android.parcel.Parcelize
 @Parcelize
 data class PostRoomEntity(
     @PrimaryKey(autoGenerate = false)
-    val postId:String=""
-    ,val userId: String=""
-    ,val name: String=""
-    ,val timestamp: String=""
-    ,val likes: String=""
+    var postId:String=""
+    ,var userId: String=""
+    ,var name: String=""
+    ,var timestamp: String=""
+    ,var likes: String=""
     ,var favourites: String=""
-    ,val description: String=""
-    ,val color: String=""
-    ,val username: String=""
-    ,val userimage: String =""
-    ,val image_count: Int = 0
-    ,val image_url_0: String=""
-    ,val image_url_1: String=""
-    ,val image_url_2: String=""
-    ,val image_url_3: String=""
-    ,val image_url_4: String=""
-    ,val image_url_5: String=""
-    ,val image_url_6: String=""
+    ,var description: String=""
+    ,var color: String=""
+    ,var username: String=""
+    ,var userimage: String =""
+    ,var image_count: Int = 0
+    ,var image_url_0: String=""
+    ,var image_url_1: String=""
+    ,var image_url_2: String=""
+    ,var image_url_3: String=""
+    ,var image_url_4: String=""
+    ,var image_url_5: String=""
+    ,var image_url_6: String=""
 ):Parcelable
 
 

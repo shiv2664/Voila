@@ -1,38 +1,43 @@
-package com.android.testproject1.model
+package com.android.testproject1.room.enteties
 
 import android.os.Parcelable
-import com.android.testproject1.room.enteties.ChatRoomEntity
+import androidx.room.Entity
+import androidx.room.PrimaryKey
+import com.android.testproject1.model.Offer
 import kotlinx.android.parcel.Parcelize
 
+@Entity
 @Parcelize
-data class Offer(val userId: String=""
-                 ,val postId:String=""
-                 ,val name: String=""
-                 ,val timestamp: String=""
-                 ,val likes: String=""
+data class OfferRoomEntity(
+                 @PrimaryKey(autoGenerate = false)
+                 var postId:String=""
+                 ,var userId: String=""
+                 ,var name: String=""
+                 ,var timestamp: String=""
+                 ,var likes: String=""
                  ,var favourites: String=""
-                 ,val description: String=""
-                 ,val username: String=""
-                 ,val userimage: String =""
-                 ,val title:String=""
+                 ,var description: String=""
+                 ,var username: String=""
+                 ,var userimage: String =""
+                 ,var title:String=""
                  ,var saved:String=""
-                 ,val originalPrice:String=""
-                 ,val discountPrice:String=""
-                 ,val city:String=""
-                 ,val ratings:String=""
-                 ,val usersRated:String=""
-                 ,val addressMap:String=""
-                 ,val offerCategory:String=""
-                 ,val minPeople:String=""
-                 ,val maxPeople:String=""
-                 ,val image_count: Int = 0
-                 ,val image_url_0: String=""
-                 ,val image_url_1: String=""
-                 ,val image_url_2: String=""
-                 ,val image_url_3: String=""
-                 ,val image_url_4: String=""
-                 ,val image_url_5: String=""
-                 ,val image_url_6: String="") :Parcelable {
+                 ,var originalPrice:String=""
+                 ,var discountPrice:String=""
+                 ,var city:String=""
+                 ,var ratings:String=""
+                 ,var usersRated:String=""
+                 ,var addressMap:String=""
+                 ,var offerCategory:String=""
+                 ,var minPeople:String=""
+                 ,var maxPeople:String=""
+                 ,var image_count: Int = 0
+                 ,var image_url_0: String=""
+                 ,var image_url_1: String=""
+                 ,var image_url_2: String=""
+                 ,var image_url_3: String=""
+                 ,var image_url_4: String=""
+                 ,var image_url_5: String=""
+                 ,var image_url_6: String="") : Parcelable{
 
     override fun equals(other: Any?): Boolean {
 
@@ -40,7 +45,8 @@ data class Offer(val userId: String=""
             return false
         }
 
-        other as Offer
+        other as OfferRoomEntity
+
         if (userId != other.userId) {
             return false
         }
@@ -139,8 +145,8 @@ data class Offer(val userId: String=""
     }
 
     override fun hashCode(): Int {
-        var result = userId.hashCode()
-        result = 31 * result + postId.hashCode()
+        var result = postId.hashCode()
+        result = 31 * result + userId.hashCode()
         result = 31 * result + name.hashCode()
         result = 31 * result + timestamp.hashCode()
         result = 31 * result + likes.hashCode()
@@ -170,6 +176,4 @@ data class Offer(val userId: String=""
         return result
     }
 }
-
-
 

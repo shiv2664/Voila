@@ -10,11 +10,11 @@
             type="com.android.testproject1.interfaces.IMainActivity" />
 
         <import type="java.util.List"/>
-        <import type="com.android.testproject1.model.Notifications"/>
+        <import type="com.android.testproject1.room.enteties.NotificationsRoomEntity"/>
 
         <variable
             name="dataList"
-            type="List&lt;Notifications>"/>
+            type="List&lt;NotificationsRoomEntity>"/>
 
     </data>
 
@@ -32,6 +32,7 @@
             <androidx.appcompat.widget.Toolbar
                 android:id="@+id/toolbar"
                 app:title="Notifications"
+                app:theme="@style/ThemeOverlay.AppCompat"
                 app:titleTextColor="@color/white"
                 android:background="?attr/colorPrimary"
                 android:layout_width="match_parent"
@@ -39,13 +40,14 @@
 
         </com.google.android.material.appbar.AppBarLayout>
 
-        <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
-            android:layout_below="@+id/top"
-            android:id="@+id/refreshLayout"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
+<!--        <androidx.swiperefreshlayout.widget.SwipeRefreshLayout-->
+<!--            android:layout_below="@+id/top"-->
+<!--            android:id="@+id/refreshLayout"-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="match_parent">-->
 
             <FrameLayout
+                android:layout_below="@+id/top"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
 
@@ -85,7 +87,7 @@
 
             </FrameLayout>
 
-        </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+<!--        </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>-->
 
 
     </RelativeLayout>

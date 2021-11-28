@@ -8,32 +8,30 @@ import androidx.databinding.ViewDataBinding
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.android.testproject1.BR
-import com.android.testproject1.interfaces.IMainActivity
+import com.android.testproject1.databinding.ProfileOfferCurrentuserRecyclerviewBinding
 import com.android.testproject1.databinding.ProfilePostRecyclerviewBinding
-import com.android.testproject1.model.Offer
-import com.android.testproject1.model.Post
-import com.android.testproject1.room.enteties.NotificationsRoomEntity
+import com.android.testproject1.interfaces.IMainActivity
 import com.android.testproject1.room.enteties.OfferRoomEntity
 
-class ProfilePostRecyclerViewAdapter(private val context: Context, private var postList: MutableList<OfferRoomEntity>):
-    RecyclerView.Adapter<ProfilePostRecyclerViewAdapter.BindingViewHolder>() {
+class ProfilePostCurrentUserRecyclerviewAdapter(private val context: Context, private var postList: MutableList<OfferRoomEntity>):
+    RecyclerView.Adapter<ProfilePostCurrentUserRecyclerviewAdapter.BindingViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BindingViewHolder {
 
-        val rooView: ViewDataBinding = ProfilePostRecyclerviewBinding.inflate(LayoutInflater.from(context),parent,false)
+        val rooView: ViewDataBinding = ProfileOfferCurrentuserRecyclerviewBinding.inflate(LayoutInflater.from(context),parent,false)
         return BindingViewHolder(rooView)
     }
 
     override fun onBindViewHolder(holder: BindingViewHolder, position: Int) {
 
-        val post = postList[position]
+        val offerItem = postList[position]
 
-        holder.itemBinding.setVariable(BR.offerItem,post)
+        holder.itemBinding.setVariable(BR.offerItem,offerItem)
         holder.itemBinding.setVariable(BR.listener, context as IMainActivity)
         holder.itemBinding.executePendingBindings()
     }
     override fun getItemCount(): Int {
-        Log.d("MyTag","Size is : "+postList.size)
+        Log.d("MyTag","Size is Current user  : "+postList.size)
         return postList.size
     }
 
@@ -48,7 +46,7 @@ class ProfilePostRecyclerViewAdapter(private val context: Context, private var p
                 oldList, newDataList
             )
         )
-       postList=newDataList.toMutableList()
+        postList=newDataList.toMutableList()
         diffUtil.dispatchUpdatesTo(this)
 
     }
@@ -73,8 +71,6 @@ class ProfilePostRecyclerViewAdapter(private val context: Context, private var p
             return  (oldNotificationList[oldItemPosition] == newNotificationList[newItemPosition])
         }
     }
-
-
 
     class BindingViewHolder(val itemBinding: ViewDataBinding)
         : RecyclerView.ViewHolder(itemBinding.root){}

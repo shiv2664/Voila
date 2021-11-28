@@ -6,7 +6,7 @@ import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.ViewModelProvider
 import com.android.testproject1.databinding.ActivityPaymentBinding
 import com.android.testproject1.interfaces.IMainActivity
-import com.android.testproject1.model.Notifications
+import com.android.testproject1.room.enteties.NotificationsRoomEntity
 import com.android.testproject1.model.Offer
 import com.android.testproject1.model.Users
 import com.android.testproject1.room.enteties.UsersChatListEntity
@@ -200,7 +200,7 @@ class PaymentActivity : AppCompatActivity(),IMainActivity {
     }
 
     override fun onAcceptClick(
-        notificationsItem: Notifications,
+        notificationsRoomEntityItem: NotificationsRoomEntity,
         reject: MaterialButton,
         accept: MaterialButton,
         cancel: MaterialButton,
@@ -210,7 +210,7 @@ class PaymentActivity : AppCompatActivity(),IMainActivity {
     }
 
     override fun onOrderReadyClick(
-        notificationsItem: Notifications,
+        notificationsRoomEntityItem: NotificationsRoomEntity,
         cancel: MaterialButton,
         ready: MaterialButton,
         waiting: MaterialButton
@@ -242,7 +242,7 @@ class PaymentActivity : AppCompatActivity(),IMainActivity {
         TODO("Not yet implemented")
     }
 
-    override fun onNotificationItemClick(notificationsItem: Notifications) {
+    override fun onNotificationItemClick(notificationsRoomEntityItem: NotificationsRoomEntity) {
         TODO("Not yet implemented")
     }
 

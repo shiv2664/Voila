@@ -52,13 +52,20 @@
 
 
 
-<!--        android:layout_below="@+id/app_bar_home"-->
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/rv_Posts"
+        <!--        android:layout_below="@+id/app_bar_home"-->
+
+        <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+            android:id="@+id/swipeRefresh"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layoutAnimation="@anim/layout_animation_fall_down"
-            app:bindhomerecyclerview="@{dataList}" />
+            android:layout_height="match_parent">
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rv_Posts"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layoutAnimation="@anim/layout_animation_fall_down"
+                app:bindhomerecyclerview="@{dataList}" />
+
+        </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
 
     </RelativeLayout>

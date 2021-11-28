@@ -163,6 +163,16 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content" />
 
+                <Button
+                    android:id="@+id/Offers"
+                    android:text="Offers"
+                    android:textColor="?android:textColorPrimary"
+                    style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                    android:textAllCaps="false"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
+
+
                 <LinearLayout
                     android:id="@+id/friend_req"
                     android:visibility="gone"

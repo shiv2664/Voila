@@ -3,30 +3,37 @@ package com.android.testproject1.viewmodels
 import android.app.Application
 import android.util.Log
 import androidx.lifecycle.AndroidViewModel
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import com.android.testproject1.model.Notifications
-import com.android.testproject1.model.Post
+import androidx.lifecycle.viewModelScope
+import com.android.testproject1.room.enteties.AppDatabase
+import com.android.testproject1.room.enteties.NotificationsRoomEntity
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.DocumentChange
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.Query
 import es.dmoral.toasty.Toasty
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 class NotificationsActivityViewModel(application: Application) :AndroidViewModel(application) {
 
-    private val notificationList: MutableLiveData<MutableList<Notifications>> = MutableLiveData()
+    private val notificationList: MutableLiveData<MutableList<NotificationsRoomEntity>> = MutableLiveData()
 
-    private val list2 = mutableListOf<Notifications>()
+    private val list2 = mutableListOf<NotificationsRoomEntity>()
     private val firebaseAuth=FirebaseAuth.getInstance()
     private val firebaseFirestore=FirebaseFirestore.getInstance()
     private val myTag="MyTag"
+
+    private val localDatabase: AppDatabase = AppDatabase.getInstance(application)!!
+
 
     private val currentUserID: String? =firebaseAuth.currentUser?.uid
 
 
     @JvmName("getNotificationList")
-    fun getNotificationList(): MutableLiveData<MutableList<Notifications>> {
-        return notificationList
+    fun getNotificationList(): LiveData<List<NotificationsRoomEntity>>? {
+        return localDatabase.appDao()?.getNotifications()
     }
 
 
@@ -47,10 +54,15 @@ class NotificationsActivityViewModel(application: Application) :AndroidViewModel
                                 when (dc.type) {
 
                                     DocumentChange.Type.ADDED -> {
-                                        dc.document.toObject(Notifications::class.java).let {
-                                            Log.d(myTag, " It is : $it")
-                                            list2.addAll(listOf(it))
-                                            notificationList.postValue(list2)
+                                        dc.document.toObject(NotificationsRoomEntity::class.java).let {
+//                                            Log.d(myTag, " It is : $it")
+//                                            list2.addAll(listOf(it))
+//                                            notificationList.postValue(list2)
+
+                                            viewModelScope.launch(Dispatchers.IO) {
+                                                localDatabase.appDao()?.insertNotification(it)
+
+                                            }
                                         }
 
                                     }
@@ -58,7 +70,7 @@ class NotificationsActivityViewModel(application: Application) :AndroidViewModel
 
                                     }
                                     DocumentChange.Type.REMOVED -> {
-                                        dc.document.toObject(Notifications::class.java).let {
+                                        dc.document.toObject(NotificationsRoomEntity::class.java).let {
                                             list2.remove(it)
                                             notificationList.postValue(list2)
                                         }
@@ -74,6 +86,8 @@ class NotificationsActivityViewModel(application: Application) :AndroidViewModel
                 }
 
         }
+
+
 
 
     fun deleteAll() {
@@ -95,6 +109,11 @@ class NotificationsActivityViewModel(application: Application) :AndroidViewModel
                                 .addOnSuccessListener {
                                     Toasty.success(getApplication(), "Notifications cleared", Toasty.LENGTH_SHORT, true).show()
 //                                    getNotifications()
+                                }.continueWith {
+                                    viewModelScope.launch(Dispatchers.IO) {
+                                        localDatabase.appDao()?.deleteAllNotifications()
+
+                                    }
                                 }
                                 .addOnFailureListener { e -> e.printStackTrace() }
                         }

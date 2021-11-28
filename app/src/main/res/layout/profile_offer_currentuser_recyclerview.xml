@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+
+        <variable
+            name="offerItem"
+            type="com.android.testproject1.room.enteties.OfferRoomEntity" />
+
+        <variable
+            name="listener"
+            type="com.android.testproject1.interfaces.IMainActivity" />
+
+    </data>
+
+    <RelativeLayout
+        android:id="@+id/relativeLayout"
+        android:layout_width="match_parent"
+        android:layout_height="120dp"
+        android:layout_margin="4dp">
+
+        <com.google.android.material.imageview.ShapeableImageView
+            android:id="@+id/imageView"
+            android:layout_width="wrap_content"
+            app:backgroundImage="@{offerItem.image_url_0.toString()}"
+            android:layout_height="match_parent"
+            android:layout_centerInParent="true"
+            app:shapeAppearanceOverlay="@style/roundimageview"
+            android:scaleType="fitXY"
+            android:adjustViewBounds="true"/>
+
+        <TextView
+            android:id="@+id/textView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:textColor="@android:color/white"
+            android:layout_below="@+id/imageView" />
+
+    </RelativeLayout>
+</layout>

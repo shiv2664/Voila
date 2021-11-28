@@ -1,6 +1,6 @@
 package com.android.testproject1.interfaces
 
-import com.android.testproject1.model.Notifications
+import com.android.testproject1.room.enteties.NotificationsRoomEntity
 import com.android.testproject1.model.Offer
 import com.android.testproject1.model.Users
 import com.android.testproject1.room.enteties.UsersChatListEntity
@@ -12,13 +12,13 @@ interface IMainActivity {
     fun onRecyclerViewItemClick(offerItem: Offer)
     fun onPlaceOrderClick(offerItem: Offer, Total: String, Quantity: String="1")
     fun onAcceptClick(
-        notificationsItem: Notifications,
+        notificationsRoomEntityItem: NotificationsRoomEntity,
         reject: MaterialButton,
         accept: MaterialButton,
         cancel: MaterialButton,
         ready: MaterialButton
     )
-    fun onOrderReadyClick(notificationsItem: Notifications,
+    fun onOrderReadyClick(notificationsRoomEntityItem: NotificationsRoomEntity,
                           cancel: MaterialButton,
                           ready: MaterialButton,
                           waiting:MaterialButton)
@@ -28,7 +28,7 @@ interface IMainActivity {
     fun onGroupItemClick(userItem: Users)
     fun onLocationClick()
     fun onSendFriendReqClick(userItem: Users)
-    fun onNotificationItemClick(notificationsItem: Notifications)
+    fun onNotificationItemClick(notificationsRoomEntityItem: NotificationsRoomEntity)
     fun onSearchPeopleItemClick(userItem: Users)
     fun onBookMarkItemClick(offerItem: Offer)
     fun onGroupOpenFromMessages(userItem: UsersChatListEntity)

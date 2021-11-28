@@ -10,8 +10,8 @@ import java.util.*
 @Parcelize
 data class UsersChatListEntity(
      @PrimaryKey(autoGenerate = false)
-     val id:String="",val name:String="",val username:String="",val bio:String=""
-    ,val email:String="",val location:String="",val profileimage:String=""
-    ,val imgUrl:String="",val postId:String="",val groupId:String=""
-    ,val createdBy:String="",val timeStamp: Date?=null,val viewType:String=""
+     var id:String="",var name:String="",var username:String="",var bio:String=""
+    ,var email:String="",var location:String="",var profileimage:String=""
+    ,var imgUrl:String="",var postId:String="",var groupId:String=""
+    ,var createdBy:String="",var timeStamp: Date?=null,var viewType:String=""
 ) : Parcelable

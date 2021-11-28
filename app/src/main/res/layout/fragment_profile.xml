@@ -66,12 +66,12 @@
                                 android:src="@drawable/person3" />
 
                             <LinearLayout
-                                android:layout_centerVertical="true"
-                                android:gravity="start"
-                                android:layout_toEndOf="@+id/profilepic"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
+                                android:layout_centerVertical="true"
                                 android:layout_marginStart="20dp"
+                                android:layout_toEndOf="@+id/profilepic"
+                                android:gravity="start"
                                 android:orientation="vertical">
 
                                 <TextView
@@ -81,7 +81,6 @@
                                     android:layout_marginTop="10dp"
                                     android:fontFamily="@font/proximanovaregular"
                                     android:gravity="center"
-                                    android:text="Kristina"
                                     android:textColor="#424242"
                                     android:textSize="21sp"
                                     android:textStyle="bold" />
@@ -91,9 +90,9 @@
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:fontFamily="@font/proximanovaregular"
+                                    android:gravity="center"
                                     android:text="kyc@gmail.com"
                                     android:textColor="#424242"
-                                    android:gravity="center"
                                     android:textSize="14sp" />
 
                             </LinearLayout>

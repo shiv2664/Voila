@@ -16,6 +16,7 @@ import com.android.testproject1.R
 import com.android.testproject1.RegisterActivity
 import com.android.testproject1.adapter.PostsAdapter2
 import com.android.testproject1.databinding.FragmentHomeBinding
+import com.android.testproject1.databindingadapters.bind
 import com.android.testproject1.model.DataProvider
 import com.android.testproject1.viewmodels.HomeFragmentViewModel
 import com.google.firebase.auth.FirebaseAuth
@@ -29,6 +30,8 @@ class HomeFragment : Fragment() {
     private lateinit var binding: FragmentHomeBinding
 
     private lateinit var scrollListener: RecyclerView.OnScrollListener
+
+
 
     var isScrolling = false
     var currentItems = 0
@@ -55,7 +58,11 @@ class HomeFragment : Fragment() {
 
         mViewModel.loadDataPost()
 
+        binding.swipeRefresh.setOnRefreshListener {
+            mViewModel.loadDataPost()
+            binding.swipeRefresh.isRefreshing=false
 
+        }
 
         binding.dataList2 = DataProvider.productList
 

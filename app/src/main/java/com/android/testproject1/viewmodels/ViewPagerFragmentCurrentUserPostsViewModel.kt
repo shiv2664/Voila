@@ -7,9 +7,11 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.android.testproject1.Repository
+import com.android.testproject1.fragments.ProfileFragment
+import com.android.testproject1.model.Offer
 import com.android.testproject1.model.Post
 import com.android.testproject1.room.enteties.AppDatabase
-import com.android.testproject1.room.enteties.OffersSavedRoomEntity
+import com.android.testproject1.room.enteties.OfferRoomEntity
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.FirebaseFirestore
@@ -17,46 +19,53 @@ import com.google.firebase.firestore.Query
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
-class SavedFragmentViewModel(application: Application) :AndroidViewModel(application) {
+class ViewPagerFragmentCurrentUserPostsViewModel(application: Application) :AndroidViewModel(
+    application) {
 
     private val authAppRepository: Repository = Repository(application)
+    //    private val userPostList: MutableLiveData<MutableList<Post>> = authAppRepository.getUserPostList()
+    private val userPostList: MutableLiveData<MutableList<Offer>> = MutableLiveData()
     private val localDatabase: AppDatabase = AppDatabase.getInstance(application)!!
     private val firebaseAuth: FirebaseAuth = FirebaseAuth.getInstance()
     private val db: FirebaseFirestore = FirebaseFirestore.getInstance()
-    private val savedOfferList = MutableLiveData<List<OffersSavedRoomEntity>>()
     private val myTAG:String="MyTag"
-    private var checkduplicate2:String?=null
-    private var lastResult: DocumentSnapshot? = null
     private val currentUserID= firebaseAuth.currentUser?.uid
-    val list2 = mutableListOf<OffersSavedRoomEntity>()
+    private var lastResult: DocumentSnapshot? = null
+    val list2 = mutableListOf<Offer>()
 
-    @JvmName("savedOffersList")
-    fun getSavedOffers(): LiveData<MutableList<OffersSavedRoomEntity>>? {
-        return localDatabase.appDao()?.getSavedOffers()
+
+    @JvmName("getUserPostList")
+    fun getUserPostList(): LiveData<MutableList<OfferRoomEntity>>? {
+        return localDatabase.appDao()?.getOffersUser(currentUserID!!)
     }
 
-    fun loadSavedPosts(){
+
+    fun loadUserPosts() {
 
         val query: Query = if (lastResult == null) {
-            db.collection("Users").document(currentUserID!!).collection("Saved")
-                .orderBy("timestamp", Query.Direction.DESCENDING)
+            db.collection("Offers").whereEqualTo("userId",currentUserID).orderBy("timestamp", Query.Direction.DESCENDING)
                 .limit(10)
         } else {
-            db.collection("Posts").orderBy("timestamp", Query.Direction.DESCENDING)
+            db.collection("Offers") .whereEqualTo("userId",currentUserID).orderBy("timestamp", Query.Direction.DESCENDING)
                 .startAfter(lastResult?.toObject(Post::class.java)?.timestamp)
                 .limit(10)
+
         }
+
+
+//        Log.d(myTAG, " lastResult is  : ${lastResult?.toObject(Post::class.java)?.postId}")
 
         query.get()
             .addOnSuccessListener { queryDocumentSnapshots ->
                 for (documentSnapshot in queryDocumentSnapshots) {
-                    val offerSaved: OffersSavedRoomEntity = documentSnapshot.toObject(OffersSavedRoomEntity::class.java)
+                    val offer: OfferRoomEntity = documentSnapshot.toObject(OfferRoomEntity::class.java)
 
                     viewModelScope.launch(Dispatchers.IO) {
-                        localDatabase.appDao()?.addOffer(offerSaved)
+                        localDatabase.appDao()?.addOfferUser(offer)
                     }
 
-//                    savedOfferList.postValue(list2)
+//                    list2.addAll(listOf(offer))
+//                    userPostList.postValue(list2)
                 }
 
                 if (queryDocumentSnapshots.size() > 0) {
@@ -65,8 +74,9 @@ class SavedFragmentViewModel(application: Application) :AndroidViewModel(applica
 
             }.addOnFailureListener {
                 Log.d(myTAG,"Exception is : "+it.localizedMessage)
+                Log.d(myTAG,"Query failed")
             }
-
     }
+
 
 }

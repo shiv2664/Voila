@@ -52,143 +52,153 @@ class ChatFragment : Fragment() {
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
-        binding= FragmentChatBinding.inflate(inflater,container,false)
+        binding = FragmentChatBinding.inflate(inflater, container, false)
 
         val bundle = this.arguments
-        val chatsOpened=bundle?.getString("chatsOpened")
+        val chatsOpened = bundle?.getString("chatsOpened")
 
-        if (chatsOpened=="fromGroups"){
-            val groupItem= bundle.getParcelable<UsersChatListEntity>("userItem")
-            Log.d("MyTag","userItem is : "+groupItem?.id)
+        if (chatsOpened == "fromGroups") {
+            val groupItem = bundle.getParcelable<UsersChatListEntity>("userItem")
+            Log.d("MyTag", "userItem is : " + groupItem?.id)
             if (groupItem != null) {
-                userId=groupItem.id
+                userId = groupItem.id
             }
-        }else if (chatsOpened=="fromMessages"){
-            val groupItem= bundle.getParcelable<UsersChatListEntity>("userItem")
+        } else if (chatsOpened == "fromMessages") {
+            val groupItem = bundle.getParcelable<UsersChatListEntity>("userItem")
             if (groupItem != null) {
-                userId=groupItem.id
+                userId = groupItem.id
+            }
+        } else if (chatsOpened == "fromProfile") {
+            val userIdIntent = arguments?.getString("userId")
+            if (userIdIntent != null) {
+                userId = userIdIntent
             }
 
-        }
+            firebseauth = FirebaseAuth.getInstance()
+            currentUserId = firebseauth.currentUser?.uid.toString()
+            chatreference = FirebaseFirestore.getInstance()
 
-        firebseauth= FirebaseAuth.getInstance()
-        currentUserId= firebseauth.currentUser?.uid.toString()
-        chatreference= FirebaseFirestore.getInstance()
-
-        val i = currentUserId.compareTo(userId)
-        if (+i >= 1) {
-            chatKey = userId + currentUserId
-        } else if (+i < 1) {
-            chatKey = currentUserId + userId
-        } else if (+i == 0) {
-            chatKey = ""
-        }
-
-        mViewModel = ViewModelProvider(this, ViewModelProvider.AndroidViewModelFactory.getInstance(requireActivity().application))
-            .get(ChatFragmentViewModel::class.java)
-
-        CoroutineScope(Dispatchers.IO).launch {}
-
-        chatKey?.let {
-            mViewModel.getChatList(it)?.observe(viewLifecycleOwner, {
-                binding.chatList = it
-            })
-        }
-
-
-
-
-
-
-        chatreference.collection("Users").document(currentUserId).get().addOnSuccessListener {
-            if (it!=null){
-                val notifPojo: Users? = it.toObject(Users::class.java)
-                if (notifPojo != null) {
-                    name=notifPojo.name
-                }
+            val i = currentUserId.compareTo(userId)
+            if (+i >= 1) {
+                chatKey = userId + currentUserId
+            } else if (+i < 1) {
+                chatKey = currentUserId + userId
+            } else if (+i == 0) {
+                chatKey = ""
             }
-        }
 
-        chatreference.collection("ChatList").document(currentUserId).get().addOnSuccessListener {
+            mViewModel = ViewModelProvider(this,
+                ViewModelProvider.AndroidViewModelFactory.getInstance(requireActivity().application))
+                .get(ChatFragmentViewModel::class.java)
+//            CoroutineScope(Dispatchers.IO).launch {}
 
-            val group = it.get("ChatList") as List<String>?
-            if (group != null) {
-                for (i in group){
-                    if (i ==userId){
-                        checkChatList=true
+            chatKey?.let {
+                mViewModel.getChatList(it)?.observe(viewLifecycleOwner, {
+                    binding.chatList = it
+                })
+            }
+
+
+
+
+
+
+            chatreference.collection("Users").document(currentUserId).get().addOnSuccessListener {
+                if (it != null) {
+                    val notifPojo: Users? = it.toObject(Users::class.java)
+                    if (notifPojo != null) {
+                        name = notifPojo.name
                     }
                 }
             }
 
-        }
+            chatreference.collection("ChatList").document(currentUserId).get()
+                .addOnSuccessListener {
 
-        CoroutineScope(Dispatchers.IO).launch {
-            chatKey?.let { mViewModel.loadChat(it) }
-        }
-
-
-        binding.btnSend.setOnClickListener {
-
-            Log.d("MyTag","check chat list is  $checkChatList")
-            val message=binding.textSend.text.toString().trim()
-            if (message.isEmpty()){
-                Toast.makeText(activity,"Empty Message Can't be sent",Toast.LENGTH_SHORT).show()
-            }else{
-                sendMessage(currentUserId,userId,message)
-                binding.textSend.setText("")
-
-                if (!checkChatList){
-                    if (userId!=currentUserId) {
-                        chatreference.collection("ChatList").document(currentUserId)
-                            .update("ChatList", FieldValue.arrayUnion(userId))
-                            .addOnSuccessListener {
+                    val group = it.get("ChatList") as List<String>?
+                    if (group != null) {
+                        for (i in group) {
+                            if (i == userId) {
                                 checkChatList = true
-                            }.addOnFailureListener {
-                                Log.d("MyTag", "error is  " + it.localizedMessage)
                             }
+                        }
                     }
 
                 }
 
-
+            CoroutineScope(Dispatchers.IO).launch {
+                chatKey?.let { mViewModel.loadChat(it) }
             }
 
-        }
 
-        chatKey?.let { mViewModel.queryLoad(it) }
+            binding.btnSend.setOnClickListener {
 
-        binding.messageRecyclerview.addOnScrollListener(object : RecyclerView.OnScrollListener() {
-            override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
-                super.onScrollStateChanged(recyclerView, newState)
-                if (newState == AbsListView.OnScrollListener.SCROLL_STATE_TOUCH_SCROLL) {
-                    isScrolling = true
+                Log.d("MyTag", "check chat list is  $checkChatList")
+                val message = binding.textSend.text.toString().trim()
+                if (message.isEmpty()) {
+                    Toast.makeText(activity, "Empty Message Can't be sent", Toast.LENGTH_SHORT)
+                        .show()
+                } else {
+                    sendMessage(currentUserId, userId, message)
+                    binding.textSend.setText("")
+
+                    if (!checkChatList) {
+                        if (userId != currentUserId) {
+                            chatreference.collection("ChatList").document(currentUserId)
+                                .update("ChatList", FieldValue.arrayUnion(userId))
+                                .addOnSuccessListener {
+                                    checkChatList = true
+                                }.addOnFailureListener {
+                                    Log.d("MyTag", "error is  " + it.localizedMessage)
+                                }
+                        }
+
+                    }
+
+
                 }
+
             }
 
-            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
-                super.onScrolled(recyclerView, dx, dy)
-                currentItems = messageRecyclerview.layoutManager?.childCount!!
-                totalItems = messageRecyclerview.layoutManager?.itemCount!!
-                scrollOutItems = (messageRecyclerview.layoutManager as LinearLayoutManager).findFirstVisibleItemPosition()
+            chatKey?.let { mViewModel.queryLoad(it) }
 
-                Log.d("MyTag"," currentItems : $currentItems  totalItems : $totalItems scrollOutItems :$scrollOutItems")
+            binding.messageRecyclerview.addOnScrollListener(object :
+                RecyclerView.OnScrollListener() {
+                override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
+                    super.onScrollStateChanged(recyclerView, newState)
+                    if (newState == AbsListView.OnScrollListener.SCROLL_STATE_TOUCH_SCROLL) {
+                        isScrolling = true
+                    }
+                }
 
-                if (isScrolling && currentItems + scrollOutItems == totalItems) {
-                    isScrolling = false
+                override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+                    super.onScrolled(recyclerView, dx, dy)
+                    currentItems = messageRecyclerview.layoutManager?.childCount!!
+                    totalItems = messageRecyclerview.layoutManager?.itemCount!!
+                    scrollOutItems =
+                        (messageRecyclerview.layoutManager as LinearLayoutManager).findFirstVisibleItemPosition()
+
+                    Log.d(
+                        "MyTag",
+                        " currentItems : $currentItems  totalItems : $totalItems scrollOutItems :$scrollOutItems"
+                    )
+
+                    if (isScrolling && currentItems + scrollOutItems == totalItems) {
+                        isScrolling = false
 //                    mViewModel.removelistener()
-                    chatKey?.let { mViewModel.queryLoad(it) }
+                        chatKey?.let { mViewModel.queryLoad(it) }
+                    }
+
+
                 }
+            })
 
-
-
-            }
-        })
-
-        //                if(!recyclerView.canScrollVertically()) {
+            //                if(!recyclerView.canScrollVertically()) {
 //                    // LOAD MORE
 //                    chatKey?.let { mViewModel.loadChat(it) }
 //                }
 
+        }
 
         return binding.root
     }

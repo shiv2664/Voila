@@ -9,7 +9,7 @@ import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
 import com.android.testproject1.R
 import com.android.testproject1.databinding.FragmentSearchPeopleContainerBinding
-import com.android.testproject1.model.Notifications
+import com.android.testproject1.room.enteties.NotificationsRoomEntity
 import com.android.testproject1.model.Users
 
 class SearchPeopleContainer : Fragment() {
@@ -29,7 +29,7 @@ class SearchPeopleContainer : Fragment() {
 
         if (stringCheck=="openFriend"){
 
-            val notificationsItem= bundle.getParcelable<Notifications>("notificationsItem")
+            val notificationsItem= bundle.getParcelable<NotificationsRoomEntity>("notificationsItem")
             val id :String = notificationsItem?.id.toString()
             Log.d("MyTag", "id is : $id")
 

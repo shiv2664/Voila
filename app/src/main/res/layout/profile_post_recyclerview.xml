@@ -5,8 +5,8 @@
     <data>
 
         <variable
-            name="postItem"
-            type="com.android.testproject1.model.Post" />
+            name="offerItem"
+            type="com.android.testproject1.room.enteties.OfferRoomEntity" />
 
         <variable
             name="listener"
@@ -22,7 +22,7 @@
             <com.google.android.material.imageview.ShapeableImageView
                 android:id="@+id/imageView"
                 android:layout_width="wrap_content"
-                app:backgroundImage="@{postItem.image_url_0}"
+                app:backgroundImage="@{offerItem.image_url_0.toString()}"
                 android:layout_height="match_parent"
                 android:layout_centerInParent="true"
                 app:shapeAppearanceOverlay="@style/roundimageview"
@@ -36,5 +36,6 @@
                 android:layout_centerHorizontal="true"
                 android:textColor="@android:color/white"
                 android:layout_below="@+id/imageView" />
+
         </RelativeLayout>
 </layout>

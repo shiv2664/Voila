@@ -98,6 +98,7 @@
 
                     <de.hdodenhof.circleimageview.CircleImageView
                         android:id="@+id/profileImage"
+                        android:onClick="@{()->listener.onProfileOpenedDiscover(offerItem)}"
                         android:layout_width="50dp"
                         android:layout_height="50dp"
                         android:src="@drawable/person3" />
@@ -121,9 +122,9 @@
                             android:layout_alignParentStart="true"
                             android:layout_marginStart="10dp"
                             android:layout_marginEnd="10dp"
-                            android:onClick="@{()->listener.onProfileOpenedDiscover(offerItem)}"
                             android:maxLines="2"
-                            android:text="Tipsy"
+                            android:onClick="@{()->listener.onProfileOpenedDiscover(offerItem)}"
+                            android:text="@{offerItem.name}"
                             android:textColor="@color/colorWhite"
                             android:textSize="18sp"
                             android:textStyle="bold" />
@@ -339,13 +340,14 @@
                         <!--                            app:mfb_favorite_image="@drawable/ic_baseline_bookmark_24" />-->
 
 
+<!--                        android:src="@drawable/ic_bookmark_border_black_24dp"-->
                         <ImageView
                             android:id="@+id/bookMark"
-                            android:onClick="@{()->listener.onBookMarkItemClick(offerItem)}"
                             android:layout_width="30dp"
                             android:layout_height="30dp"
                             android:layout_alignParentEnd="true"
-                            android:src="@drawable/ic_bookmark_border_black_24dp" />
+                            android:onClick="@{()->listener.onBookMarkItemClick(offerItem)}"
+                            android:src="@drawable/ic_bookmark_border_black_24dp"/>
 
 
 

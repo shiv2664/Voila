@@ -12,15 +12,19 @@ import java.text.NumberFormat
 import java.util.*
 
 @BindingAdapter("backgroundImage")
-fun setImageFromURls(view: ShapeableImageView, fileName: String) {
+fun setImageFromURls(view: ShapeableImageView, fileName: String?) {
     val requestOptions: RequestOptions = RequestOptions()
 //            .setDefaultRequestOptions(requestOptions)
 
-    Log.d("MyTag",fileName)
-    if(fileName.isNotEmpty()){
-        Glide.with(view.context)
+
+        Log.d("MyTag","file name is"+fileName)
+
+    if (fileName != null) {
+        if(fileName.isNotEmpty()){
+            Glide.with(view.context)
                 .load(fileName)
                 .into(view)
+        }
     }
 
 }

@@ -9,7 +9,7 @@ import com.android.testproject1.fragments.ChatGroupFragment
 import com.android.testproject1.fragments.GroupFragment
 import com.android.testproject1.fragments.ProfileOpened
 import com.android.testproject1.interfaces.IMainActivity
-import com.android.testproject1.model.Notifications
+import com.android.testproject1.room.enteties.NotificationsRoomEntity
 import com.android.testproject1.model.Offer
 import com.android.testproject1.model.Users
 import com.android.testproject1.room.enteties.UsersChatListEntity
@@ -94,6 +94,46 @@ class ChatActivity : AppCompatActivity() ,IMainActivity {
                     .add(R.id.container, fragment)
                     .commit()
 
+            } else if (chatsOpened=="fromProfile"){
+
+//                val userItem=intent.getParcelableExtra<UsersChatListEntity>("userItem")
+//
+                val userId =intent.getStringExtra("userId")
+                val name=intent.getStringExtra("name")
+
+//                Log.d("MyTag","user ID is this : "+userId)
+
+                name_holder.text=name
+
+                name_holder.setOnClickListener {
+                    val fragment=ProfileOpened()
+                    val bundle = Bundle()
+//                    bundle.putParcelable("userItem",userItem)
+//                    bundle.putString("chatsOpened","fromGroups")
+                    if (userId != null) {
+                        bundle.putString("iD",userId)
+                    }
+                    fragment.arguments=bundle
+
+                    supportFragmentManager
+                        .beginTransaction()
+                        .add(R.id.container, fragment)
+                        .commit()
+
+                }
+
+                val fragment=ChatFragment()
+                val bundle = Bundle()
+                bundle.putString("chatsOpened","fromProfile")
+//                bundle.putParcelable("userItem",userItem)
+                bundle.putString("userId",userId)
+                fragment.arguments=bundle
+
+                supportFragmentManager
+                    .beginTransaction()
+                    .add(R.id.container, fragment)
+                    .commit()
+
             }
 
         }else if (checkFragment=="openGroupChat"){
@@ -158,7 +198,7 @@ class ChatActivity : AppCompatActivity() ,IMainActivity {
     }
 
     override fun onAcceptClick(
-        notificationsItem: Notifications,
+        notificationsRoomEntityItem: NotificationsRoomEntity,
         reject: MaterialButton,
         accept: MaterialButton,
         cancel: MaterialButton,
@@ -168,7 +208,7 @@ class ChatActivity : AppCompatActivity() ,IMainActivity {
     }
 
     override fun onOrderReadyClick(
-        notificationsItem: Notifications,
+        notificationsRoomEntityItem: NotificationsRoomEntity,
         cancel: MaterialButton,
         ready: MaterialButton,
         waiting: MaterialButton
@@ -226,7 +266,7 @@ class ChatActivity : AppCompatActivity() ,IMainActivity {
         TODO("Not yet implemented")
     }
 
-    override fun onNotificationItemClick(notificationsItem: Notifications) {
+    override fun onNotificationItemClick(notificationsRoomEntityItem: NotificationsRoomEntity) {
         TODO("Not yet implemented")
     }
 

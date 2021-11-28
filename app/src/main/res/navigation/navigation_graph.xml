@@ -47,9 +47,16 @@
         <action
             android:id="@+id/action_profileOpened_to_viewPagerFragmentSaved"
             app:destination="@id/viewPagerFragmentSaved" />
+        <action
+            android:id="@+id/action_profileOpened_to_viewPagerFragmentCurrentUserPosts"
+            app:destination="@id/viewPagerFragmentCurrentUserPosts" />
     </fragment>
     <fragment
         android:id="@+id/viewPagerFragmentSaved"
         android:name="com.android.testproject1.fragments.ViewPagerFragmentSaved"
         android:label="Saved" />
+    <fragment
+        android:id="@+id/viewPagerFragmentCurrentUserPosts"
+        android:name="com.android.testproject1.fragments.ViewPagerFragmentCurrentUserPosts"
+        android:label="Offers" />
 </navigation>

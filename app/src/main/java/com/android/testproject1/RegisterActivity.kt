@@ -8,7 +8,7 @@ import androidx.fragment.app.FragmentManager
 import com.android.testproject1.fragments.LoginFragment
 import com.android.testproject1.fragments.SignUpFragment
 import com.android.testproject1.interfaces.IMainActivity
-import com.android.testproject1.model.Notifications
+import com.android.testproject1.room.enteties.NotificationsRoomEntity
 import com.android.testproject1.model.Offer
 import com.android.testproject1.model.Users
 import com.android.testproject1.room.enteties.UsersChatListEntity
@@ -64,7 +64,7 @@ class RegisterActivity : AppCompatActivity(), IMainActivity {
     }
 
     override fun onAcceptClick(
-        notificationsItem: Notifications,
+        notificationsRoomEntityItem: NotificationsRoomEntity,
         reject: MaterialButton,
         accept: MaterialButton,
         cancel: MaterialButton,
@@ -74,7 +74,7 @@ class RegisterActivity : AppCompatActivity(), IMainActivity {
     }
 
     override fun onOrderReadyClick(
-        notificationsItem: Notifications,
+        notificationsRoomEntityItem: NotificationsRoomEntity,
         cancel: MaterialButton,
         ready: MaterialButton,
         waiting: MaterialButton
@@ -105,7 +105,7 @@ class RegisterActivity : AppCompatActivity(), IMainActivity {
         TODO("Not yet implemented")
     }
 
-    override fun onNotificationItemClick(notificationsItem: Notifications) {
+    override fun onNotificationItemClick(notificationsRoomEntityItem: NotificationsRoomEntity) {
         TODO("Not yet implemented")
     }
 

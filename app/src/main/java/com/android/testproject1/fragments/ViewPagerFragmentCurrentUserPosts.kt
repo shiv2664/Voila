@@ -11,13 +11,15 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.android.testproject1.R
-import com.android.testproject1.databinding.FragmentViewpagerPostsBinding
+import com.android.testproject1.databinding.FragmentViewPagerCurrentUserPostsBinding
+import com.android.testproject1.databindingadapters.bind
+import com.android.testproject1.viewmodels.ViewPagerFragmentCurrentUserPostsViewModel
 import com.android.testproject1.viewmodels.ViewPagerFragmentPostViewModel
 
-class ViewpagerFragmentPosts : Fragment() {
+class ViewPagerFragmentCurrentUserPosts : Fragment() {
 
-    private lateinit var binding:FragmentViewpagerPostsBinding
-    private lateinit var mViewModel:ViewPagerFragmentPostViewModel
+    private lateinit var binding:FragmentViewPagerCurrentUserPostsBinding
+    private lateinit var mViewModel:ViewPagerFragmentCurrentUserPostsViewModel
 
     var myTag: String = "MyTag"
 
@@ -28,11 +30,13 @@ class ViewpagerFragmentPosts : Fragment() {
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?): View {
-        binding= FragmentViewpagerPostsBinding.inflate(inflater,container,false)
+        savedInstanceState: Bundle?
+    ): View? {
+
+        binding= FragmentViewPagerCurrentUserPostsBinding.inflate(inflater,container,false)
 
         mViewModel = ViewModelProvider(this, ViewModelProvider.AndroidViewModelFactory.getInstance(requireActivity().application))
-            .get(ViewPagerFragmentPostViewModel::class.java)
+            .get(ViewPagerFragmentCurrentUserPostsViewModel::class.java)
 
         mViewModel.loadUserPosts()
 
@@ -68,7 +72,6 @@ class ViewpagerFragmentPosts : Fragment() {
                 }
             }
         })
-
 
 
 

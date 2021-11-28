@@ -8,18 +8,18 @@ import com.google.firebase.firestore.ServerTimestamp
 @Entity
 data class ChatRoomEntity(
         @PrimaryKey(autoGenerate = false)
-        val id :String = "",
-        val sender: String="",
-        val receiver: String="",
-        val message: String="",
-        val isseen: Boolean = false,
+        var id :String = "",
+        var sender: String="",
+        var receiver: String="",
+        var message: String="",
+        var isseen: Boolean = false,
         var MessageId: String="",
-        val chatKey: String="",
+        var chatKey: String="",
         var name:String="",
-        val postId:String="",
-        val groupId:String="",
+        var postId:String="",
+        var groupId:String="",
         @ServerTimestamp
-        val timestamp: Date? = null
+        var timestamp: Date? = null
 ){
         override fun equals(other: Any?): Boolean {
 

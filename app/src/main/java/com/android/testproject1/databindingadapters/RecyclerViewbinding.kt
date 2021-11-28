@@ -1,13 +1,10 @@
 package com.android.testproject1.databindingadapters
 
-import android.graphics.drawable.GradientDrawable
 import androidx.databinding.BindingAdapter
 import androidx.recyclerview.widget.*
 import com.android.testproject1.adapter.*
 import com.android.testproject1.model.*
-import com.android.testproject1.room.enteties.ChatRoomEntity
-import com.android.testproject1.room.enteties.OffersSavedRoomEntity
-import com.android.testproject1.room.enteties.UsersChatListEntity
+import com.android.testproject1.room.enteties.*
 
 
 @BindingAdapter("bindhomerecyclerview")
@@ -53,7 +50,7 @@ fun bindHomeRecyclerView(view: RecyclerView, dataList:List<Post>?) {
 
 
 @BindingAdapter("bindnotificationrecyclerview")
-fun bindNotificationsRecyclerView(view: RecyclerView, dataList:List<Notifications>?) {
+fun bindNotificationsRecyclerView(view: RecyclerView, dataList:List<NotificationsRoomEntity>?) {
 
 //    if (dataList != null) {
 //        if (dataList.isEmpty())
@@ -79,16 +76,31 @@ fun bindNotificationsRecyclerView(view: RecyclerView, dataList:List<Notification
             view.adapter = adapter
         }
     }
+
     if (dataList != null) {
         adapter?.updateData(dataList)
+        if (adapter != null) {
+            if(!view.canScrollVertically(-1)){
+                // Its at bottom
+                view.scrollToPosition(0)
+            }else{
+                adapter.showToast()
+            }
+
+        }
     }
+
+
+//    if (dataList != null) {
+//        adapter?.updateData(dataList)
+//    }
 
 }
 
 
 
 @BindingAdapter("bindorderrecyclerview")
-fun bindOrderHistoryRecyclerView(view: RecyclerView, dataList:List<Notifications>?) {
+fun bindOrderHistoryRecyclerView(view: RecyclerView, dataList:List<OrdersRoomEntity>?) {
 
 //    if (dataList != null) {
 //        if (dataList.isEmpty())
@@ -114,8 +126,21 @@ fun bindOrderHistoryRecyclerView(view: RecyclerView, dataList:List<Notifications
             view.adapter = adapter
         }
     }
+//    if (dataList != null) {
+//        adapter?.updateData(dataList)
+//    }
+
     if (dataList != null) {
         adapter?.updateData(dataList)
+        if (adapter != null) {
+            if(!view.canScrollVertically(-1)){
+                // Its at bottom
+                view.scrollToPosition(0)
+            }else{
+                adapter.showToast()
+            }
+
+        }
     }
 
 }
@@ -123,7 +148,7 @@ fun bindOrderHistoryRecyclerView(view: RecyclerView, dataList:List<Notifications
 
 
 @BindingAdapter("bindprofilepostrecyclerview")
-fun bindRecyclerView(view: RecyclerView, dataList:List<Post>?) {
+fun bindRecyclerView(view: RecyclerView, dataList:List<OfferRoomEntity>?) {
 
     if (dataList != null) {
         if (dataList.isEmpty())
@@ -141,6 +166,35 @@ fun bindRecyclerView(view: RecyclerView, dataList:List<Post>?) {
     if (adapter == null) {
         if (dataList != null) {
             adapter = ProfilePostRecyclerViewAdapter(view.context,dataList.toMutableList())
+            view.adapter = adapter
+        }
+    }
+    if (dataList != null) {
+        adapter?.updateData(dataList)
+    }
+
+}
+
+
+@BindingAdapter("bindprofilepostcurrentuserrecyclerview")
+fun bindprofilecurrentUserPosts(view: RecyclerView, dataList:List<OfferRoomEntity>?) {
+
+    if (dataList != null) {
+        if (dataList.isEmpty())
+            return
+    }
+
+    val gridLayoutManager = GridLayoutManager(view.context,3)
+    val layoutManager = view.layoutManager
+    if (layoutManager == null) {
+        view.layoutManager = gridLayoutManager
+    }
+
+    var adapter:ProfilePostCurrentUserRecyclerviewAdapter?= view.adapter as ProfilePostCurrentUserRecyclerviewAdapter?
+
+    if (adapter == null) {
+        if (dataList != null) {
+            adapter = ProfilePostCurrentUserRecyclerviewAdapter(view.context,dataList.toMutableList())
             view.adapter = adapter
         }
     }

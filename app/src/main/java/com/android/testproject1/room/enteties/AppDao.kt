@@ -5,14 +5,14 @@ import androidx.room.*
 
 @Dao
 interface AppDao {
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun insertPost(PostEntity: PostRoomEntity)
-
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun insertAllPosts(PostEntity :List<PostRoomEntity>)
-
-    @Query("Select * from PostRoomEntity")
-    fun getPosts(): LiveData<MutableList<PostRoomEntity>>
+//    @Insert(onConflict = OnConflictStrategy.REPLACE)
+//    fun insertPost(PostEntity: PostRoomEntity)
+//
+//    @Insert(onConflict = OnConflictStrategy.REPLACE)
+//    fun insertAllPosts(PostEntity :List<PostRoomEntity>)
+//
+//    @Query("Select * from PostRoomEntity")
+//    fun getPosts(): LiveData<MutableList<PostRoomEntity>>
 
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
@@ -39,6 +39,16 @@ interface AppDao {
 
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
+    fun addOfferUser(OfferEntity: OfferRoomEntity)
+
+    @Query("Select * from OfferRoomEntity where userId=:userId")
+    fun getOffersUser(userId:String):LiveData<MutableList<OfferRoomEntity>>
+
+    @Query("DELETE FROM OfferRoomEntity WHERE postId = :postId")
+    fun deleteOfferByIdUser(postId: String)
+
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insertMessage(chatRoomEntity: ChatRoomEntity)
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
@@ -46,6 +56,25 @@ interface AppDao {
 
     @Query("Select * From ChatRoomEntity where chatKey= :chatKey order by timestamp ")
     fun getMessages(chatKey: String): LiveData<List<ChatRoomEntity>>
+
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    fun insertNotification(notificationRoomEntity: NotificationsRoomEntity)
+
+    @Query("Select * From NotificationsRoomEntity order by timestamp desc")
+    fun getNotifications(): LiveData<List<NotificationsRoomEntity>>
+
+    @Query("Delete from NotificationsRoomEntity")
+    fun deleteAllNotifications()
+
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    fun insertOrder(orderRoomEntity: OrdersRoomEntity)
+
+    @Query("Select * From OrdersRoomEntity order by timestamp desc")
+    fun getOrders(): LiveData<List<OrdersRoomEntity>>
+
+
 
 //    @Query("Select * From ChatRoomEntity where chatKey= :chatKey order by timestamp ")
 //    fun getMessagesList(chatKey: String): List<ChatRoomEntity>

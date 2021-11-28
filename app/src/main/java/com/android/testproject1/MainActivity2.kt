@@ -9,6 +9,7 @@ import android.os.Bundle
 import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
+import android.view.View
 import android.widget.LinearLayout
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
@@ -20,7 +21,7 @@ import com.afollestad.materialdialogs.MaterialDialog
 import com.android.testproject1.adapter.MenuAdapter
 import com.android.testproject1.fragments.*
 import com.android.testproject1.interfaces.IMainActivity
-import com.android.testproject1.model.Notifications
+import com.android.testproject1.room.enteties.NotificationsRoomEntity
 import com.android.testproject1.model.Offer
 import com.android.testproject1.model.Users
 import com.android.testproject1.room.enteties.AppDatabase
@@ -51,7 +52,6 @@ import kotlin.collections.HashMap
 import androidx.fragment.app.FragmentManager
 import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
-import androidx.navigation.fragment.findNavController
 import androidx.navigation.ui.NavigationUI
 import androidx.navigation.ui.setupWithNavController
 import com.google.android.material.button.MaterialButton
@@ -107,7 +107,7 @@ class MainActivity2 : AppCompatActivity(), IMainActivity {
         toolbar.title="Voila"
 
         stringCheck=intent.getStringExtra("openFriend")
-        val notificationsItem=intent.getParcelableExtra<Notifications>("notificationsItem")
+        val notificationsItem=intent.getParcelableExtra<NotificationsRoomEntity>("notificationsItem")
 
         if (stringCheck=="openFriend"){
 
@@ -245,6 +245,14 @@ class MainActivity2 : AppCompatActivity(), IMainActivity {
 //                }
 //                else -> navController.navigateUp()
 //            }
+//        }
+
+//        navController.addOnDestinationChangedListener { _, destination, _ ->
+////            if(destination.id == R.id.chatFragment) {
+////               bottomNav.visibility = View.GONE
+////            } else {
+////                bottomNav.visibility = View.VISIBLE
+////            }
 //        }
 
 
@@ -633,7 +641,7 @@ class MainActivity2 : AppCompatActivity(), IMainActivity {
     }
 
     override fun onAcceptClick(
-        notificationsItem: Notifications,
+        notificationsRoomEntityItem: NotificationsRoomEntity,
         reject: MaterialButton,
         accept: MaterialButton,
         cancel: MaterialButton,
@@ -643,7 +651,7 @@ class MainActivity2 : AppCompatActivity(), IMainActivity {
     }
 
     override fun onOrderReadyClick(
-        notificationsItem: Notifications,
+        notificationsRoomEntityItem: NotificationsRoomEntity,
         cancel: MaterialButton,
         ready: MaterialButton,
         waiting: MaterialButton
@@ -653,7 +661,11 @@ class MainActivity2 : AppCompatActivity(), IMainActivity {
 
     override fun onProfileOpenedDiscover(offerItem: Offer) {
 
-        navController.navigate(R.id.action_searchFragment2_to_profileFragment)
+        val bundle = Bundle()
+        bundle.putParcelable("offerItem",offerItem)
+
+
+        navController.navigate(R.id.action_searchFragment2_to_profileFragment,bundle)
     }
 
     override fun onJoinItemClick(userItem: UsersChatListEntity) {
@@ -745,7 +757,7 @@ class MainActivity2 : AppCompatActivity(), IMainActivity {
         addUser(userItem,currentUserId)
     }
 
-    override fun onNotificationItemClick(notificationsItem: Notifications) {
+    override fun onNotificationItemClick(notificationsRoomEntityItem: NotificationsRoomEntity) {
         TODO("Not yet implemented")
     }
 
@@ -978,6 +990,18 @@ class MainActivity2 : AppCompatActivity(), IMainActivity {
                     }
                     .addOnSuccessListener {
 
+                        firebaseFirestore
+                            .collection("Users")
+                            .document(userItem)
+                            .collection("Orders")
+                            .document("recentOrder").set(userMap).continueWith {
+                                firebaseFirestore
+                                    .collection("Users")
+                                    .document(currentUserId)
+                                    .collection("Orders")
+                                    .document("recentOrder").set(userMap)
+                            }
+
                         documentSnapshot.getString("name")?.let { it1 ->
                             addToNotification(userItem, currentUserId,
                                 //                                documentSnapshot.getString("image"),
@@ -997,8 +1021,13 @@ class MainActivity2 : AppCompatActivity(), IMainActivity {
     }
 
     private fun executeFriendReq(userItem: Users,currentUserId: String) {
+
+        idOrder=firebaseFirestore.collection("Users")
+            .document(userItem.id)
+            .collection("Friend_Requests").document().id
+
         val userMap = HashMap<String, Any?>()
-        FirebaseFirestore.getInstance()
+        firebaseFirestore
             .collection("Users")
             .document(currentUserId)
             .get()
@@ -1017,13 +1046,13 @@ class MainActivity2 : AppCompatActivity(), IMainActivity {
                     .collection("Users")
                     .document(userItem.id)
                     .collection("Friend_Requests")
-                    .document(currentUserId)
+                    .document(idOrder!!)
                     .set(userMap)
                     .addOnSuccessListener {
 
                         documentSnapshot.getString("name")?.let { it1 ->
                             addToNotification(userItem.id, currentUserId,
-                    //                                documentSnapshot.getString("image"),
+                                //                                documentSnapshot.getString("image"),
                                 it1,
                                 "Sent you friend request",
                                 "friend_req"
@@ -1090,27 +1119,32 @@ class MainActivity2 : AppCompatActivity(), IMainActivity {
                 firebaseFirestore.collection("Users")
                     .document(UserItemId)
                     .collection("Info_Notifications")
-                    .add(map)
-                    .addOnSuccessListener(OnSuccessListener { documentReference: DocumentReference? ->
-                        if (type == "friend_req") {
-//                        req_sent.setText("Friend request sent")
-                            Toasty.success(this, "Friend request Sent.", Toasty.LENGTH_SHORT,true).show()
-                        }
-//                    else if (type == "order_req"){
-//                        Toasty.success(this, "Order request sent.", Toasty.LENGTH_SHORT,true).show()
-//                    }
-//                    else { Toasty.success(this, "Friend request accepted", Toasty.LENGTH_SHORT, true).show()
-//                    }
-//                    if (type == "order_req") {
+                    .document(idOrder!!)
+                    .set(map, SetOptions.merge()).addOnSuccessListener {
+                        Toasty.success(this, "Friend request Sent.", Toasty.LENGTH_SHORT,true).show()
+                    }.addOnFailureListener {
+                        Log.e("Error",""+it.localizedMessage)
+                    }
+//                    .addOnSuccessListener(OnSuccessListener { documentReference: DocumentReference? ->
+//                        if (type == "friend_req") {
 ////                        req_sent.setText("Friend request sent")
-//                        Toasty.success(this, "Order request sent.", Toasty.LENGTH_SHORT,true).show()
-//                    }
-//                    else { Toasty.success(this, "Order request accepted", Toasty.LENGTH_SHORT, true).show()
-//                    }
-                    })
-                    .addOnFailureListener(OnFailureListener { e: java.lang.Exception ->
-                        Log.e("Error", e.localizedMessage)
-                    })
+//                            Toasty.success(this, "Friend request Sent.", Toasty.LENGTH_SHORT,true).show()
+//                        }
+////                    else if (type == "order_req"){
+////                        Toasty.success(this, "Order request sent.", Toasty.LENGTH_SHORT,true).show()
+////                    }
+////                    else { Toasty.success(this, "Friend request accepted", Toasty.LENGTH_SHORT, true).show()
+////                    }
+////                    if (type == "order_req") {
+//////                        req_sent.setText("Friend request sent")
+////                        Toasty.success(this, "Order request sent.", Toasty.LENGTH_SHORT,true).show()
+////                    }
+////                    else { Toasty.success(this, "Order request accepted", Toasty.LENGTH_SHORT, true).show()
+////                    }
+//                    })
+//                    .addOnFailureListener(OnFailureListener { e: java.lang.Exception ->
+//                        Log.e("Error", e.localizedMessage)
+//                    })
 
             }
 //            firebaseFirestore.collection("Users")

@@ -10,11 +10,11 @@
             type="com.android.testproject1.interfaces.IMainActivity" />
 
         <import type="java.util.List"/>
-        <import type="com.android.testproject1.model.Post"/>
+        <import type="com.android.testproject1.room.enteties.OfferRoomEntity"/>
 
         <variable
             name="dataList"
-            type="List&lt;Post>"/>
+            type="List&lt;OfferRoomEntity>"/>
 
     </data>
 

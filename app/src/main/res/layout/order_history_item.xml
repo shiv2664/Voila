@@ -8,7 +8,7 @@
 
         <variable
             name="notificationItem"
-            type="com.android.testproject1.model.Notifications" />
+            type="com.android.testproject1.room.enteties.OrdersRoomEntity" />
 
         <variable
             name="listener"
@@ -200,41 +200,6 @@
                 android:orientation="horizontal"
                 android:weightSum="2">
 
-                <!--                app:backgroundTint="?attr/colorAccent"-->
-                <!--                android:visibility="@{Accept.callOnClick()?View.VISIBLE:View.GONE}"-->
-                <com.google.android.material.button.MaterialButton
-                    android:visibility="@{Accept.isPressed()?View.GONE:View.VISIBLE}"
-                    android:layout_weight="1"
-                    android:layout_marginStart="15dp"
-                    android:layout_marginEnd="15dp"
-                    android:layout_marginTop="5dp"
-                    android:layout_marginBottom="12dp"
-                    android:id="@+id/Reject"
-                    style="@style/Widget.MaterialComponents.Button.OutlinedButton"
-                    android:layout_width="match_parent"
-                    android:layout_height="59dp"
-                    android:text="Reject"
-                    android:textColor="@color/selected_icon"
-                    android:textSize="15sp"
-                    app:cornerRadius="10dp" />
-
-                <!--                android:visibility="@{Accept.isPressed()?View.VISIBLE:View.GONE}"-->
-                <com.google.android.material.button.MaterialButton
-                    android:layout_weight="1"
-                    android:layout_marginStart="15dp"
-                    android:layout_marginEnd="15dp"
-                    android:id="@+id/Accept"
-                    style="@style/Widget.MaterialComponents.Button.OutlinedButton"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="5dp"
-                    android:text="Accept"
-                    android:textSize="15sp"
-                    android:background="@drawable/backgroundgreen"
-                    app:backgroundTint="@null"
-                    android:textColor="@color/colorWhite"
-                    app:cornerRadius="10dp" />
-
                 <com.google.android.material.button.MaterialButton
                     android:visibility="gone"
                     android:layout_weight="1"
@@ -246,31 +211,12 @@
                     style="@style/Widget.MaterialComponents.Button.OutlinedButton"
                     android:layout_width="match_parent"
                     android:layout_height="59dp"
-                    android:text="Cancel"
+                    android:text="Cancelled"
                     android:textColor="@color/selected_icon"
                     android:textSize="15sp"
                     app:cornerRadius="10dp" />
 
                 <com.google.android.material.button.MaterialButton
-                    android:visibility="gone"
-                    android:layout_weight="1"
-                    android:layout_marginStart="15dp"
-                    android:layout_marginEnd="15dp"
-                    android:id="@+id/Ready"
-                    style="@style/Widget.MaterialComponents.Button.OutlinedButton"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="5dp"
-                    android:text="Order Ready"
-                    android:onClick="@{(button)->listener.onOrderReadyClick(notificationItem,Cancelled,Ready,WaitingList)}"
-                    android:textSize="15sp"
-                    android:background="@drawable/backgroundgreen"
-                    app:backgroundTint="@null"
-                    android:textColor="@color/colorWhite"
-                    app:cornerRadius="10dp" />
-
-                <com.google.android.material.button.MaterialButton
-                    android:visibility="gone"
                     android:layout_weight="1"
                     android:layout_marginStart="15dp"
                     android:layout_marginEnd="15dp"
@@ -280,9 +226,9 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="5dp"
-                    android:text="Waiting"
+                    android:text="Delivered"
                     android:textSize="15sp"
-                    android:background="@drawable/backgroundblue"
+                    android:background="@drawable/backgroundgreen"
                     app:backgroundTint="@null"
                     android:textColor="@color/colorWhite"
                     app:cornerRadius="10dp" />

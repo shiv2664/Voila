@@ -50,13 +50,6 @@ class ChatAdapter(private val context: Context, private var chats: MutableList<C
     }
 
     fun updateData(newChatList: MutableList<ChatRoomEntity>) {
-//        Log.d("MyTag size before ",chats.size.toString())
-//        chats.clear()
-        Log.d("MyTag ", " new Chat List : "+newChatList)
-//        chats.addAll(newChatList)
-//        notifyDataSetChanged()
-//        Log.d("MyTag","notifyDataSetChanged")
-
         val oldList=chats
         val diffUtil:DiffUtil.DiffResult=DiffUtil.calculateDiff(ChatItemDiffCallback(
             oldList,newChatList

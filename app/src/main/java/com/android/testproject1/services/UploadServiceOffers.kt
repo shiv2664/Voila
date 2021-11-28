@@ -208,7 +208,7 @@ class UploadServiceOffers : Service() {
             } catch (e: IOException) {
                 e.printStackTrace()
 
-                e.localizedMessage?.toString()?.let { Log.d(myTag, " errore is  $it") }
+                e.localizedMessage?.toString()?.let { Log.d(myTag, " error is  $it") }
             }
         } else {
             // Use older version
@@ -216,13 +216,13 @@ class UploadServiceOffers : Service() {
                 bitmap = MediaStore.Images.Media.getBitmap(this.contentResolver, imageUri0)
             } catch (e: IOException) {
                 e.printStackTrace()
-                e.localizedMessage?.toString()?.let { Log.d(myTag, " errore is  $it") }
+                e.localizedMessage?.toString()?.let { Log.d(myTag, " error is  $it") }
             }
         }
 
 //        val bitmap = BitmapFactory.decodeFile(file.getAbsolutePath())
 
-        resized = bitmap?.let { Bitmap.createScaledBitmap(it, 600, 600, true) }
+        resized = bitmap?.let { Bitmap.createScaledBitmap(it, 200, 200, true) }
 //        Log.d(myTag, "path is  ${bitmap.toString()}")
 
         var path :String?=null

@@ -14,17 +14,16 @@
         <com.google.android.material.appbar.AppBarLayout
             android:id="@+id/bar_layout"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@color/colorPrimary"
-            android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
-
+            android:layout_height="wrap_content">
 
             <androidx.appcompat.widget.Toolbar
                 android:id="@+id/myToolbar"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                app:layout_scrollFlags="scroll|enterAlways"
-                app:popupTheme="@style/ThemeOverlay.AppCompat.Light">
+                android:background="?attr/colorPrimary"
+                app:theme="@style/ThemeOverlay.AppCompat"
+                app:titleTextColor="@color/colorWhite"
+                app:layout_scrollFlags="scroll|enterAlways">
 
                 <TextView
                     android:id="@+id/text_counter"
@@ -55,7 +54,7 @@
                     android:layout_height="wrap_content"
                     android:id="@+id/name_holder"
                     android:textSize="18sp"
-                    android:textColor="@color/black"
+                    android:textColor="@color/white"
                     android:textStyle="bold"
                     android:layout_marginStart="25dp"/>
 

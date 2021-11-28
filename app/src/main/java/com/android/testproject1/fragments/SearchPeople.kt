@@ -5,17 +5,10 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import com.android.testproject1.R
-import com.android.testproject1.databinding.FragmentSearchBinding
 import com.android.testproject1.databinding.FragmentSearchPeopleBinding
-import android.widget.Toast
 import androidx.appcompat.widget.SearchView
 import androidx.lifecycle.ViewModelProvider
 
-import com.android.testproject1.MainActivity
-import com.android.testproject1.model.Notifications
-import com.android.testproject1.viewmodels.ChatFragmentViewModel
-import com.android.testproject1.viewmodels.SearchFragmentViewModel
 import com.android.testproject1.viewmodels.SearchPeopleViewModel
 
 

@@ -68,18 +68,23 @@
         <entry key="..\:/Users/Shiv/AndroidStudioProjects/TestProject1/app/src/main/res/layout/fragment_search_people_child.xml" value="0.23007246376811594" />
         <entry key="..\:/Users/Shiv/AndroidStudioProjects/TestProject1/app/src/main/res/layout/fragment_search_people_container.xml" value="0.25416666666666665" />
         <entry key="..\:/Users/Shiv/AndroidStudioProjects/TestProject1/app/src/main/res/layout/fragment_sign_up.xml" value="0.2" />
+        <entry key="..\:/Users/Shiv/AndroidStudioProjects/TestProject1/app/src/main/res/layout/fragment_view_pager_current_user_posts.xml" value="0.25416666666666665" />
         <entry key="..\:/Users/Shiv/AndroidStudioProjects/TestProject1/app/src/main/res/layout/fragment_view_pager_message_chats.xml" value="0.16394927536231885" />
         <entry key="..\:/Users/Shiv/AndroidStudioProjects/TestProject1/app/src/main/res/layout/fragment_viewpager_posts.xml" value="0.151268115942029" />
         <entry key="..\:/Users/Shiv/AndroidStudioProjects/TestProject1/app/src/main/res/layout/frragment_viewpager_userinfo.xml" value="0.151268115942029" />
         <entry key="..\:/Users/Shiv/AndroidStudioProjects/TestProject1/app/src/main/res/layout/group_recyclerview_layout.xml" value="0.264" />
         <entry key="..\:/Users/Shiv/AndroidStudioProjects/TestProject1/app/src/main/res/layout/home_recyclerview.xml" value="0.15443840579710144" />
+        <entry key="..\:/Users/Shiv/AndroidStudioProjects/TestProject1/app/src/main/res/layout/home_recyclerview2.xml" value="0.15217391304347827" />
         <entry key="..\:/Users/Shiv/AndroidStudioProjects/TestProject1/app/src/main/res/layout/home_recyclerview3.xml" value="0.264" />
         <entry key="..\:/Users/Shiv/AndroidStudioProjects/TestProject1/app/src/main/res/layout/item_discover.xml" value="0.264" />
         <entry key="..\:/Users/Shiv/AndroidStudioProjects/TestProject1/app/src/main/res/layout/item_saved_offer.xml" value="0.25416666666666665" />
         <entry key="..\:/Users/Shiv/AndroidStudioProjects/TestProject1/app/src/main/res/layout/notifications_item.xml" value="0.25416666666666665" />
         <entry key="..\:/Users/Shiv/AndroidStudioProjects/TestProject1/app/src/main/res/layout/order_history_item.xml" value="0.25416666666666665" />
         <entry key="..\:/Users/Shiv/AndroidStudioProjects/TestProject1/app/src/main/res/layout/payment_recyclerview_item.xml" value="0.25416666666666665" />
+        <entry key="..\:/Users/Shiv/AndroidStudioProjects/TestProject1/app/src/main/res/layout/profile_offer_currentuser_recyclerview.xml" value="0.25416666666666665" />
+        <entry key="..\:/Users/Shiv/AndroidStudioProjects/TestProject1/app/src/main/res/layout/profile_post_recyclerview.xml" value="0.25416666666666665" />
         <entry key="..\:/Users/Shiv/AndroidStudioProjects/TestProject1/app/src/main/res/layout/search_people_item.xml" value="0.264" />
+        <entry key="..\:/Users/Shiv/AndroidStudioProjects/TestProject1/app/src/main/res/layout/search_recyclerview.xml" value="0.25416666666666665" />
         <entry key="..\:/Users/Shiv/AndroidStudioProjects/TestProject1/app/src/main/res/layout/user_chatlist_group.xml" value="0.25416666666666665" />
         <entry key="..\:/Users/Shiv/AndroidStudioProjects/TestProject1/app/src/main/res/layout/user_chatlist_recyclerview_layout.xml" value="0.264" />
         <entry key="..\:/Users/Shiv/AndroidStudioProjects/TestProject1/app/src/main/res/menu/bottom_menu.xml" value="0.25416666666666665" />

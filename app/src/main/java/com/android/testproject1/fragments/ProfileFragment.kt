@@ -1,18 +1,24 @@
 package com.android.testproject1.fragments
 
+import android.content.Intent
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.FragmentManager
+import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.viewpager2.widget.ViewPager2
+import com.android.testproject1.ChatActivity
+import com.android.testproject1.MainActivity2
 import com.android.testproject1.R
 import com.android.testproject1.adapter.ViewPager2Adapter
 import com.android.testproject1.anim.DepthPageTransform
 import com.android.testproject1.databinding.FragmentProfileBinding
+import com.android.testproject1.model.Offer
 import com.android.testproject1.model.Users
+import com.android.testproject1.viewmodels.ViewPagerFragmentPostViewModel
 import com.google.android.material.tabs.TabLayout
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
@@ -24,7 +30,11 @@ class ProfileFragment : Fragment() {
     private lateinit var adapter:ViewPager2Adapter
     private lateinit var firebaseFirestore: FirebaseFirestore
     private lateinit var firebaseAuth: FirebaseAuth
+    private lateinit var mViewModel: ViewPagerFragmentPostViewModel
 
+    companion object{
+        var userIdOpened:String=""
+    }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
@@ -32,15 +42,37 @@ class ProfileFragment : Fragment() {
 
 //        requireActivity().bottomNav.menu.getItem(4).isChecked=true
 
+        val offerItem=arguments?.getParcelable<Offer>("offerItem")
+
         val fmc: FragmentManager = childFragmentManager
         firebaseFirestore= FirebaseFirestore.getInstance()
         firebaseAuth= FirebaseAuth.getInstance()
+        val currentUserId=firebaseAuth.currentUser?.uid
 
-        val userItem=firebaseAuth.currentUser?.uid
+        if (offerItem != null) {
+            if (currentUserId==offerItem.userId){
+
+                binding.sendMessage.visibility=View.GONE
+            }
+        }
+
+
+        mViewModel = ViewModelProvider(this, ViewModelProvider.AndroidViewModelFactory.getInstance(requireActivity().application))
+            .get(ViewPagerFragmentPostViewModel::class.java)
+
+        if (offerItem != null) {
+            userIdOpened = offerItem.userId
+        }
+
+
 //        val toolbar = binding.toolbarProfile
 //        (activity as AppCompatActivity).setSupportActionBar(toolbar)
 //        (activity as AppCompatActivity).supportActionBar?.title = "Profile"
 //        setHasOptionsMenu(true)
+
+        if (offerItem != null) {
+            binding.name.text = offerItem.name
+        }
 
         adapter = ViewPager2Adapter(fmc, viewLifecycleOwner.lifecycle)
         binding.pager.adapter = adapter
@@ -63,15 +95,16 @@ class ProfileFragment : Fragment() {
             }
         })
 
-        if (userItem != null) {
-            firebaseFirestore
-                .collection("Users")
-                .document(userItem)
-                .get().addOnSuccessListener {
-                    binding.name.text=it.getString("name")
-                }
+//        if (userItem != null) {
+//            firebaseFirestore
+//                .collection("Users")
+//                .document(userItem)
+//                .get().addOnSuccessListener {
+//                    binding.name.text=it.getString("name")
+//                }
+//
+//        }
 
-        }
 
 
         binding.editProfileBtn.setOnClickListener {
@@ -88,6 +121,28 @@ class ProfileFragment : Fragment() {
 //                .commit()
 
         }
+
+        val bundle = Bundle()
+        if (offerItem != null) {
+            bundle.putString("userId",offerItem.userId)
+            bundle.putString("chatsOpened","fromProfile")
+        }
+
+        binding.sendMessage.setOnClickListener {
+
+            val intent = Intent(activity,ChatActivity::class.java)
+            if (offerItem != null) {
+                intent.putExtra("userId",offerItem.userId)
+                intent.putExtra("chatsOpened","fromProfile")
+                intent.putExtra("openChat","openUserChat")
+                intent.putExtra("name",offerItem.name)
+                startActivity(intent)
+            }
+
+//            findNavController().navigate(R.id.action_profileFragment_to_chatFragment,bundle)
+        }
+
+
 
         return binding.root
     }

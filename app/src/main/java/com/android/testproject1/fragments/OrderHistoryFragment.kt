@@ -12,6 +12,9 @@ import com.android.testproject1.databinding.FragmentOrderHistoryBinding
 import com.android.testproject1.databindingadapters.bind
 import com.android.testproject1.viewmodels.HomeFragmentViewModel
 import com.android.testproject1.viewmodels.OrderHistoryFragmentViewModel
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 class OrderHistoryFragment : Fragment() {
 
@@ -31,13 +34,14 @@ class OrderHistoryFragment : Fragment() {
                 .getInstance(requireActivity().application)
         ).get(OrderHistoryFragmentViewModel::class.java)
 
-        mViewModel.loadOrders()
+        CoroutineScope(Dispatchers.IO).launch {
+            mViewModel.loadOrders()
+            mViewModel.loadRecentOrder()
+        }
 
-        mViewModel.getNotificationList().observe(viewLifecycleOwner, {
+        mViewModel.getNotificationList()?.observe(viewLifecycleOwner, {
             binding.dataList = it
         })
-
-
 
         return binding.root
     }

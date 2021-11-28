@@ -10,7 +10,6 @@ import androidx.lifecycle.viewModelScope
 import com.android.testproject1.Repository
 import com.android.testproject1.model.Post
 import com.android.testproject1.room.enteties.AppDatabase
-import com.android.testproject1.room.enteties.PostRoomEntity
 import com.google.android.gms.tasks.OnSuccessListener
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.*
@@ -37,7 +36,7 @@ class HomeFragmentViewModel(application: Application): AndroidViewModel(applicat
         loadNotes()
     }
 
-    private fun loadNotes() {
+    private fun loadNotes(){
 
         Log.d(myTAG,"last result is : "+lastResult?.toObject(Post::class.java)?.postId)
 
@@ -58,7 +57,7 @@ class HomeFragmentViewModel(application: Application): AndroidViewModel(applicat
                 for (documentSnapshot in queryDocumentSnapshots) {
                     val post: Post = documentSnapshot.toObject(Post::class.java)
                     list2.addAll(listOf(post))
-                    Log.d(myTAG,"post Ids are "+post.postId)
+//                    Log.d(myTAG,"post Ids are "+post.postId)
                     postList.postValue(list2)
                 }
 

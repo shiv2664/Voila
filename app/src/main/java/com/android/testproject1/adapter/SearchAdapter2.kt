@@ -12,8 +12,10 @@ import com.android.testproject1.databinding.ItemDiscoverBinding
 import com.android.testproject1.model.Offer
 import kotlinx.android.synthetic.main.item_discover.view.*
 import android.widget.Toast
+import androidx.recyclerview.widget.DiffUtil
 
 import com.android.testproject1.MainActivity
+import com.android.testproject1.room.enteties.ChatRoomEntity
 
 import com.shalan.mohamed.itemcounterview.CounterListener
 
@@ -79,10 +81,43 @@ class SearchAdapter2(private val context: Context,
     }
 
     fun updateData(data: List<Offer>){
-        offerList.clear()
-        offerList.addAll(data)
-        notifyDataSetChanged()
+//        offerList.clear()
+//        offerList.addAll(data)
+//        notifyDataSetChanged()
+
+        val oldList=offerList
+        val diffUtil:DiffUtil.DiffResult=DiffUtil.calculateDiff(
+            OfferItemDiffCallback(
+                oldList, data
+            )
+        )
+//        offerList=data.toMutableList()
+        diffUtil.dispatchUpdatesTo(this)
     }
+
+
+class OfferItemDiffCallback(
+    var oldOfferList :List<Offer>,
+    var newOfferList:List<Offer>
+): DiffUtil.Callback() {
+    override fun getOldListSize(): Int {
+        return  oldOfferList.size
+    }
+
+    override fun getNewListSize(): Int {
+        return newOfferList.size
+    }
+
+    override fun areItemsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean {
+
+        return  (oldOfferList[oldItemPosition].postId== newOfferList[newItemPosition].postId)
+    }
+
+    override fun areContentsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean {
+
+        return  (oldOfferList[oldItemPosition] == newOfferList[newItemPosition])
+    }
+}
 
 
     class BindingViewHolder(val itemBinding: ViewDataBinding)
@@ -93,6 +128,4 @@ class SearchAdapter2(private val context: Context,
 //        itemBinding.root.DiscountedPrice.text = (counterValue.toInt() * (offerList[position].discountPrice).toInt()).toString()
 
     }
-
-
 }

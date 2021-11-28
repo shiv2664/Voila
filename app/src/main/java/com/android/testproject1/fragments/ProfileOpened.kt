@@ -2,6 +2,7 @@ package com.android.testproject1.fragments
 
 import android.animation.Animator
 import android.animation.AnimatorListenerAdapter
+import android.content.Context
 import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
@@ -51,6 +52,9 @@ class ProfileOpened : Fragment() {
     ): View {
         binding= FragmentProfileOpenedBinding.inflate(inflater,container,false)
 
+        val sharedPref= activity?.getSharedPreferences("currentUserDetails", Context.MODE_PRIVATE)
+        val editor = sharedPref?.edit()
+
 //        val bundle2 = this.arguments
 //        if (bundle2 != null) {
 //            id = bundle2.getString("iD")
@@ -90,25 +94,48 @@ class ProfileOpened : Fragment() {
             findNavController().navigate(R.id.action_profileOpened_to_viewPagerFragmentSaved)
         }
 
+        binding.Offers
+            .setOnClickListener {
+
+//                val bundle = Bundle()
+//                bundle.putString("currentUserId",currentUserID)
+
+                findNavController().navigate(R.id.action_profileOpened_to_viewPagerFragmentCurrentUserPosts)
+            }
+
 
         mFirestore.collection("Users")
             .document(id!!)
             .get()
             .addOnSuccessListener { documentSnapshot ->
-                friend_name = documentSnapshot.getString("name")
-                friend_email = documentSnapshot.getString("email")
-                friend_image = documentSnapshot.getString("image")
+                editor?.putString("userName",documentSnapshot.getString("name"))
+                editor?.putString("userEmail",documentSnapshot.getString("email"))
+                editor?.putString("userImage",documentSnapshot.getString("image"))
+                editor?.putString("userBio",documentSnapshot.getString("bio"))
+                editor?.apply()
+//                friend_name = documentSnapshot.getString("name")
+//                friend_email = documentSnapshot.getString("email")
+//                friend_image = documentSnapshot.getString("image")
 //                friend_tokens = documentSnapshot["tokens"] as List<String?>?
-//                binding.username.text = String.format(Locale.ENGLISH, "@%s",documentSnapshot.getString("username"))
-                binding.name.text = friend_name
+
+            //                binding.username.text = String.format(Locale.ENGLISH, "@%s",documentSnapshot.getString("username"))
+
+//                binding.name.text = friend_name
+
 //                binding.email.text = friend_email
 //                location.setText(documentSnapshot.getString("location"))
-                binding.bio.text = documentSnapshot.getString("bio")
-//                Glide.with(rootView.getContext())
+
+//                binding.bio.text = documentSnapshot.getString("bio")
+
+            //                Glide.with(rootView.getContext())
 //                    .setDefaultRequestOptions(RequestOptions().placeholder(R.drawable.default_profile_picture))
 //                    .load(friend_image)
 //                    .into(profile_pic)
             }
+
+        binding.name.text = sharedPref?.getString("userName","")
+        binding.email.text = sharedPref?.getString("userEmail","Error")
+        binding.bio.text = sharedPref?.getString("userBio","Error")
 
 
 //        currentUserID?.let {

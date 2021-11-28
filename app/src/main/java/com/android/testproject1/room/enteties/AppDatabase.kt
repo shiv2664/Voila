@@ -8,7 +8,7 @@ import androidx.room.TypeConverters
 import com.android.testproject1.typeconverters.TypeConvertersClass
 
 
-@Database(entities = [PostRoomEntity::class,UsersChatListEntity::class,OffersSavedRoomEntity::class,ChatRoomEntity::class], version = 4)
+@Database(entities = [UsersChatListEntity::class,OffersSavedRoomEntity::class,ChatRoomEntity::class,OfferRoomEntity::class,NotificationsRoomEntity::class,OrdersRoomEntity::class], version = 1)
 @TypeConverters(TypeConvertersClass::class)
 abstract class AppDatabase : RoomDatabase() {
     abstract fun appDao(): AppDao?
