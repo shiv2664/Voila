@@ -2,13 +2,14 @@ package com.android.testproject1
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.widget.LinearLayout
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.ViewModelProvider
 import com.android.testproject1.databinding.ActivityPaymentBinding
 import com.android.testproject1.interfaces.IMainActivity
 import com.android.testproject1.room.enteties.NotificationsRoomEntity
-import com.android.testproject1.model.Offer
 import com.android.testproject1.model.Users
+import com.android.testproject1.room.enteties.OfferRoomEntity
 import com.android.testproject1.room.enteties.UsersChatListEntity
 import com.android.testproject1.viewmodels.PaymentActivityViewModel
 import com.google.android.material.button.MaterialButton
@@ -191,11 +192,11 @@ class PaymentActivity : AppCompatActivity(),IMainActivity {
         TODO("Not yet implemented")
     }
 
-    override fun onRecyclerViewItemClick(offerItem: Offer) {
+    override fun onRecyclerViewGroupsItemClick(offerItem: OfferRoomEntity) {
         TODO("Not yet implemented")
     }
 
-    override fun onPlaceOrderClick(offerItem: Offer, Total: String, Quantity: String) {
+    override fun onPlaceOrderClick(offerItem: OfferRoomEntity, Total: String, Quantity: String) {
         TODO("Not yet implemented")
     }
 
@@ -204,7 +205,11 @@ class PaymentActivity : AppCompatActivity(),IMainActivity {
         reject: MaterialButton,
         accept: MaterialButton,
         cancel: MaterialButton,
-        ready: MaterialButton
+        ready: MaterialButton,
+        linearLayout: LinearLayout,
+        linearlayout2: LinearLayout,
+        linearLayout3: LinearLayout,
+        linearlayout4: LinearLayout
     ) {
         TODO("Not yet implemented")
     }
@@ -213,12 +218,30 @@ class PaymentActivity : AppCompatActivity(),IMainActivity {
         notificationsRoomEntityItem: NotificationsRoomEntity,
         cancel: MaterialButton,
         ready: MaterialButton,
-        waiting: MaterialButton
+        waiting: MaterialButton,
+        linearLayout: LinearLayout,
+        linearLayout2: LinearLayout,
+        linearLayout3: LinearLayout,
+        linearLayout4: LinearLayout
     ) {
         TODO("Not yet implemented")
     }
 
-    override fun onProfileOpenedDiscover(offerItem: Offer) {
+    override fun onWaitingClicked(
+        notificationItem: NotificationsRoomEntity,
+        linearLayout: LinearLayout,
+        linearLayout2: LinearLayout,
+        linearLayout3: LinearLayout,
+        linearLayout4: LinearLayout
+    ) {
+        TODO("Not yet implemented")
+    }
+
+    override fun onCurrentUserOfferClick(offerItem: OfferRoomEntity) {
+        TODO("Not yet implemented")
+    }
+
+    override fun onProfileOpenedDiscover(offerItem: OfferRoomEntity) {
         TODO("Not yet implemented")
     }
 
@@ -250,7 +273,7 @@ class PaymentActivity : AppCompatActivity(),IMainActivity {
         TODO("Not yet implemented")
     }
 
-    override fun onBookMarkItemClick(offerItem: Offer) {
+    override fun onBookMarkItemClick(offerItem: OfferRoomEntity) {
         TODO("Not yet implemented")
     }
 

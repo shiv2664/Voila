@@ -114,6 +114,7 @@
                 </LinearLayout>
 
                 <ImageView
+                    android:visibility="invisible"
                     android:id="@+id/type_image"
                     android:layout_width="24dp"
                     android:layout_height="24dp"
@@ -202,26 +203,65 @@
 
                 <com.google.android.material.button.MaterialButton
                     android:visibility="gone"
-                    android:layout_weight="1"
+                    android:layout_weight="2"
                     android:layout_marginStart="15dp"
                     android:layout_marginEnd="15dp"
-                    android:layout_marginTop="5dp"
                     android:layout_marginBottom="12dp"
-                    android:id="@+id/Cancelled"
+                    android:id="@+id/Pending"
                     style="@style/Widget.MaterialComponents.Button.OutlinedButton"
                     android:layout_width="match_parent"
-                    android:layout_height="59dp"
-                    android:text="Cancelled"
-                    android:textColor="@color/selected_icon"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="5dp"
+                    android:text="Pending"
                     android:textSize="15sp"
+                    android:background="@drawable/backgroundgreen"
+                    app:backgroundTint="@null"
+                    android:textColor="@color/colorWhite"
                     app:cornerRadius="10dp" />
 
                 <com.google.android.material.button.MaterialButton
-                    android:layout_weight="1"
+                    android:visibility="gone"
+                    android:layout_weight="2"
                     android:layout_marginStart="15dp"
                     android:layout_marginEnd="15dp"
                     android:layout_marginBottom="12dp"
-                    android:id="@+id/WaitingList"
+                    android:id="@+id/Accepted"
+                    style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="5dp"
+                    android:text="Accepted"
+                    android:textSize="15sp"
+                    android:background="@drawable/backgroundgreen"
+                    app:backgroundTint="@null"
+                    android:textColor="@color/colorWhite"
+                    app:cornerRadius="10dp" />
+
+                <com.google.android.material.button.MaterialButton
+                    android:visibility="gone"
+                    android:layout_weight="2"
+                    android:layout_marginStart="15dp"
+                    android:layout_marginEnd="15dp"
+                    android:layout_marginBottom="12dp"
+                    android:id="@+id/Waiting"
+                    style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="5dp"
+                    android:text="Waiting"
+                    android:textSize="15sp"
+                    android:background="@drawable/backgroundblue"
+                    app:backgroundTint="@null"
+                    android:textColor="@color/colorWhite"
+                    app:cornerRadius="10dp" />
+
+                <com.google.android.material.button.MaterialButton
+                    android:visibility="gone"
+                    android:layout_weight="2"
+                    android:layout_marginStart="15dp"
+                    android:layout_marginEnd="15dp"
+                    android:layout_marginBottom="12dp"
+                    android:id="@+id/Delivered"
                     style="@style/Widget.MaterialComponents.Button.OutlinedButton"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -231,6 +271,38 @@
                     android:background="@drawable/backgroundgreen"
                     app:backgroundTint="@null"
                     android:textColor="@color/colorWhite"
+                    app:cornerRadius="10dp" />
+
+                <com.google.android.material.button.MaterialButton
+                    android:visibility="gone"
+                    android:layout_weight="2"
+                    android:layout_marginStart="15dp"
+                    android:layout_marginEnd="15dp"
+                    android:layout_marginTop="5dp"
+                    android:layout_marginBottom="12dp"
+                    android:id="@+id/Reject"
+                    style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                    android:layout_width="0dp"
+                    android:layout_height="59dp"
+                    android:text="Rejected"
+                    android:textColor="@color/selected_icon"
+                    android:textSize="15sp"
+                    app:cornerRadius="10dp" />
+
+                <com.google.android.material.button.MaterialButton
+                    android:visibility="gone"
+                    android:layout_weight="2"
+                    android:layout_marginStart="15dp"
+                    android:layout_marginEnd="15dp"
+                    android:layout_marginTop="5dp"
+                    android:layout_marginBottom="12dp"
+                    android:id="@+id/Cancel"
+                    style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                    android:layout_width="0dp"
+                    android:layout_height="59dp"
+                    android:text="Cancelled"
+                    android:textColor="@color/selected_icon"
+                    android:textSize="15sp"
                     app:cornerRadius="10dp" />
 
             </LinearLayout>

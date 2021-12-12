@@ -2,6 +2,7 @@ package com.android.testproject1.fragments
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -18,10 +19,17 @@ import com.android.testproject1.anim.DepthPageTransform
 import com.android.testproject1.databinding.FragmentProfileBinding
 import com.android.testproject1.model.Offer
 import com.android.testproject1.model.Users
+import com.android.testproject1.room.enteties.AppDatabase
+import com.android.testproject1.room.enteties.OfferRoomEntity
+import com.android.testproject1.room.enteties.UserImagesRoomEntity
 import com.android.testproject1.viewmodels.ViewPagerFragmentPostViewModel
+import com.bumptech.glide.Glide
 import com.google.android.material.tabs.TabLayout
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 
 class ProfileFragment : Fragment() {
@@ -31,6 +39,7 @@ class ProfileFragment : Fragment() {
     private lateinit var firebaseFirestore: FirebaseFirestore
     private lateinit var firebaseAuth: FirebaseAuth
     private lateinit var mViewModel: ViewPagerFragmentPostViewModel
+
 
     companion object{
         var userIdOpened:String=""
@@ -42,7 +51,9 @@ class ProfileFragment : Fragment() {
 
 //        requireActivity().bottomNav.menu.getItem(4).isChecked=true
 
-        val offerItem=arguments?.getParcelable<Offer>("offerItem")
+        val offerItem=arguments?.getParcelable<OfferRoomEntity>("offerItem")
+
+       val localDatabase: AppDatabase? = AppDatabase.getInstance(requireActivity())
 
         val fmc: FragmentManager = childFragmentManager
         firebaseFirestore= FirebaseFirestore.getInstance()
@@ -72,6 +83,37 @@ class ProfileFragment : Fragment() {
 
         if (offerItem != null) {
             binding.name.text = offerItem.name
+        }
+
+        val reference=FirebaseFirestore.getInstance()
+//        val fUser=FirebaseAuth.getInstance().currentUser?.uid
+        val fUser= offerItem?.userId
+        reference.collection("Users").document(fUser.toString()).get().addOnSuccessListener {
+            if (it != null) {
+
+                if (it.exists()) {
+                    // convert document to POJO
+                    val notifPojo: Users? = it.toObject(Users::class.java)
+
+                    if (notifPojo != null) {
+                        if (notifPojo.profileimage.isNotEmpty()) {
+                            activity?.let { it1 -> Glide.with(it1).load(notifPojo.profileimage).into(binding.profilepic) }
+                            binding.name.text = notifPojo.name
+                            binding.email.text = notifPojo.email
+
+                            val userImageRoomEntity: UserImagesRoomEntity? = it.toObject(UserImagesRoomEntity::class.java)
+                            CoroutineScope(Dispatchers.IO).launch {
+                                if (userImageRoomEntity != null) {
+                                    localDatabase?.appDao()?.insertImage(userImageRoomEntity)
+                                }
+                            }
+
+                        }
+                        Log.d("MyTag"," Image Url is "+notifPojo.profileimage)
+                    }
+                }
+            }
+
         }
 
         adapter = ViewPager2Adapter(fmc, viewLifecycleOwner.lifecycle)

@@ -26,6 +26,7 @@ class HomeFragmentViewModel(application: Application): AndroidViewModel(applicat
     private val postList: MutableLiveData<MutableList<Post>> = MutableLiveData()
     private val list2 = mutableListOf<Post>()
 
+
     @JvmName("getPostList")
     fun getPostList(): MutableLiveData<MutableList<Post>> {
         return postList

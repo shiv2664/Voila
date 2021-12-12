@@ -9,7 +9,6 @@ import android.os.Bundle
 import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
-import android.view.View
 import android.widget.LinearLayout
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
@@ -21,14 +20,7 @@ import com.afollestad.materialdialogs.MaterialDialog
 import com.android.testproject1.adapter.MenuAdapter
 import com.android.testproject1.fragments.*
 import com.android.testproject1.interfaces.IMainActivity
-import com.android.testproject1.room.enteties.NotificationsRoomEntity
-import com.android.testproject1.model.Offer
-import com.android.testproject1.model.Users
-import com.android.testproject1.room.enteties.AppDatabase
-import com.android.testproject1.room.enteties.OffersSavedRoomEntity
-import com.android.testproject1.room.enteties.UsersChatListEntity
 import com.google.android.gms.tasks.OnFailureListener
-import com.google.android.gms.tasks.OnSuccessListener
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.firebase.auth.FirebaseAuth
@@ -50,28 +42,29 @@ import kotlin.collections.HashMap
 
 
 import androidx.fragment.app.FragmentManager
+import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.NavigationUI
 import androidx.navigation.ui.setupWithNavController
+import com.android.testproject1.model.Users
+import com.android.testproject1.room.enteties.*
+import com.android.testproject1.viewmodels.MainActivity2ViewModel
 import com.google.android.material.button.MaterialButton
 import kotlinx.android.synthetic.main.fragment_profile_opened.*
+import kotlinx.android.synthetic.main.notifications_item.*
 
-
-//import android.R
-
-//DuoMenuView.OnMenuClickListener
 class MainActivity2 : AppCompatActivity(), IMainActivity {
 
     companion object {
         private const val READ_PERMISSION_CODE = 100
         private const val STORAGE_PERMISSION_CODE = 101
-        private var GROUP_USER_ID:String?=null
+        private var GROUP_USER_ID: String? = null
     }
 
     private lateinit var firebaseFirestore: FirebaseFirestore
     private lateinit var firebaseAuth: FirebaseAuth
-    var postId:String=""
+    var postId: String = ""
     val myTag = "MyTag"
     private var imagesList1: ArrayList<Image> = java.util.ArrayList()
     private val pickImages = 102
@@ -79,15 +72,17 @@ class MainActivity2 : AppCompatActivity(), IMainActivity {
     private var serviceCount = 0
 
     private var addPost: MenuItem? = null
-    var checkTabDashboard:Boolean?=null
+    var checkTabDashboard: Boolean? = null
+
+    private lateinit var mViewModel: MainActivity2ViewModel
 
     private lateinit var mNavDrawer: DrawerLayout
     private var mTitles: ArrayList<String> = ArrayList()
     private lateinit var mMenuAdapter: MenuAdapter
 
-    private lateinit var mBottomSheetDialog:BottomSheetDialog
+    private lateinit var mBottomSheetDialog: BottomSheetDialog
 
-    var stringCheck:String?=null
+    var stringCheck: String? = null
 
     var doubleBackToExitPressedOnce = false
     private lateinit var navController: NavController
@@ -97,52 +92,58 @@ class MainActivity2 : AppCompatActivity(), IMainActivity {
     private val fm: FragmentManager = supportFragmentManager
     var active = fragment1
     private lateinit var navigation: BottomNavigationView
-    var idOrder:String?=null
+    var idOrder: String? = null
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main2)
         setSupportActionBar(toolbar)
-        toolbar.title="Voila"
+        toolbar.title = "Voila"
 
-        stringCheck=intent.getStringExtra("openFriend")
-        val notificationsItem=intent.getParcelableExtra<NotificationsRoomEntity>("notificationsItem")
+        stringCheck = intent.getStringExtra("openFriend")
+        val notificationsItem =
+            intent.getParcelableExtra<NotificationsRoomEntity>("notificationsItem")
 
-        if (stringCheck=="openFriend"){
+        if (stringCheck == "openFriend") {
 
             val fragment = SearchPeopleContainer()
             val fm = supportFragmentManager
             val bundle = Bundle()
-            bundle.putString("openFriend","openFriend")
-            bundle.putParcelable("notificationsItem",notificationsItem)
+            bundle.putString("openFriend", "openFriend")
+            bundle.putParcelable("notificationsItem", notificationsItem)
             toolbar.title = "Search"
 
-            fragment.arguments=bundle
+            fragment.arguments = bundle
             fm.beginTransaction()
                 .replace(R.id.container, fragment)
                 .commit()
 
-        }else{
+        } else {
 //            loadFragment(HomeFragment())
 //            loadFragment(SearchFragment())
         }
 
-        firebaseAuth= FirebaseAuth.getInstance()
-        firebaseFirestore= FirebaseFirestore.getInstance()
+        mViewModel = ViewModelProvider(
+            this, ViewModelProvider.AndroidViewModelFactory
+                .getInstance(this.application))
+            .get(MainActivity2ViewModel::class.java)
+
+        firebaseAuth = FirebaseAuth.getInstance()
+        firebaseFirestore = FirebaseFirestore.getInstance()
 
 
-        checkPermission(
-            Manifest.permission.WRITE_EXTERNAL_STORAGE,
-            STORAGE_PERMISSION_CODE
-        )
-        checkPermission(
-            Manifest.permission.READ_EXTERNAL_STORAGE,
-            READ_PERMISSION_CODE
-        )
+//        checkPermission(
+//            Manifest.permission.WRITE_EXTERNAL_STORAGE,
+//            STORAGE_PERMISSION_CODE
+//        )
+//        checkPermission(
+//            Manifest.permission.READ_EXTERNAL_STORAGE,
+//            READ_PERMISSION_CODE
+//        )
 
 
-        
+
         mBottomSheetDialog = BottomSheetDialog(this)
         val sheetView = layoutInflater.inflate(R.layout.bottom_sheet_dialog, null)
         mBottomSheetDialog.setContentView(sheetView)
@@ -178,186 +179,30 @@ class MainActivity2 : AppCompatActivity(), IMainActivity {
 
         buttonPostOffer.setOnClickListener {
             mBottomSheetDialog.dismiss()
+            checkPermission(
+                Manifest.permission.WRITE_EXTERNAL_STORAGE,
+                STORAGE_PERMISSION_CODE
+            )
+            checkPermission(
+                Manifest.permission.READ_EXTERNAL_STORAGE,
+                READ_PERMISSION_CODE
+            )
             startPickImage2()
 //            val intent=Intent(this,CreateOffer::class.java)
 //            startActivity(intent)
         }
 
-//        navigation = bottomNav
-//        setFragment(fragment1, "1", 0);
-//
-//        val bottomNavigationView=bottomNav
-
-//        bottomNavigationView.setOnNavigationItemSelectedListener(BottomNavigationView.OnNavigationItemSelectedListener { menuItem ->
-//            when (menuItem.itemId)
-//            {
-//                R.id.search -> {
-//                    setFragment(fragment1, "1", 0)
-//                    return@OnNavigationItemSelectedListener true
-//                }
-//                R.id.notifications -> {
-//                    setFragment(fragment2, "2", 1)
-//                    return@OnNavigationItemSelectedListener true
-//                }
-//                R.id.profile -> {
-//                    setFragment(fragment3, "3", 2)
-//                    return@OnNavigationItemSelectedListener true
-//                }
-//            }
-//            false
-//        })
-
-
-//        val mOnNavigationItemSelectedListener = BottomNavigationView.OnNavigationItemSelectedListener { item ->
-//                when (item.itemId) {
-//                    R.id.search -> {
-//                        setFragment(fragment1, "1", 0)
-//                        return@OnNavigationItemSelectedListener true
-//                    }
-//                    R.id.notifications -> {
-//                        setFragment(fragment2, "2", 1)
-//                        return@OnNavigationItemSelectedListener true
-//                    }
-//                    R.id.profile -> {
-//                        setFragment(fragment3, "3", 2)
-//                        return@OnNavigationItemSelectedListener true
-//                    }
-//                }
-//                false
-//            }
-
-        val bottomNavigation=bottomNav
-        val navHost = supportFragmentManager.findFragmentById(R.id.fragmentContainerView2) as NavHostFragment
+        val bottomNavigation = bottomNav
+        val navHost =
+            supportFragmentManager.findFragmentById(R.id.fragmentContainerView2) as NavHostFragment
         navController = navHost.navController
         NavigationUI.setupWithNavController(toolbar, navController)
         bottomNavigation.setupWithNavController(navController)
-//        bottomNavigation.setOnNavigationItemReselectedListener {
-//            "Reselect blocked."
-//        }
-
-//        toolbar.setNavigationOnClickListener {
-//            when (navController.currentDestination?.id) {
-//                R.id.search, R.id.notifications, R.id.profile -> {
-//                    if (onBackPressedDispatcher.hasEnabledCallbacks())
-//                        onBackPressedDispatcher.onBackPressed()
-//                    else
-//                        navController.navigateUp()
-//                }
-//                else -> navController.navigateUp()
-//            }
-//        }
-
-//        navController.addOnDestinationChangedListener { _, destination, _ ->
-////            if(destination.id == R.id.chatFragment) {
-////               bottomNav.visibility = View.GONE
-////            } else {
-////                bottomNav.visibility = View.VISIBLE
-////            }
-//        }
 
 
-
-
-
-
-
-
-
-        checkTabDashboard=true
-
-//        Home.setOnClickListener {
-//            loadFragment(Dashboard())
-//            toolbar.title = "Home"
-//            addPost?.isVisible = true
-//            drawer.closeDrawer()
-//        }
-//        Discover.setOnClickListener {
-//
-//            val fragment = Dashboard()
-//            val fm = supportFragmentManager
-//            val bundle = Bundle()
-//            bundle.putString("bottom_nav","1")
-//            toolbar.title = "Discover"
-//            addPost?.isVisible = true
-//
-//            fragment.arguments=bundle
-//                fm.beginTransaction()
-//                    .replace(R.id.container, fragment)
-//                    .commit()
-//            drawer.closeDrawer()
-//        }
-//        Search.setOnClickListener {
-//            val fragment = SearchPeopleContainer()
-//            val fm = supportFragmentManager
-////            val bundle = Bundle()
-////            bundle.putString("bottom_nav","1")
-////            toolbar.title = "Discover"
-////            addPost?.isVisible = true
-//            toolbar.title = "Search"
-////            fragment.arguments=bundle
-//            fm.beginTransaction()
-//                .replace(R.id.container, fragment)
-//                .commit()
-//            drawer.closeDrawer()
-//        }
-//        Friends.setOnClickListener {
-//            val fragment = Friends()
-//            val fm = supportFragmentManager
-////            val bundle = Bundle()
-////            bundle.putString("bottom_nav","1")
-////            toolbar.title = "Discover"
-////            addPost?.isVisible = true
-//
-////            fragment.arguments=bundle
-//            fm.beginTransaction()
-//                .replace(R.id.container, fragment)
-//                .commit()
-//            drawer.closeDrawer()
-//        }
-//        Messages.setOnClickListener {
-//            loadFragment(MessagesFragment())
-//            toolbar.title = "Chats"
-//            addPost?.isVisible = false
-//            drawer.closeDrawer()
-//        }
-//        Profile.setOnClickListener {
-//            loadFragment(ProfileFragment())
-//            toolbar.title = "Profile"
-//            addPost?.isVisible = false
-//            drawer.closeDrawer()
-//        }
-
-
-//        val duoDrawerToggle = DuoDrawerToggle(this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close)
-//        drawer.setDrawerListener(duoDrawerToggle)
-//        duoDrawerToggle.syncState()
-//        mMenuAdapter = MenuAdapter(mTitles);
-//        duoMenuView.setOnMenuClickListener(this);
-//        duoMenuView.adapter = mMenuAdapter
+        checkTabDashboard = true
 
     }
-
-//    private fun initNavigation() {
-//        val navHost = supportFragmentManager.findFragmentById(R.id.container) as NavHostFragment
-//        navController = navHost.navController
-//        NavigationUI.setupWithNavController(binding.toolbar, navController)
-//        binding.bottomNavigation.setupWithNavController(navController)
-//        binding.bottomNavigation.setOnNavigationItemReselectedListener {
-//            "Reselect blocked."
-//        }
-//
-//        binding.toolbar.setNavigationOnClickListener {
-//            when (navController.currentDestination?.id) {
-//                R.id.searchFragment, R.id.gamesFragment, R.id.notificationsFragment -> {
-//                    if (onBackPressedDispatcher.hasEnabledCallbacks())
-//                        onBackPressedDispatcher.onBackPressed()
-//                    else
-//                        navController.navigateUp()
-//                }
-//                else -> navController.navigateUp()
-//            }
-//        }
-//    }
 
     private fun setFragment(fragment: Fragment, tag: String?, position: Int) {
 //        val fm = supportFragmentManager
@@ -418,38 +263,38 @@ class MainActivity2 : AppCompatActivity(), IMainActivity {
 //                intent.putParcelableArrayListExtra("imagesList", imagesList1)
 //                startActivity(intent)
 
-            MaterialDialog.Builder(this)
-                .title("Confirmation")
-                .content("Are you sure do you want to continue?")
-                .positiveText("Yes")
-                .negativeText("No")
-                .cancelable(false)
-                .canceledOnTouchOutside(false)
-                .neutralText("Cancel")
-                .onPositive { _, _ ->
+                MaterialDialog.Builder(this)
+                    .title("Confirmation")
+                    .content("Are you sure do you want to continue?")
+                    .positiveText("Yes")
+                    .negativeText("No")
+                    .cancelable(false)
+                    .canceledOnTouchOutside(false)
+                    .neutralText("Cancel")
+                    .onPositive { _, _ ->
 
-                    val intent=Intent(this,CreatePost::class.java)
-                    intent.putParcelableArrayListExtra("imagesList", imagesList1)
-                    startActivity(intent)
-                }
+//                        val intent = Intent(this, CreatePost::class.java)
+//                        intent.putParcelableArrayListExtra("imagesList", imagesList1)
+//                        startActivity(intent)
+                    }
 //
 //
-                .onNegative { _, _ ->
+                    .onNegative { _, _ ->
 
-                    ImagePicker.with(this)
-                        .setFolderMode(true)
-                        .setFolderTitle("Album")
-                        .setRootDirectoryName(Config.ROOT_DIR_DCIM)
-                        .setDirectoryName("Image Picker")
-                        .setMultipleMode(true)
-                        .setShowNumberIndicator(true)
-                        .setMaxSize(10)
-                        .setLimitMessage("You can select up to 6 images")
+                        ImagePicker.with(this)
+                            .setFolderMode(true)
+                            .setFolderTitle("Album")
+                            .setRootDirectoryName(Config.ROOT_DIR_DCIM)
+                            .setDirectoryName("Image Picker")
+                            .setMultipleMode(true)
+                            .setShowNumberIndicator(true)
+                            .setMaxSize(10)
+                            .setLimitMessage("You can select up to 6 images")
 //                .setSelectedImages(imagesList1)
-                        .setRequestCode(pickImages)
-                        .start();
+                            .setRequestCode(pickImages)
+                            .start();
 
-                }.show()
+                    }.show()
 
             } else {
                 Log.d(myTag, "Error is : ")
@@ -469,7 +314,7 @@ class MainActivity2 : AppCompatActivity(), IMainActivity {
                     .neutralText("Cancel")
                     .onPositive { _, _ ->
 
-                        val intent=Intent(this,CreateOffer::class.java)
+                        val intent = Intent(this, CreateOffer::class.java)
                         intent.putParcelableArrayListExtra("imagesList", imagesList1)
                         startActivity(intent)
                     }
@@ -510,13 +355,16 @@ class MainActivity2 : AppCompatActivity(), IMainActivity {
         }
     }
 
-    override fun onRequestPermissionsResult(requestCode: Int,
-                                            permissions: Array<String>,
-                                            grantResults: IntArray) {
+    override fun onRequestPermissionsResult(
+        requestCode: Int,
+        permissions: Array<String>,
+        grantResults: IntArray
+    ) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
         if (requestCode == READ_PERMISSION_CODE) {
             if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
 //                Toast.makeText(this@MainActivity, "Read Permission Granted", Toast.LENGTH_SHORT).show()
+                startPickImage2()
             } else {
                 Toast.makeText(this@MainActivity2, "Read Permission Denied", Toast.LENGTH_SHORT).show()
             }
@@ -530,8 +378,8 @@ class MainActivity2 : AppCompatActivity(), IMainActivity {
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
-        menuInflater.inflate(R.menu.menu_main,menu)
-        addPost=menu?.findItem(R.id.Post)
+        menuInflater.inflate(R.menu.menu_main, menu)
+        addPost = menu?.findItem(R.id.Post)
 
         return super.onCreateOptionsMenu(menu)
 
@@ -543,37 +391,20 @@ class MainActivity2 : AppCompatActivity(), IMainActivity {
 //            loadFragment(CreatePost())
             mBottomSheetDialog.show()
             return true
-        }else if (id==R.id.notification){
-            val intent=Intent(this@MainActivity2,NotificationsActivity::class.java)
+        } else if (id == R.id.notification) {
+            val intent = Intent(this@MainActivity2, NotificationsActivity::class.java)
             startActivity(intent)
+            return true
+        } else if (id==R.id.SignOut){
+            firebaseAuth.signOut()
+            val intent = Intent(this@MainActivity2, RegisterActivity::class.java)
+            startActivity(intent)
+            finish()
             return true
         }
 
         return NavigationUI.onNavDestinationSelected(item, navController) || super.onOptionsItemSelected(item)
 //        return super.onOptionsItemSelected(item)
-    }
-
-
-
-    override fun onBackPressed() {
-        super.onBackPressed()
-//        if (drawer.isDrawerOpen) {
-//            drawer.closeDrawer()
-//        } else {
-//            super.onBackPressed()
-//        }
-
-//        if (active == fragment1) {
-//            if (doubleBackToExitPressedOnce) {
-//                super.onBackPressed();
-//                return;
-//            }
-//            this.doubleBackToExitPressedOnce = true;
-//            Toast.makeText(this, "Please click BACK again to exit", Toast.LENGTH_SHORT).show();
-//        } else {
-//            setFragment(fragment1, "1", 0);
-//        }
-
     }
 
     private fun loadFragment(fragment: Fragment?): Boolean {
@@ -591,17 +422,13 @@ class MainActivity2 : AppCompatActivity(), IMainActivity {
         TODO("Not yet implemented")
     }
 
-    override fun onRecyclerViewItemClick(offerItem: Offer) {
-//        val fragment = DetailsFragment()
+    override fun onRecyclerViewGroupsItemClick(offerItem: OfferRoomEntity) {
+
         val fragment = GroupsOnOfferFragment()
-
-        postId=offerItem.postId
-
+        postId = offerItem.postId
         val bundle = Bundle()
-        bundle.putParcelable("OfferItem",offerItem)
-        fragment.arguments=bundle
-
-
+        bundle.putParcelable("OfferItem", offerItem)
+        fragment.arguments = bundle
         supportFragmentManager
             .beginTransaction()
             .addToBackStack("Groups On Offer Fragment")
@@ -609,7 +436,9 @@ class MainActivity2 : AppCompatActivity(), IMainActivity {
             .commit()
     }
 
-    override fun onPlaceOrderClick(offerItem: Offer, Total: String, Quantity: String) {
+    override fun onPlaceOrderClick(offerItem: OfferRoomEntity, Total: String, Quantity: String) {
+
+//        mViewModel.onPlaceOrder(offerItem,Total, Quantity)
 
         Log.d(myTag, "Total is$Total")
         Log.d(myTag, "Quantity is $Quantity")
@@ -624,7 +453,7 @@ class MainActivity2 : AppCompatActivity(), IMainActivity {
             .canceledOnTouchOutside(false)
             .neutralText("Cancel")
             .onPositive { _, _ ->
-                addOrder(offerItem.userId,currentUserId,offerItem.title,Total,Quantity)
+                addOrder(offerItem.userId, currentUserId, offerItem.title, Total, Quantity,offerItem.image_url_0,offerItem.name)
 //                    binding.refreshLayout.isRefreshing=true
 //                mViewModel.deleteAll()
 //                    binding.refreshLayout.isRefreshing=false
@@ -635,9 +464,6 @@ class MainActivity2 : AppCompatActivity(), IMainActivity {
                 dialog.dismiss()
             }.show()
 
-
-
-
     }
 
     override fun onAcceptClick(
@@ -645,7 +471,11 @@ class MainActivity2 : AppCompatActivity(), IMainActivity {
         reject: MaterialButton,
         accept: MaterialButton,
         cancel: MaterialButton,
-        ready: MaterialButton
+        ready: MaterialButton,
+        linearLayout: LinearLayout,
+        linearlayout2: LinearLayout,
+        linearLayout3: LinearLayout,
+        linearlayout4: LinearLayout
     ) {
         TODO("Not yet implemented")
     }
@@ -654,18 +484,39 @@ class MainActivity2 : AppCompatActivity(), IMainActivity {
         notificationsRoomEntityItem: NotificationsRoomEntity,
         cancel: MaterialButton,
         ready: MaterialButton,
-        waiting: MaterialButton
+        waiting: MaterialButton,
+        linearLayout: LinearLayout,
+        linearLayout2: LinearLayout,
+        linearLayout3: LinearLayout,
+        linearLayout4: LinearLayout
     ) {
         TODO("Not yet implemented")
     }
 
-    override fun onProfileOpenedDiscover(offerItem: Offer) {
+    override fun onWaitingClicked(
+        notificationItem: NotificationsRoomEntity,
+        linearLayout: LinearLayout,
+        linearLayout2: LinearLayout,
+        linearLayout3: LinearLayout,
+        linearLayout4: LinearLayout
+    ) {
+        TODO("Not yet implemented")
+    }
+
+    override fun onCurrentUserOfferClick(offerItem: OfferRoomEntity) {
 
         val bundle = Bundle()
-        bundle.putParcelable("offerItem",offerItem)
+        bundle.putParcelable("offerItem", offerItem)
+        navController.navigate(R.id.action_viewPagerFragmentCurrentUserPosts_to_singleOfferFragment,bundle)
 
+    }
 
-        navController.navigate(R.id.action_searchFragment2_to_profileFragment,bundle)
+    override fun onProfileOpenedDiscover(offerItem: OfferRoomEntity) {
+
+        val bundle = Bundle()
+        bundle.putParcelable("offerItem", offerItem)
+
+        navController.navigate(R.id.action_searchFragment2_to_profileFragment, bundle)
     }
 
     override fun onJoinItemClick(userItem: UsersChatListEntity) {
@@ -675,11 +526,11 @@ class MainActivity2 : AppCompatActivity(), IMainActivity {
 //        val postMap: MutableMap<String, Any?> = HashMap()
 //        postMap[currentUserId]=true
 
-        val fragment=GroupFragment()
+        val fragment = GroupFragment()
 
         val bundle = Bundle()
-        bundle.putParcelable("userItem",userItem)
-        fragment.arguments=bundle
+        bundle.putParcelable("userItem", userItem)
+        fragment.arguments = bundle
 
 
         firebaseFirestore.collection("Offers")
@@ -689,9 +540,9 @@ class MainActivity2 : AppCompatActivity(), IMainActivity {
             .update("Members", FieldValue.arrayUnion(currentUserId))
             .addOnSuccessListener {
 
-                val offerMap=HashMap<String,Any>()
-                offerMap["postId"]=postId
-                offerMap["groupId"]=userId
+                val offerMap = HashMap<String, Any>()
+                offerMap["postId"] = postId
+                offerMap["groupId"] = userId
 
                 firebaseFirestore.collection("Users")
                     .document(currentUserId)
@@ -707,54 +558,46 @@ class MainActivity2 : AppCompatActivity(), IMainActivity {
 
     override fun onGroupItemClick(userItem: UsersChatListEntity) {
 
-        GROUP_USER_ID =userItem.id
-        val intent =Intent(this@MainActivity2,ChatActivity::class.java)
-        intent.putExtra("openChat","openUserChat")
-        intent.putExtra("chatsOpened","fromMessages")
-        intent.putExtra("userItem",userItem)
+        GROUP_USER_ID = userItem.id
+        val intent = Intent(this@MainActivity2, ChatActivity::class.java)
+        intent.putExtra("openChat", "openUserChat")
+        intent.putExtra("chatsOpened", "fromMessages")
+        intent.putExtra("userItem", userItem)
         startActivity(intent)
 
     }
 
     override fun onGroupItemClick(userItem: Users) {
-        GROUP_USER_ID =userItem.id
+        GROUP_USER_ID = userItem.userId
 
-        val intent =Intent(this@MainActivity2,ChatActivity::class.java)
-        intent.putExtra("openChat","openUserChat")
-        intent.putExtra("chatsOpened","fromGroups")
-        intent.putExtra("userItem",userItem)
+        val intent = Intent(this@MainActivity2, ChatActivity::class.java)
+        intent.putExtra("openChat", "openUserChat")
+        intent.putExtra("chatsOpened", "fromGroups")
+        intent.putExtra("userItem", userItem)
         startActivity(intent)
 
-//        val fragment=ChatFragment()
-//        val bundle = Bundle()
-//        bundle.putParcelable("userItem",userItem)
-//        fragment.arguments=bundle
-//
-//        supportFragmentManager
-//            .beginTransaction()
-//            .add(R.id.container, fragment)
-//            .commit()
     }
 
     override fun onLocationClick() {
 
-        Log.d(myTag,"Button Clicked")
+        Log.d(myTag, "Button Clicked")
 //        https://maps.app.goo.gl/uRkAJghUgeBNMC6n8
 
-        try{
-        val uri: String = java.lang.String.format(Locale.ENGLISH, "https://maps.app.goo.gl/uRkAJghUgeBNMC6n8")
-        val intent = Intent(Intent.ACTION_VIEW, Uri.parse(uri))
-        startActivity(intent)
-        }catch (e :Exception){
-            Log.d(myTag,""+e.message+" error is "+e.cause)
-            Toasty.normal(this,"Can't access the location",Toasty.LENGTH_SHORT).show()
+        try {
+            val uri: String =
+                java.lang.String.format(Locale.ENGLISH, "https://maps.app.goo.gl/uRkAJghUgeBNMC6n8")
+            val intent = Intent(Intent.ACTION_VIEW, Uri.parse(uri))
+            startActivity(intent)
+        } catch (e: Exception) {
+            Log.d(myTag, "" + e.message + " error is " + e.cause)
+            Toasty.normal(this, "Can't access the location", Toasty.LENGTH_SHORT).show()
         }
 
     }
 
     override fun onSendFriendReqClick(userItem: Users) {
         val currentUserId: String = firebaseAuth.currentUser?.uid!!
-        addUser(userItem,currentUserId)
+        addUser(userItem, currentUserId)
     }
 
     override fun onNotificationItemClick(notificationsRoomEntityItem: NotificationsRoomEntity) {
@@ -763,26 +606,26 @@ class MainActivity2 : AppCompatActivity(), IMainActivity {
 
     override fun onSearchPeopleItemClick(userItem: Users) {
 
-            val fragment = SearchPeopleContainer()
-            val fm = supportFragmentManager
+        val fragment = SearchPeopleContainer()
+        val fm = supportFragmentManager
         val bundle = Bundle()
         bundle.putString("openFriend", "openFriendSearch")
-        bundle.putParcelable("userItem",userItem)
-        fragment.arguments=bundle
+        bundle.putParcelable("userItem", userItem)
+        fragment.arguments = bundle
         loadFragment(fragment)
 
     }
 
-    override fun onBookMarkItemClick(offerItem: Offer) {
+    override fun onBookMarkItemClick(offerItem: OfferRoomEntity) {
 
         val localDatabase: AppDatabase = AppDatabase.getInstance(this)!!
 
 //        val mapper = ObjectMapper() // jackson's objectmapper
 //        val pojo: MyPojo = mapper.convertValue(map, MyPojo::class.java)
 
-        val offerMap=HashMap<String,Any>()
-        offerMap["postId"]=offerItem.postId
-        offerMap["username"]=offerItem.username
+        val offerMap = HashMap<String, Any>()
+        offerMap["postId"] = offerItem.postId
+        offerMap["username"] = offerItem.username
 
 
         firebaseAuth.currentUser?.uid?.let { it1 ->
@@ -792,7 +635,7 @@ class MainActivity2 : AppCompatActivity(), IMainActivity {
                 .collection("Saved")
                 .document(offerItem.postId.trim())
                 .get().addOnSuccessListener { it2 ->
-                    if (!it2.exists()){
+                    if (!it2.exists()) {
                         firebaseAuth.currentUser?.uid?.let {
                             firebaseFirestore
                                 .collection("Users")
@@ -804,7 +647,8 @@ class MainActivity2 : AppCompatActivity(), IMainActivity {
                                         .collection("Offers")
                                         .document(offerItem.postId)
                                         .get().addOnSuccessListener {
-                                            val offerPojo: OffersSavedRoomEntity? = it.toObject(OffersSavedRoomEntity::class.java)
+                                            val offerPojo: OffersSavedRoomEntity? =
+                                                it.toObject(OffersSavedRoomEntity::class.java)
                                             CoroutineScope(Dispatchers.IO).launch {
                                                 if (offerPojo != null) {
                                                     localDatabase.appDao()?.addOffer(offerPojo)
@@ -813,11 +657,11 @@ class MainActivity2 : AppCompatActivity(), IMainActivity {
                                         }
 
 
-                                    Toasty.success(this,"Saved",Toasty.LENGTH_SHORT,true).show()
+                                    Toasty.success(this, "Saved", Toasty.LENGTH_SHORT, true).show()
                                 }
 
                         }
-                    }else{
+                    } else {
                         firebaseAuth.currentUser?.uid?.let {
                             firebaseFirestore
                                 .collection("Users")
@@ -829,7 +673,7 @@ class MainActivity2 : AppCompatActivity(), IMainActivity {
                                     CoroutineScope(Dispatchers.IO).launch {
                                         localDatabase.appDao()?.deleteOfferById(offerItem.postId)
                                     }
-                                    Toasty.normal(this,"Removed",Toasty.LENGTH_SHORT).show()
+                                    Toasty.normal(this, "Removed", Toasty.LENGTH_SHORT).show()
 
                                 }
                         }
@@ -841,65 +685,33 @@ class MainActivity2 : AppCompatActivity(), IMainActivity {
     }
 
     override fun onGroupOpenFromMessages(userItem: UsersChatListEntity) {
-        val intent=Intent(this,ChatActivity::class.java)
-        intent.putExtra("groupItem",userItem)
-        intent.putExtra("openChat","openGroupChat")
+        val intent = Intent(this, ChatActivity::class.java)
+        intent.putExtra("groupItem", userItem)
+        intent.putExtra("openChat", "openGroupChat")
         startActivity(intent)
     }
 
-    private fun addOrder(userItem: String, currentUserId: String,itemName:String,price: String,Quantity: String){
+    private fun addOrder(
+        userItem: String,
+        currentUserId: String,
+        itemName: String,
+        price: String,
+        Quantity: String,
+        imageUrl0: String,
+        userNameOffer: String
+    ) {
 
-//        firebaseFirestore
-//            .collection("Users")
-//            .document(userItem.id)
-//            .collection("Friends")
-//            .document(currentUserId)
-//            .get()
-//            .addOnSuccessListener { documentSnapshot: DocumentSnapshot ->
-//                if (!documentSnapshot.exists()) {
-
-
-        if (userItem!=currentUserId) {
-            executeOrder(userItem, currentUserId, itemName, price, Quantity)
-        }else{
-            Toasty.error(this,"Error",Toasty.LENGTH_SHORT,true).show()
+        if (userItem != currentUserId) {
+            executeOrder(userItem, currentUserId, itemName, price, Quantity,imageUrl0,userNameOffer)
+        } else {
+            Toasty.error(this, "Error", Toasty.LENGTH_SHORT, true).show()
         }
-
-//                    firebaseFirestore
-//                        .collection("Users")
-//                        .document(userItem)
-//                        .collection("Orders")
-//                        .document(currentUserId)
-//                        .get()
-//                        .addOnSuccessListener { documentSnapshot1: DocumentSnapshot ->
-////                            if (holderr.friend_icon.getVisibility() != View.VISIBLE) {
-//                            if (!documentSnapshot1.exists()) {
-//                                executeOrder(userItem,currentUserId)
-//                            } else {
-//                                Toasty.normal(this@MainActivity2,"Order already Sent",Toasty.LENGTH_SHORT).show()
-//                            }
-////                            }
-////                            else {
-////                                Snackbar.make(view, usersList.get(position).getName()
-////                                    .toString() + " is already your friend", Snackbar.LENGTH_LONG).show()
-////                                notifyDataSetChanged()
-//                        }
-
-    //                }
-//            }
-
-    //        else {
-//                    usersList.removeAt(position)
-//                    notifyDataSetChanged()
-//                }
-
     }
 
-
-    private fun addUser(userItem: Users,currentUserId: String) {
+    private fun addUser(userItem: Users, currentUserId: String) {
         firebaseFirestore
             .collection("Users")
-            .document(userItem.id)
+            .document(userItem.userId)
             .collection("Friends")
             .document(currentUserId)
             .get()
@@ -908,41 +720,53 @@ class MainActivity2 : AppCompatActivity(), IMainActivity {
 
                     firebaseFirestore
                         .collection("Users")
-                        .document(userItem.id)
+                        .document(userItem.userId)
                         .collection("Friend_Requests")
                         .document(currentUserId)
                         .get()
                         .addOnSuccessListener { documentSnapshot1: DocumentSnapshot ->
 //                            if (holderr.friend_icon.getVisibility() != View.VISIBLE) {
-                                if (!documentSnapshot1.exists()) {
-                                    executeFriendReq(userItem,currentUserId)
-                                } else {
-                                     Toasty.normal(this@MainActivity2,"Friend Request already Sent",Toasty.LENGTH_SHORT).show()
-                                }
+                            if (!documentSnapshot1.exists()) {
+                                executeFriendReq(userItem, currentUserId)
+                            } else {
+                                Toasty.normal(
+                                    this@MainActivity2,
+                                    "Friend Request already Sent",
+                                    Toasty.LENGTH_SHORT
+                                ).show()
+                            }
 //                            }
 //                            else {
 //                                Snackbar.make(view, usersList.get(position).getName()
 //                                    .toString() + " is already your friend", Snackbar.LENGTH_LONG).show()
 //                                notifyDataSetChanged()
-                            }
                         }
                 }
+            }
 //        else {
 //                    usersList.removeAt(position)
 //                    notifyDataSetChanged()
 //                }
-            }
+    }
 //    }
 
 
-    private fun executeOrder(userItem: String, currentUserId: String,itemName:String,price: String,Quantity: String){
+    private fun executeOrder(
+        userItem: String,
+        currentUserId: String,
+        itemName: String,
+        price: String,
+        Quantity: String,
+        imageUrl0: String,
+        userNameOffer: String
+    ) {
 
-        idOrder= firebaseFirestore.collection("Users")
+        idOrder = firebaseFirestore.collection("Users")
             .document(userItem)
             .collection("Orders").document().id
 
-        val messageText:String="Order Request"
-        val type:String ="order_req"
+        val messageText: String = "Order Request"
+        val type: String = "order_req"
 
         val userMap = HashMap<String, Any?>()
         FirebaseFirestore.getInstance()
@@ -951,67 +775,99 @@ class MainActivity2 : AppCompatActivity(), IMainActivity {
             .get()
             .addOnSuccessListener { documentSnapshot: DocumentSnapshot ->
                 val email = documentSnapshot.getString("email")
-                userMap["username"] = documentSnapshot.getString("name")
+                val thumbnailImage=documentSnapshot.getString("thumbnailImage")
+                userMap["username"] = documentSnapshot.getString("username")
                 userMap["id"] = documentSnapshot.getString("id")
                 userMap["email"] = email
                 userMap["image"] = documentSnapshot.getString("image")
-//                userMap["tokens"] = documentSnapshot["token_ids"]
+                userMap["thumbnailImage"] =documentSnapshot.getString("thumbnailImage")
+                userMap["userNameOffer"] = userNameOffer
                 userMap["notification_id"] = System.currentTimeMillis().toString()
-                userMap["orderName"] =itemName
-                userMap["status"] ="Pending"
-                userMap["message"] =messageText
-                userMap["type"] =type
-                userMap["price"]=price
-                userMap["Quantity"]=Quantity
-                userMap["orderFrom"]=currentUserId
-                userMap["orderTo"]=userItem
-                userMap["idOrder"]=idOrder
-                userMap["timestamp"] =FieldValue.serverTimestamp()
-
-//               idOrder= firebaseFirestore.collection("Users")
-//                    .document(userItem)
-//                    .collection("Orders").document().id
-                //Add to user
-
+                userMap["orderName"] = itemName
+                userMap["status"] = "Pending"
+                userMap["message"] = messageText
+                userMap["type"] = type
+                userMap["price"] = price
+                userMap["Quantity"] = Quantity
+                userMap["orderFrom"] = currentUserId
+                userMap["userId"] = currentUserId
+                userMap["orderTo"] = userItem
+                userMap["foodImage"] = imageUrl0
+                userMap["idOrder"] = idOrder
+                userMap["timestamp"] = FieldValue.serverTimestamp()
 
                 firebaseFirestore
                     .collection("Users")
                     .document(userItem)
                     .collection("Orders")
-//                    .document(currentUserId)
                     .document(idOrder!!)
                     .set(userMap, SetOptions.merge()).continueWith {
                         firebaseFirestore
                             .collection("Users")
                             .document(currentUserId)
                             .collection("Orders")
-//                    .document(currentUserId)
-                            .document(idOrder!!).set(userMap,SetOptions.merge())
+                            .document(idOrder!!).set(userMap, SetOptions.merge())
                     }
                     .addOnSuccessListener {
 
                         firebaseFirestore
                             .collection("Users")
                             .document(userItem)
-                            .collection("Orders")
-                            .document("recentOrder").set(userMap).continueWith {
+                            .collection("Orders").document(idOrder!!).get().addOnSuccessListener {
+
+                                val ordersRoomEntity: OrdersRoomEntity? = it?.toObject(OrdersRoomEntity::class.java)
+
+                                val recentMap = HashMap<String, Any?>()
+                                recentMap["username"] = documentSnapshot.getString("username")
+                                recentMap["id"] = documentSnapshot.getString("id")
+                                recentMap["email"] = email
+                                recentMap["image"] = documentSnapshot.getString("image")
+                                recentMap["thumbnailImage"] =documentSnapshot.getString("thumbnailImage")
+                                recentMap["foodImage"] = imageUrl0
+                                recentMap["userNameOffer"] = userNameOffer
+                                recentMap["notification_id"] = System.currentTimeMillis().toString()
+                                recentMap["orderName"] = itemName
+                                recentMap["status"] = "Pending"
+                                recentMap["message"] = messageText
+                                recentMap["type"] = type
+                                recentMap["price"] = price
+                                recentMap["Quantity"] = Quantity
+                                recentMap["orderFrom"] = currentUserId
+                                recentMap["userId"] = currentUserId
+                                recentMap["orderTo"] = userItem
+                                recentMap["idOrder"] = idOrder
+                                if (ordersRoomEntity != null) {
+                                    recentMap["timestamp"] = ordersRoomEntity.timestamp
+                                }
                                 firebaseFirestore
                                     .collection("Users")
-                                    .document(currentUserId)
-                                    .collection("Orders")
-                                    .document("recentOrder").set(userMap)
-                            }
+                                    .document(userItem)
+                                    .collection("Orders").document("recentOrder").set(recentMap).continueWith {
+                                        firebaseFirestore
+                                            .collection("Users")
+                                            .document(currentUserId)
+                                            .collection("Orders").document("recentOrder").set(recentMap)
+                                    }
 
-                        documentSnapshot.getString("name")?.let { it1 ->
-                            addToNotification(userItem, currentUserId,
-                                //                                documentSnapshot.getString("image"),
-                                it1,
-                                messageText,
-                                type,itemName,price,Quantity
-                            )
+                                documentSnapshot.getString("username")?.let { it1 ->
+                                    if (ordersRoomEntity != null) {
+                                        ordersRoomEntity.timestamp?.let { it2 ->
+                                            addToNotification(
+                                                userItem, currentUserId,
+                                                it1,
+                                                messageText,
+                                                type, itemName, price, Quantity, it2,imageUrl0,userNameOffer,thumbnailImage
+                                            )
+                                        }
+                                    }
+                            }
                         }
 
-                        Toasty.success(this@MainActivity2,"Order Request Sent",Toasty.LENGTH_SHORT).show()
+                        Toasty.success(
+                            this@MainActivity2,
+                            "Order Request Sent",
+                            Toasty.LENGTH_SHORT
+                        ).show()
                     }.addOnFailureListener { e: java.lang.Exception ->
 //                        holder.progressBar.setVisibility(View.GONE)
                         Log.e("Error", e.message!!)
@@ -1020,10 +876,10 @@ class MainActivity2 : AppCompatActivity(), IMainActivity {
 
     }
 
-    private fun executeFriendReq(userItem: Users,currentUserId: String) {
+    private fun executeFriendReq(userItem: Users, currentUserId: String) {
 
-        idOrder=firebaseFirestore.collection("Users")
-            .document(userItem.id)
+        idOrder = firebaseFirestore.collection("Users")
+            .document(userItem.userId)
             .collection("Friend_Requests").document().id
 
         val userMap = HashMap<String, Any?>()
@@ -1044,22 +900,27 @@ class MainActivity2 : AppCompatActivity(), IMainActivity {
                 //Add to user
                 FirebaseFirestore.getInstance()
                     .collection("Users")
-                    .document(userItem.id)
+                    .document(userItem.userId)
                     .collection("Friend_Requests")
                     .document(idOrder!!)
                     .set(userMap)
                     .addOnSuccessListener {
 
-                        documentSnapshot.getString("name")?.let { it1 ->
-                            addToNotification(userItem.id, currentUserId,
-                                //                                documentSnapshot.getString("image"),
-                                it1,
-                                "Sent you friend request",
-                                "friend_req"
-                            )
-                        }
+//                        documentSnapshot.getString("name")?.let { it1 ->
+//                            addToNotification(
+//                                userItem.id, currentUserId,
+//                                //                                documentSnapshot.getString("image"),
+//                                it1,
+//                                "Sent you friend request",
+//                                "friend_req"
+//                            )
+//                        }
 
-                        Toasty.success(this@MainActivity2,"Friend Request Sent",Toasty.LENGTH_SHORT).show()
+                        Toasty.success(
+                            this@MainActivity2,
+                            "Friend Request Sent",
+                            Toasty.LENGTH_SHORT
+                        ).show()
                     }.addOnFailureListener { e: java.lang.Exception ->
 //                        holder.progressBar.setVisibility(View.GONE)
                         Log.e("Error", e.message!!)
@@ -1075,30 +936,38 @@ class MainActivity2 : AppCompatActivity(), IMainActivity {
         username: String,
         message: String,
         type: String,
-        itemName: String="",
-        price:String="",
-        Quantity: String="1"
+        itemName: String = "",
+        price: String = "",
+        Quantity: String = "1",
+        timestamp: Date,
+        imageUrl0: String,
+        userNameOffer: String,
+        thumbnailImage: String?
     ) {
         val map: MutableMap<String, Any> = java.util.HashMap()
         map["id"] = currentUserId
         map["username"] = username
 //        map["image"] = profile
         map["message"] = message
-        map["timestamp"] = FieldValue.serverTimestamp()
+        map["timestamp"] = timestamp
         map["type"] = type
+        map["thumbnailImage"]=thumbnailImage.toString()
         map["action_id"] = currentUserId
-        if(type=="order_req"){
-            map["orderName"] =itemName
-            map["status"] ="Pending"
-            map["price"]=price
-            map["orderFrom"]=currentUserId
-            map["orderTo"]=UserItemId
-            map["idOrder"]= idOrder.toString()
-            map["Quantity"]=Quantity
+        if (type == "order_req") {
+            map["orderName"] = itemName
+            map["status"] = "Pending"
+            map["price"] = price
+            map["userNameOffer"] =userNameOffer
+            map["foodImage"] = imageUrl0
+            map["orderFrom"] = currentUserId
+            map["userId"] = currentUserId
+            map["orderTo"] = UserItemId
+            map["idOrder"] = idOrder.toString()
+            map["Quantity"] = Quantity
         }
         if (UserItemId != currentUserId) {
 
-            if (type=="order_req"){
+            if (type == "order_req") {
 
                 idOrder?.let {
                     firebaseFirestore.collection("Users")
@@ -1107,144 +976,29 @@ class MainActivity2 : AppCompatActivity(), IMainActivity {
                         .document(it)
                         .set(map, SetOptions.merge()).addOnSuccessListener {
 
-                            Toasty.success(this, "Order request Sent.", Toasty.LENGTH_SHORT,true).show()
+                            Toasty.success(this, "Order request Sent.", Toasty.LENGTH_SHORT, true)
+                                .show()
                         }
                         .addOnFailureListener(OnFailureListener { e: java.lang.Exception ->
-                            Log.e("Error", e.localizedMessage)
+                            Log.e("Error",""+e.localizedMessage)
                         })
                 }
 
-            }else{
+            } else {
 
                 firebaseFirestore.collection("Users")
                     .document(UserItemId)
                     .collection("Info_Notifications")
                     .document(idOrder!!)
                     .set(map, SetOptions.merge()).addOnSuccessListener {
-                        Toasty.success(this, "Friend request Sent.", Toasty.LENGTH_SHORT,true).show()
+                        Toasty.success(this, "Friend request Sent.", Toasty.LENGTH_SHORT, true)
+                            .show()
                     }.addOnFailureListener {
-                        Log.e("Error",""+it.localizedMessage)
+                        Log.e("Error", "" + it.localizedMessage)
                     }
-//                    .addOnSuccessListener(OnSuccessListener { documentReference: DocumentReference? ->
-//                        if (type == "friend_req") {
-////                        req_sent.setText("Friend request sent")
-//                            Toasty.success(this, "Friend request Sent.", Toasty.LENGTH_SHORT,true).show()
-//                        }
-////                    else if (type == "order_req"){
-////                        Toasty.success(this, "Order request sent.", Toasty.LENGTH_SHORT,true).show()
-////                    }
-////                    else { Toasty.success(this, "Friend request accepted", Toasty.LENGTH_SHORT, true).show()
-////                    }
-////                    if (type == "order_req") {
-//////                        req_sent.setText("Friend request sent")
-////                        Toasty.success(this, "Order request sent.", Toasty.LENGTH_SHORT,true).show()
-////                    }
-////                    else { Toasty.success(this, "Order request accepted", Toasty.LENGTH_SHORT, true).show()
-////                    }
-//                    })
-//                    .addOnFailureListener(OnFailureListener { e: java.lang.Exception ->
-//                        Log.e("Error", e.localizedMessage)
-//                    })
-
             }
-//            firebaseFirestore.collection("Users")
-//                .document(UserItemId)
-//                .collection("Info_Notifications")
-//                .add(map)
-//                .addOnSuccessListener(OnSuccessListener { documentReference: DocumentReference? ->
-//                    if (type == "friend_req") {
-////                        req_sent.setText("Friend request sent")
-//                        Toasty.success(this, "Friend request sent.", Toasty.LENGTH_SHORT,true).show()
-//                    }
-////                    else if (type == "order_req"){
-////                        Toasty.success(this, "Order request sent.", Toasty.LENGTH_SHORT,true).show()
-////                    }
-////                    else { Toasty.success(this, "Friend request accepted", Toasty.LENGTH_SHORT, true).show()
-////                    }
-////                    if (type == "order_req") {
-//////                        req_sent.setText("Friend request sent")
-////                        Toasty.success(this, "Order request sent.", Toasty.LENGTH_SHORT,true).show()
-////                    }
-////                    else { Toasty.success(this, "Order request accepted", Toasty.LENGTH_SHORT, true).show()
-////                    }
-//                })
-//                .addOnFailureListener(OnFailureListener { e: java.lang.Exception ->
-//                    Log.e("Error", e.localizedMessage)
-//                })
         }
     }
-
-
-
-//    override fun onFooterClicked() {}
-//
-//    override fun onHeaderClicked() {}
-//
-//    override fun onOptionClicked(position: Int, objectClicked: Any?) {
-////        title = mTitles[position]
-////        Log.d("MyTag", "Positin Clicked $position")
-////
-////        // Set the right options selected
-////
-////        // Set the right options selected
-////        mMenuAdapter.setViewSelected(position, true)
-////
-////        // Navigate to the right fragment
-////        when (position) {
-////            0 -> loadFragment(HomeFragment())
-////            1 -> loadFragment(SearchFragment())
-////        }
-////        drawer.closeDrawer()
-//    }
 }
-
-
-
-    //        mNavDrawer = drawer_layout
-//        val navigationView = findViewById<NavigationView>(R.id.navigation_view)
-//
-//        val toggle = ActionBarDrawerToggle(
-//            this, mNavDrawer, toolbar,
-//            R.string.navigation_drawer_open,
-//            R.string.navigation_drawer_close
-//        )
-//
-//        mNavDrawer.addDrawerListener(toggle)
-//
-//        toggle.syncState()
-//        navigationView.setNavigationItemSelectedListener(this)
-//
-//        if (savedInstanceState == null) {
-//            supportFragmentManager.beginTransaction()
-//                .replace(R.id.container, Dashboard())
-//                .commit()
-//            navigationView.setCheckedItem(R.id.nav_dashboard)
-//        }
-
-
-//    override fun onNavigationItemSelected(item: MenuItem): Boolean {
-//
-//        when (item.itemId) {
-//            R.id.nav_dashboard ->                 //add the inbox fragment
-//                supportFragmentManager.beginTransaction()
-//                    .replace(R.id.container, Dashboard())
-//                    .commit()
-//            R.id.nav_forum ->                 //add the inbox fragment
-//                supportFragmentManager.beginTransaction()
-//                    .replace(R.id.container,SearchFragment())
-//                    .commit()
-//            R.id.nav_messages ->                 //add the inbox fragment
-//                supportFragmentManager.beginTransaction()
-//                    .replace(R.id.container, MessagesFragment())
-//                    .commit()
-//            R.id.nav_about -> Toast.makeText(this, "This is about Item", Toast.LENGTH_SHORT).show()
-//            R.id.nav_signOut -> Toast.makeText(this, "This is sign out Item", Toast.LENGTH_SHORT).show()
-//        }
-//
-//        mNavDrawer.closeDrawer(GravityCompat.START)
-//
-//        return true
-//
-//    }
 
 

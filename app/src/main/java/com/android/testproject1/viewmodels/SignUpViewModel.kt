@@ -4,7 +4,6 @@ import android.app.Application
 import android.util.Log
 import android.util.Patterns
 import android.widget.TextView
-import android.widget.Toast
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
 import com.android.testproject1.Repository
@@ -59,7 +58,7 @@ class SignUpViewModel(application: Application) : AndroidViewModel(application) 
 
     }
 
-    fun register(email: String, password: String, fullName: String){
+    fun register(email: String, password: String, username: String, phoneNumber: String=""){
         firebaseAuth.createUserWithEmailAndPassword(email, password)
             .addOnCompleteListener { task ->
                 if (task.isSuccessful) {
@@ -71,17 +70,14 @@ class SignUpViewModel(application: Application) : AndroidViewModel(application) 
                     val offerMap: MutableMap<String, Any> = HashMap()
                     val chatListMap: MutableMap<String, Any> = HashMap()
 
-                    userMap["id"] = uid
-                    userMap["name"] = fullName
-//                      userMap["image"] = uri.toString()
+                    userMap["userId"] = uid
+                    userMap["username"] = username
                     userMap["email"] = email
                     userMap["bio"] = ""
-                    userMap["username"] = ""
                     userMap["location"] = ""
-
+                    userMap["phoneNumber"]=phoneNumber
                     postMap["Posts"]= uid
                     offerMap["Offers"]= uid
-
                     chatListMap["Owner"]=uid
 
 
@@ -122,7 +118,7 @@ class SignUpViewModel(application: Application) : AndroidViewModel(application) 
 
                                             }).addOnFailureListener(OnFailureListener {
                                                 Log.d(myTAG, "token NotUpdated")
-                                                Log.d(myTAG, it.localizedMessage.toString())
+                                                Log.d(myTAG, ""+it.localizedMessage)
 
                                             })
                                     }
@@ -134,9 +130,7 @@ class SignUpViewModel(application: Application) : AndroidViewModel(application) 
 
                         }
 
-                }
-
-                else if (!task.isSuccessful) {
+                } else if (!task.isSuccessful) {
                     try {
                         throw task.exception!!
                     } catch (e: FirebaseAuthWeakPasswordException) {

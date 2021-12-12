@@ -45,6 +45,7 @@ class ChatFragment : Fragment() {
     var currentItems = 0
     var totalItems:Int = 0
     var scrollOutItems:Int = 0
+    var scrollOutItemsDOWN:Int=0
 
     companion object {
         var chatKey: String? = null
@@ -168,6 +169,7 @@ class ChatFragment : Fragment() {
                     super.onScrollStateChanged(recyclerView, newState)
                     if (newState == AbsListView.OnScrollListener.SCROLL_STATE_TOUCH_SCROLL) {
                         isScrolling = true
+                        Log.d("MyTag","is scrolling "+isScrolling)
                     }
                 }
 
@@ -175,17 +177,13 @@ class ChatFragment : Fragment() {
                     super.onScrolled(recyclerView, dx, dy)
                     currentItems = messageRecyclerview.layoutManager?.childCount!!
                     totalItems = messageRecyclerview.layoutManager?.itemCount!!
-                    scrollOutItems =
-                        (messageRecyclerview.layoutManager as LinearLayoutManager).findFirstVisibleItemPosition()
+                    scrollOutItems = (messageRecyclerview.layoutManager as LinearLayoutManager).findFirstVisibleItemPosition()
+//                    scrollOutItemsDOWN = (messageRecyclerview.layoutManager as LinearLayoutManager).findLastVisibleItemPosition()
 
-                    Log.d(
-                        "MyTag",
-                        " currentItems : $currentItems  totalItems : $totalItems scrollOutItems :$scrollOutItems"
-                    )
+                    Log.d("MyTag", " currentItems : $currentItems  totalItems : $totalItems scrollOutItems :$scrollOutItemsDOWN")
 
-                    if (isScrolling && currentItems + scrollOutItems == totalItems) {
+                    if (isScrolling &&currentItems + scrollOutItemsDOWN == totalItems) {
                         isScrolling = false
-//                    mViewModel.removelistener()
                         chatKey?.let { mViewModel.queryLoad(it) }
                     }
 

@@ -31,7 +31,11 @@
     <fragment
         android:id="@+id/editProfileFragment"
         android:name="com.android.testproject1.fragments.EditProfileFragment"
-        android:label="Edit Profile" />
+        android:label="Edit Profile" >
+        <action
+            android:id="@+id/action_editProfileFragment_to_changePasswordFragment"
+            app:destination="@id/changePasswordFragment" />
+    </fragment>
     <fragment
         android:id="@+id/orderHistoryFragment"
         android:name="com.android.testproject1.fragments.OrderHistoryFragment"
@@ -58,5 +62,17 @@
     <fragment
         android:id="@+id/viewPagerFragmentCurrentUserPosts"
         android:name="com.android.testproject1.fragments.ViewPagerFragmentCurrentUserPosts"
-        android:label="Offers" />
+        android:label="Offers" >
+        <action
+            android:id="@+id/action_viewPagerFragmentCurrentUserPosts_to_singleOfferFragment"
+            app:destination="@id/singleOfferFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/changePasswordFragment"
+        android:name="com.android.testproject1.fragments.ChangePasswordFragment"
+        android:label="Change Password" />
+    <fragment
+        android:id="@+id/singleOfferFragment"
+        android:name="com.android.testproject1.fragments.SingleOfferFragment"
+        android:label="Offer" />
 </navigation>

@@ -32,13 +32,24 @@
                     android:background="@drawable/cardbackground" />
 
 
-                <de.hdodenhof.circleimageview.CircleImageView
+                <com.google.android.material.imageview.ShapeableImageView
                     android:id="@+id/imageView"
                     android:layout_width="120dp"
                     android:layout_height="120dp"
+                    android:scaleType="centerCrop"
                     android:layout_centerHorizontal="true"
                     android:layout_marginTop="5dp"
-                    android:src="@drawable/person3" />
+                    android:transitionName="img"
+                    android:visibility="visible"
+                    app:shapeAppearanceOverlay="@style/ShapeAppearanceOverlay.App.CornerSize50Percent" />
+
+
+                <!--                <de.hdodenhof.circleimageview.CircleImageView-->
+<!--                    android:id="@+id/imageView"-->
+<!--                    android:layout_width="120dp"-->
+<!--                    android:layout_height="120dp"-->
+<!--                    android:layout_centerHorizontal="true"-->
+<!--                    android:layout_marginTop="5dp" />-->
 
                 <TextView
                     android:id="@+id/name"
@@ -66,35 +77,34 @@
                     android:layout_toStartOf="@+id/imageView"
                     android:orientation="vertical">
 
-                        <ImageButton
-                            android:id="@+id/editImageButton"
-                            android:layout_width="50dp"
-                            android:layout_height="50dp"
-                            android:layout_gravity="center_horizontal"
-                            android:layout_marginTop="72dp"
-                            android:background="@android:color/transparent"
-                            app:srcCompat="@drawable/ic_baseline_edit_24" />
+                    <ImageButton
+                        android:id="@+id/editImageButton"
+                        android:layout_width="50dp"
+                        android:layout_height="50dp"
+                        android:layout_gravity="center_horizontal"
+                        android:layout_marginTop="72dp"
+                        android:background="@android:color/transparent"
+                        app:srcCompat="@drawable/ic_baseline_edit_24" />
 
-                        <TextView
-                            android:id="@+id/editProfileBtn"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="center"
-                            android:text="Edit Profile"
-                            android:textAlignment="center"
-                            android:textColor="@android:color/white"
-                            android:textSize="14sp" />
+                    <TextView
+                        android:id="@+id/editProfileBtn"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:text="Edit Profile"
+                        android:textAlignment="center"
+                        android:textColor="@android:color/white"
+                        android:textSize="14sp" />
 
 
                 </LinearLayout>
 
 
-
                 <LinearLayout
-                    android:layout_alignTop="@+id/imageView"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_above="@+id/view"
+                    android:layout_alignTop="@+id/imageView"
                     android:layout_marginStart="16dp"
                     android:layout_marginBottom="-30dp"
                     android:layout_toEndOf="@+id/imageView"
@@ -172,7 +182,6 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content" />
 
-
                 <LinearLayout
                     android:id="@+id/friend_req"
                     android:visibility="gone"
@@ -227,6 +236,17 @@
                 app:backgroundTint="@null"
                 android:background="@drawable/cardbackground"
                 android:text="Message"/>
+
+<!--            <Button-->
+<!--                android:layout_marginStart="10dp"-->
+<!--                android:layout_marginEnd="10dp"-->
+<!--                android:id="@+id/savedImage"-->
+<!--                android:text="Saved"-->
+<!--                android:textColor="?android:textColorPrimary"-->
+<!--                style="@style/Widget.MaterialComponents.Button.OutlinedButton"-->
+<!--                android:textAllCaps="false"-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="wrap_content" />-->
 
 
             <androidx.cardview.widget.CardView

@@ -10,7 +10,6 @@ import com.android.testproject1.BR
 import com.android.testproject1.databinding.ItemDiscoverBinding
 import com.android.testproject1.databinding.ItemSavedOfferBinding
 import com.android.testproject1.interfaces.IMainActivity
-import com.android.testproject1.room.enteties.OfferRoomEntity
 import com.android.testproject1.room.enteties.OffersSavedRoomEntity
 
 class SavedOffersAdapter(private val context: Context, private var offerList:MutableList<OffersSavedRoomEntity>): RecyclerView.

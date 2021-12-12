@@ -16,6 +16,10 @@ import androidx.navigation.fragment.findNavController
 import com.afollestad.materialdialogs.MaterialDialog
 import com.android.testproject1.R
 import com.android.testproject1.databinding.FragmentProfileOpenedBinding
+import com.android.testproject1.model.Users
+import com.android.testproject1.room.enteties.AppDatabase
+import com.android.testproject1.room.enteties.UserImagesRoomEntity
+import com.bumptech.glide.Glide
 import com.google.android.gms.tasks.OnFailureListener
 import com.google.android.gms.tasks.OnSuccessListener
 import com.google.firebase.auth.FirebaseAuth
@@ -24,13 +28,16 @@ import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.FirebaseFirestore
 import com.marcoscg.dialogsheet.DialogSheet
 import es.dmoral.toasty.Toasty
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import java.lang.Exception
 import java.util.*
 import kotlin.collections.HashMap
 
 class ProfileOpened : Fragment() {
 
-    private lateinit var binding:FragmentProfileOpenedBinding
+    private lateinit var binding: FragmentProfileOpenedBinding
     private lateinit var mFirestore:FirebaseFirestore
     private lateinit var mFirebaseAuth: FirebaseAuth
     private lateinit var remove_friend:Button
@@ -52,6 +59,7 @@ class ProfileOpened : Fragment() {
     ): View {
         binding= FragmentProfileOpenedBinding.inflate(inflater,container,false)
 
+        val localDatabase: AppDatabase? = AppDatabase.getInstance(requireActivity())
         val sharedPref= activity?.getSharedPreferences("currentUserDetails", Context.MODE_PRIVATE)
         val editor = sharedPref?.edit()
 
@@ -75,6 +83,33 @@ class ProfileOpened : Fragment() {
         remove_friend= binding.friendYes
         add_friend=binding.friendNo
         req_layout=binding.friendReq
+
+        val reference=FirebaseFirestore.getInstance()
+        val fUser=FirebaseAuth.getInstance().currentUser?.uid
+        reference.collection("Users").document(fUser.toString()).get().addOnSuccessListener {
+            if (it != null) {
+
+                if (it.exists()) {
+                    // convert document to POJO
+                    val notifPojo: Users? = it.toObject(Users::class.java)
+
+                    if (notifPojo != null) {
+                        if (notifPojo.profileimage.isNotEmpty()) {
+                            activity?.let { it1 -> Glide.with(it1).load(notifPojo.profileimage).into(binding.imageView) }
+                        }
+//                        Log.d("MyTag"," Image Url is "+notifPojo.profileimage)
+                    }
+
+                    val userImageRoomEntity: UserImagesRoomEntity? = it.toObject(UserImagesRoomEntity::class.java)
+                    CoroutineScope(Dispatchers.IO).launch {
+                        if (userImageRoomEntity != null) {
+                            localDatabase?.appDao()?.insertImage(userImageRoomEntity)
+                        }
+                    }
+                }
+            }
+
+        }
 
         binding.sendMessage.setOnClickListener {
 

@@ -2,13 +2,14 @@ package com.android.testproject1.model
 
 import android.os.Parcelable
 import com.android.testproject1.room.enteties.ChatRoomEntity
+import com.google.firebase.firestore.ServerTimestamp
 import kotlinx.android.parcel.Parcelize
+import java.util.*
 
 @Parcelize
 data class Offer(val userId: String=""
                  ,val postId:String=""
                  ,val name: String=""
-                 ,val timestamp: String=""
                  ,val likes: String=""
                  ,var favourites: String=""
                  ,val description: String=""
@@ -32,7 +33,9 @@ data class Offer(val userId: String=""
                  ,val image_url_3: String=""
                  ,val image_url_4: String=""
                  ,val image_url_5: String=""
-                 ,val image_url_6: String="") :Parcelable {
+                 ,val image_url_6: String=""
+                 ,@ServerTimestamp
+                 var timestamp: Date? = null ) :Parcelable {
 
     override fun equals(other: Any?): Boolean {
 

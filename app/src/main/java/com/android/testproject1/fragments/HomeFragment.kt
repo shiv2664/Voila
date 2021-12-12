@@ -70,6 +70,10 @@ class HomeFragment : Fragment() {
             binding.dataList = it
         })
 
+        (activity as AppCompatActivity).supportActionBar?.addOnMenuVisibilityListener {
+
+        }
+
 //        val toolbar = binding.toolbarHome
 //        (activity as AppCompatActivity).setSupportActionBar(toolbar)
 //        (activity as AppCompatActivity).supportActionBar?.title = "Home"
@@ -104,6 +108,8 @@ class HomeFragment : Fragment() {
 
         return binding.root
     }
+
+
 
 
 }

@@ -43,7 +43,7 @@ class SearchPeopleContainer : Fragment() {
         }else if(stringCheck=="openFriendSearch"){
 
             val userItem= bundle.getParcelable<Users>("userItem")
-            val id :String = userItem?.id.toString()
+            val id :String = userItem?.userId.toString()
             Log.d("MyTag", "id is : $id")
 
             val fragment= ProfileOpened()

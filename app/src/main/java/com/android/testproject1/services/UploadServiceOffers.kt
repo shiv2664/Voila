@@ -6,52 +6,67 @@ import android.app.Service
 import android.content.Context
 import android.content.Intent
 import android.graphics.Bitmap
-import android.graphics.ImageDecoder
 import android.net.Uri
-import android.os.Build
 import android.os.IBinder
 import android.provider.MediaStore
 import android.text.TextUtils
 import android.util.Log
 import androidx.core.app.NotificationCompat
-import com.google.firebase.firestore.DocumentSnapshot
-import com.google.firebase.firestore.FieldValue
-import com.google.firebase.firestore.FirebaseFirestore
-import com.google.firebase.firestore.SetOptions
+import com.android.testproject1.room.enteties.OfferRoomEntity
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.*
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.UploadTask
 import com.nguyenhoanglam.imagepicker.model.Image
 import es.dmoral.toasty.Toasty
-import kotlinx.android.synthetic.main.activity_create_offer.*
+import id.zelory.compressor.Compressor
+import id.zelory.compressor.constraint.default
+import id.zelory.compressor.constraint.format
+import id.zelory.compressor.constraint.quality
+import kotlinx.coroutines.*
 import java.io.ByteArrayOutputStream
 import java.io.File
-import java.io.IOException
 import java.util.*
+import com.google.firebase.firestore.DocumentReference
+
+
+
+
 
 class UploadServiceOffers : Service() {
 
 
     companion object{
-        val ACTION_START_FOREGROUND_SERVICE_UPLOAD_OFFERS = "ACTION_START_FOREGROUND_SERVICE"
+        const val ACTION_START_FOREGROUND_SERVICE_UPLOAD_OFFERS = "ACTION_START_FOREGROUND_SERVICE"
+        const val ACTION_START_FOREGROUND_SERVICE_UPLOAD_PROFILE_PIC = "ACTION_START_FOREGROUND_SERVICE_PROFILE_PIC"
     }
     private var count = 0
     private var bitmap: Bitmap? = null
+    private var imageBitmap: Bitmap? = null
     private var resized: Bitmap? = null
     val myTag:String = "MyTag"
+
+    private var uploadedProfileUrl = ArrayList<String>()
 
     var numberImages:Int=0
 
 
+    private val job = SupervisorJob()
+    private lateinit var scope : CoroutineScope
+
 
     override fun onCreate() {
-        Log.d(myTag, "Service Created ")
         super.onCreate()
+        Log.d(myTag, "Service Created ")
+        scope=CoroutineScope(Dispatchers.Main + job)
+
 
     }
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
 
         Log.d(myTag, "onStart $intent   $flags  $startId")
+        Log.d(myTag, "onStartCommand intent is : ${intent?.action}")
 
         if (intent!=null) {
             val action = intent.action
@@ -82,10 +97,10 @@ class UploadServiceOffers : Service() {
                 count = intent.getIntExtra("count", 0)
 
 
-                Log.d(myTag, "image list is $imagesList notificationId is $notificationId " +
-                        "postID is $postID title is $title originalPrice is $originalPrice " +
-                        "discountedPrice is $discountedPrice city is $city currentId is $currentId " +
-                        " description is $description uploadedImagesUrl is $uploadedImagesUrl")
+//                Log.d(myTag, "image list is $imagesList notificationId is $notificationId " +
+//                        "postID is $postID title is $title originalPrice is $originalPrice " +
+//                        "discountedPrice is $discountedPrice city is $city currentId is $currentId " +
+//                        " description is $description uploadedImagesUrl is $uploadedImagesUrl")
 
                 if (imagesList != null) {
                     if (postID != null) {
@@ -106,6 +121,12 @@ class UploadServiceOffers : Service() {
                     }
                 }
 
+            }else if(action == ACTION_START_FOREGROUND_SERVICE_UPLOAD_PROFILE_PIC){
+
+                Log.d("MyTag", "Action UPLOAD_PROFILE_PIC ")
+                val imageUri= Uri.parse(intent.getStringExtra("imageUri"))
+                uploadProfilePic(File(imageUri.path!!))
+
             }
 
         }
@@ -115,6 +136,9 @@ class UploadServiceOffers : Service() {
     }
 
     override fun onDestroy() {
+        job.cancel()
+        stopSelf()
+
         super.onDestroy()
     }
 
@@ -153,7 +177,7 @@ class UploadServiceOffers : Service() {
             .setAutoCancel(true)
             .setTicker(message)
             .setChannelId(App.CHANNEL_ID2)
-            .setPriority(NotificationCompat.PRIORITY_LOW)
+            .setPriority(NotificationCompat.PRIORITY_MIN)
             .setProgress(max_progress, progress, indeterminate)
             .setVibrate(LongArray(0))
         startForeground(id, builder.build())
@@ -161,26 +185,245 @@ class UploadServiceOffers : Service() {
     }
 
 
-    fun getImageUri(inContext: Context, inImage: Bitmap) {
-        val bytes = ByteArrayOutputStream()
-        inImage.compress(Bitmap.CompressFormat.JPEG, 100, bytes)
-        var path: String?=null
-        try {
-            path = MediaStore.Images.Media.insertImage(inContext.contentResolver, inImage, "Title", null)
+//    fun getImageUri(inContext: Context, inImage: Bitmap) {
+//        val bytes = ByteArrayOutputStream()
+//        inImage.compress(Bitmap.CompressFormat.JPEG, 100, bytes)
+//        var path: String?=null
+//        try {
+//            path = MediaStore.Images.Media.insertImage(inContext.contentResolver, inImage, "Title", null)
+//
+//        }catch (e: java.lang.Exception){
+//            e.localizedMessage?.toString()?.let { Log.d(myTag, it) }
+//        }
+//        if (path!=null){
+//            Log.d(myTag, Uri.parse(path).toString())
+//        }
+//        else{
+//            Log.d(myTag, "Path is null ")
+//        }
+//
+//
+//    }
 
-        }catch (e: java.lang.Exception){
-            e.localizedMessage?.toString()?.let { Log.d(myTag, it) }
-        }
-        if (path!=null){
-            Log.d(myTag, Uri.parse(path).toString())
-        }
-        else{
-            Log.d(myTag, "Path is null ")
-        }
+    private fun uploadProfilePic(imageList: File){
+
+        scope.launch{
+            val compressedImageFile= imageList.let {
+                Compressor.compress(application, imageList){
+//                    default(150,150,Bitmap.CompressFormat.WEBP,80)
+                    default(280,280,format = Bitmap.CompressFormat.WEBP, quality = 80)
+
+                }
+            }
+
+//            val compressedThumbnailFile=imageList.let {
+//                Compressor.compress(application,imageList){
+//                    default(50,50,Bitmap.CompressFormat.WEBP, 80)
+//                }
+//            }
+
+            val userId= FirebaseAuth.getInstance().currentUser?.uid
+            uploadProfilePicsCoroutine(compressedImageFile,compressedImageFile,4,1,userId,uploadedProfileUrl) }
 
 
     }
 
+    private fun updateImageUrl(notification_id: Int,
+                               currentUser_id: String?,
+                               uploadedImagesUrl: ArrayList<String>?) {
+        FirebaseFirestore.getInstance().collection("Users")
+            .document(currentUser_id!!)
+            .get()
+            .addOnSuccessListener { documentSnapshot: DocumentSnapshot ->
+                val postMap: MutableMap<String, Any?> = HashMap()
+                val id = documentSnapshot.getString("id")
+
+                postMap["profileimage"] = uploadedImagesUrl?.get(0).toString()
+                postMap["thumbnailImage"] = uploadedImagesUrl?.get(1).toString()
+
+                val firestore=FirebaseFirestore.getInstance()
+//                val firebaseAuth=FirebaseAuth.getInstance()
+
+                firestore.collection("Users")
+                    .document(currentUser_id).update(postMap).addOnSuccessListener {
+//                        Toasty.success(applicationContext, "Offer added", Toasty.LENGTH_SHORT, true).show()
+
+//                        val batch: WriteBatch =firestore.batch()
+//
+//                        firestore.collection("Offers").whereEqualTo("userId",currentUser_id)
+//                            .get().addOnSuccessListener {
+//                                for (i in it){
+//                                    val offerRoomEntity=i.toObjects(OfferRoomEntity::class.java)
+//                                    firestore.collection("Offers").document(Offe)
+//                                }
+//
+//                        }
+
+                        stopForegroundService(true)
+
+                    }.addOnFailureListener {
+                        Log.d("MyTag",""+it.localizedMessage)
+                        stopForegroundService(true)
+                    }
+
+            }
+    }
+
+    private fun uploadProfilePicsCoroutine(
+        compressedImageFile: File, compressedThumbnailFile: File, notification_id: Int,
+        index: Int,
+        currentUser_id: String?,
+        uploadedImagesUrl: ArrayList<String>?) {
+
+        Log.d("MyTag", "Upload Pics Coroutine")
+        Log.d("MyTag", "Index is : $index")
+        var imageUri= Uri.fromFile(compressedImageFile)
+        var imageUri2=Uri.fromFile(compressedThumbnailFile)
+//        imageUri = if (index==1){
+//            Uri.fromFile(compressedImageFile)
+//        }else{
+//            Uri.fromFile(compressedThumbnailFile)
+//        }
+
+//        if(index==1){
+//           imageUri= Uri.fromFile(compressedImageFile)
+////            imageUri= compressedImageFile
+//        }else{
+//          imageUri =  Uri.fromFile(compressedThumbnailFile)
+////            imageUri =  compressedThumbnailFile
+//        }
+
+        val fileToUpload = currentUser_id?.let {
+            FirebaseStorage.getInstance().reference.child(it).child("ProfilePic")
+                .child("Voila_$index.webp")
+        }
+
+        if (index <=2) {
+            if (index==1) {
+                fileToUpload?.putFile(imageUri)?.addOnSuccessListener {
+                    fileToUpload.downloadUrl
+                        .addOnSuccessListener { uri: Uri ->
+                            uploadedImagesUrl!!.add(uri.toString())
+                            val nextIndex = index + 1
+                            try {
+                                if (nextIndex == 2) {
+                                    uploadProfilePicsCoroutine(
+                                        compressedImageFile,
+                                        compressedThumbnailFile,
+                                        notification_id,
+                                        nextIndex,
+                                        currentUser_id,
+                                        uploadedImagesUrl
+                                    )
+                                } else if (nextIndex >= 3) {
+                                    updateImageUrl(
+                                        notification_id,
+                                        currentUser_id,
+                                        uploadedImagesUrl
+                                    )
+                                }
+                            } catch (e: Exception) {
+                                e.printStackTrace()
+                                updateImageUrl(
+                                    notification_id,
+                                    currentUser_id,
+                                    uploadedImagesUrl
+                                )
+                            }
+                        }.addOnFailureListener { obj: Exception -> obj.printStackTrace() }
+                }?.addOnFailureListener { obj: Exception ->
+                    obj.printStackTrace()
+                    obj.localizedMessage?.toString()?.let { Log.d(myTag, "Exception is  $it") }
+                }?.addOnProgressListener { taskSnapshot: UploadTask.TaskSnapshot ->
+//                if (count == 1) {
+//                    val title = " Updating "
+//                    val progress = (100.0 * taskSnapshot.bytesTransferred / taskSnapshot.totalByteCount).toInt()
+//                    notifyProgress(notification_id, R.drawable.stat_sys_upload, title, "$progress%",
+//                        applicationContext, 100, progress, true)
+//                }
+//                else if (count > 1)
+//                {
+                    val progress =
+                        (100.0 * taskSnapshot.bytesTransferred / taskSnapshot.totalByteCount).toInt()
+                    notifyProgress(
+                        notification_id,
+                        R.drawable.stat_sys_upload,
+                        "Viola",
+                        "Updating ",
+                        applicationContext,
+                        100,
+                        progress,
+                        true
+                    )
+//                }
+                }
+            }else if(index==2){
+                fileToUpload?.putFile(imageUri2)?.addOnSuccessListener {
+                    fileToUpload.downloadUrl
+                        .addOnSuccessListener { uri: Uri ->
+                            uploadedImagesUrl!!.add(uri.toString())
+                            val nextIndex = index + 1
+                            try {
+                                if (nextIndex == 2) {
+                                    uploadProfilePicsCoroutine(
+                                        compressedImageFile,
+                                        compressedThumbnailFile,
+                                        notification_id,
+                                        nextIndex,
+                                        currentUser_id,
+                                        uploadedImagesUrl
+                                    )
+                                } else if (nextIndex >= 3) {
+                                    updateImageUrl(
+                                        notification_id,
+                                        currentUser_id,
+                                        uploadedImagesUrl
+                                    )
+                                }
+                            } catch (e: Exception) {
+                                e.printStackTrace()
+                                updateImageUrl(
+                                    notification_id,
+                                    currentUser_id,
+                                    uploadedImagesUrl
+                                )
+                            }
+                        }.addOnFailureListener { obj: Exception -> obj.printStackTrace() }
+                }?.addOnFailureListener { obj: Exception ->
+                    obj.printStackTrace()
+                    obj.localizedMessage?.toString()?.let { Log.d(myTag, "Exception is  $it") }
+                }?.addOnProgressListener { taskSnapshot: UploadTask.TaskSnapshot ->
+//                if (count == 1) {
+//                    val title = " Updating "
+//                    val progress = (100.0 * taskSnapshot.bytesTransferred / taskSnapshot.totalByteCount).toInt()
+//                    notifyProgress(notification_id, R.drawable.stat_sys_upload, title, "$progress%",
+//                        applicationContext, 100, progress, true)
+//                }
+//                else if (count > 1)
+//                {
+                    val progress =
+                        (100.0 * taskSnapshot.bytesTransferred / taskSnapshot.totalByteCount).toInt()
+                    notifyProgress(
+                        notification_id,
+                        R.drawable.stat_sys_upload,
+                        "Viola",
+                        "Updating ",
+                        applicationContext,
+                        100,
+                        progress,
+                        true
+                    )
+//                }
+                }
+            }
+        }else{
+            updateImageUrl(
+                notification_id,
+                currentUser_id,
+                uploadedImagesUrl)
+        }
+
+    }
 
     private fun uploadImages(
         notification_id: Int,
@@ -196,67 +439,94 @@ class UploadServiceOffers : Service() {
         city:String,
         minPeople:String="1"
     ) {
-        val imgCount = index + 1
 
-        var imageUri: Uri
-
-        val imageUri0: Uri?= Uri.fromFile(File(imagesList[index].path))
-
-        if (Build.VERSION.SDK_INT >= 29) {
-            try {
-                bitmap = imageUri0?.let { ImageDecoder.createSource(this.contentResolver,it)}?.let { ImageDecoder.decodeBitmap(it) }
-            } catch (e: IOException) {
-                e.printStackTrace()
-
-                e.localizedMessage?.toString()?.let { Log.d(myTag, " error is  $it") }
+        Log.d(myTag,"path is : "+File(imagesList[index].path))
+        scope.launch {
+            val compressedImageFile = Compressor.compress(applicationContext, File(imagesList[index].path)) {
+//                    resolution(100, 100)
+                default(300,300,Bitmap.CompressFormat.WEBP,80)
+//                    quality(100)
+//                    format(Bitmap.CompressFormat.WEBP)
             }
-        } else {
-            // Use older version
-            try {
-                bitmap = MediaStore.Images.Media.getBitmap(this.contentResolver, imageUri0)
-            } catch (e: IOException) {
-                e.printStackTrace()
-                e.localizedMessage?.toString()?.let { Log.d(myTag, " error is  $it") }
-            }
+            uploadFromCoroutine(
+                compressedImageFile, notification_id, index,imagesList
+                ,currentUser_id,description, uploadedImagesUrl,postID, title,originalPrice,discountPrice, city, minPeople)
+
         }
+    }
 
-//        val bitmap = BitmapFactory.decodeFile(file.getAbsolutePath())
+    private fun getImageUri(inContext: Context, inImage: Bitmap): Uri {
+        val bytes = ByteArrayOutputStream()
+        inImage.compress(Bitmap.CompressFormat.WEBP, 100, bytes)
+        val path = MediaStore.Images.Media.insertImage(inContext.contentResolver
+            , inImage, "Title"+System.currentTimeMillis(), null)
+        return Uri.parse(path)
+    }
 
-        resized = bitmap?.let { Bitmap.createScaledBitmap(it, 200, 200, true) }
-//        Log.d(myTag, "path is  ${bitmap.toString()}")
+
+    private fun uploadFromCoroutine(compressedImageFile: File, notification_id: Int,
+                                    index: Int,
+                                    imagesList: ArrayList<Image>,
+                                    currentUser_id: String?,
+                                    description: String?,
+                                    uploadedImagesUrl: ArrayList<String>?,
+                                    postID:String,
+                                    title: String,
+                                    originalPrice:String,
+                                    discountPrice:String,
+                                    city:String,
+                                    minPeople:String="1") {
+
+        Log.d("MyTag","Fun launched : ")
+        val imgCount = index + 1
+        val imageUri0: Uri?= Uri.fromFile(compressedImageFile)
+//        var imageUri: Uri?
+
+//        if (Build.VERSION.SDK_INT >= 29) {
+//            try {
+//                bitmap = imageUri0?.let { ImageDecoder.createSource(this.contentResolver,it)}?.let { ImageDecoder.decodeBitmap(it) }
+//            } catch (e: IOException) {
+//                e.printStackTrace()
+//
+//                e.localizedMessage?.toString()?.let { Log.d(myTag, " error is  $it") }
+//            }
+//        } else {
+//            // Use older version
+//            try {
+//                bitmap = MediaStore.Images.Media.getBitmap(this.contentResolver, imageUri0)
+//            } catch (e: IOException) {
+//                e.printStackTrace()
+//                e.localizedMessage?.toString()?.let { Log.d(myTag, " error is  $it") }
+//            }
+//        }
+//
+////        resized = bitmap?.let { Bitmap.createScaledBitmap(it, 400, 400, true) }
+//        resized=bitmap
 
         var path :String?=null
-        try {
-//            path = MediaStore.Images.Media.insertImage(this.contentResolver, resized, "Title", null)
-            path = MediaStore.Images.Media.insertImage(this.contentResolver, resized,  "IMG_"
-                    + System.currentTimeMillis(), null)
-            Log.d(myTag, "path is  $path")
-        }catch (e :java.lang.Exception){
-            Log.d(myTag, "path is exception $path" )
-            Log.d(myTag, e.localizedMessage.toString() )
 
-        }
-
-
-        imageUri = Uri.parse(path)
-
-
-//        imageUri = try {
+//        try {
+////            path = MediaStore.Images.Media.insertImage(this.contentResolver, resized, "Title", null)
+//            path = MediaStore.Images.Media.insertImage(this.contentResolver, resized,  "IMG_"
+//                    + System.currentTimeMillis(), null)
+//            Log.d(myTag, "path is  $path")
 //
-//            val compressedFile: File = id.zelory.compressor.Compressor()
-//                .setQuality(80)
-//                .setCompressFormat(Bitmap.CompressFormat.JPEG)
-//                .compressToFile(File(imagesList[index].path))
-//            Uri.fromFile(compressedFile)
-//        } catch (e: Exception) {
-//            e.printStackTrace()
-//            Uri.fromFile(File(imagesList!![index].path))
+//        }catch (e :java.lang.Exception){
+//            Log.d(myTag, "path is exception $path" )
+//            Log.d(myTag, ""+e.localizedMessage?.toString() )
+//
 //        }
 
+//        imageUri = Uri.parse(path)
+//            imageUri = getImageUri(applicationContext,resized!!)
+
+        val imageUri: Uri= Uri.fromFile(compressedImageFile)
+
+
         val fileToUpload = currentUser_id?.let { FirebaseStorage.getInstance().reference.child("Offers").child(it)
-                    .child(postID)
-                    .child("Voila_"+System.currentTimeMillis()+"_$numberImages")
-            }
+            .child(postID)
+            .child("Voila_"+System.currentTimeMillis()+"_$numberImages")
+        }
         numberImages++
         fileToUpload?.putFile(imageUri)?.addOnSuccessListener {
             Log.d(myTag, "Uploaded Successfully")
@@ -304,7 +574,7 @@ class UploadServiceOffers : Service() {
                 val progress = (100.0 * taskSnapshot.bytesTransferred / taskSnapshot.totalByteCount).toInt()
 
                 notifyProgress(notification_id, R.drawable.stat_sys_upload, title, "$progress%",
-                    applicationContext, 100, progress, false)
+                    applicationContext, 100, progress, true)
             } else if (count > 1) {
                 notifyProgress(
                     notification_id,
@@ -318,6 +588,7 @@ class UploadServiceOffers : Service() {
                 )
             }
         }
+
     }
 
 
@@ -359,13 +630,13 @@ class UploadServiceOffers : Service() {
                 .addOnSuccessListener { documentSnapshot: DocumentSnapshot ->
                     val postMap: MutableMap<String, Any?> = HashMap()
                     val userPostMap: MutableMap<String, Any?> = HashMap()
-                    val id =documentSnapshot.getString("id")
+                    val id =documentSnapshot.getString("userId")
 
-                    postMap["userId"] = documentSnapshot.getString("id")
+                    postMap["userId"] = documentSnapshot.getString("userId")
                     postMap["username"] = documentSnapshot.getString("username")
                     postMap["name"] = documentSnapshot.getString("name")
-//                    postMap["userimage"] = documentSnapshot.getString("imgUrl")
-                    postMap["timestamp"] = System.currentTimeMillis().toString()
+                    postMap["thumbnailImage"] = documentSnapshot.getString("thumbnailImage")
+                    postMap["timestamp"] = FieldValue.serverTimestamp()
                     postMap["image_count"] = uploadedImagesUrl.size
                     try {
                         postMap["image_url_0"] = uploadedImagesUrl[0]
@@ -418,13 +689,89 @@ class UploadServiceOffers : Service() {
                     userPostMap[postID]=true
 
                     FirebaseFirestore.getInstance().collection("Offers").document(postID)
-                        .set(postMap, SetOptions.merge()).continueWith {
-                            if (id != null) {
-                                FirebaseFirestore.getInstance().collection("Users").document(id)
-                                    .collection("Offers").document("UploadedOffers")
-                                    .update("UploadedOffers", FieldValue.arrayUnion(postID))
-                            }
+                        .set(postMap, SetOptions.merge()).addOnSuccessListener {
+
+                            FirebaseFirestore.getInstance().collection("Offers")
+                                .document(postID).get().addOnSuccessListener {
+
+                                    val offerRoomEntity: OfferRoomEntity? = it?.toObject(OfferRoomEntity::class.java)
+
+                                    val recentMap: MutableMap<String, Any?> = HashMap()
+
+                                    recentMap["userId"] = documentSnapshot.getString("id")
+                                    recentMap["username"] = documentSnapshot.getString("username")
+                                    recentMap["name"] = documentSnapshot.getString("name")
+                                    recentMap["thumbnailImage"] = documentSnapshot.getString("thumbnailImage")
+                                    if (offerRoomEntity != null) {
+                                        recentMap["timestamp"] = offerRoomEntity.timestamp
+                                    }
+                                    recentMap["image_count"] = uploadedImagesUrl.size
+                                    recentMap["description"] = description
+                                    recentMap["postId"]= postID
+                                    recentMap["title"]=title
+                                    recentMap["originalPrice"]=originalPrice
+                                    recentMap["discountPrice"]=discountPrice
+                                    recentMap["city"]=city
+                                    recentMap["ratings"] = "0"
+                                    recentMap["usersRated"] = "0"
+                                    recentMap["addressMap"] = "none"
+                                    recentMap["offerCategory"] = ""
+                                    recentMap["minPeople"] = minPeople
+                                    recentMap["maxPeople"] = ""
+                                    try {
+                                        recentMap["image_url_0"] = uploadedImagesUrl[0]
+                                    } catch (e: Exception) {
+                                        e.printStackTrace()
+                                    }
+                                    try {
+                                        recentMap["image_url_1"] = uploadedImagesUrl[1]
+                                    } catch (e: Exception) {
+                                        e.printStackTrace()
+                                    }
+                                    try {
+                                        recentMap["image_url_2"] = uploadedImagesUrl[2]
+                                    } catch (e: Exception) {
+                                        e.printStackTrace()
+                                    }
+                                    try {
+                                        recentMap["image_url_3"] = uploadedImagesUrl[3]
+                                    } catch (e: Exception) {
+                                        e.printStackTrace()
+                                    }
+                                    try {
+                                        recentMap["image_url_4"] = uploadedImagesUrl[4]
+                                    } catch (e: Exception) {
+                                        e.printStackTrace()
+                                    }
+                                    try {
+                                        recentMap["image_url_5"] = uploadedImagesUrl[5]
+                                    } catch (e: Exception) {
+                                        e.printStackTrace()
+                                    }
+                                    try {
+                                        recentMap["image_url_6"] = uploadedImagesUrl[6]
+                                    } catch (e: Exception) {
+                                        e.printStackTrace()
+                                    }
+
+                                    FirebaseFirestore.getInstance().collection("Offers").document("recentOffer")
+                                        .set(recentMap).addOnSuccessListener {
+                                            Log.d("MyTag","OfferAdded")
+                                        }.addOnFailureListener {
+                                            Log.d("MyTag","Offer Not Added "+it.localizedMessage)
+                                        }
+
+
+                                }
+
                         }
+//                        .continueWith {
+//                            if (id != null) {
+//                                FirebaseFirestore.getInstance().collection("Users").document(id)
+//                                    .collection("Offers").document("UploadedOffers")
+//                                    .update("UploadedOffers", FieldValue.arrayUnion(postID))
+//                            }
+//                        }
                         .addOnSuccessListener {
                             getSharedPreferences("uploadService2", MODE_PRIVATE).edit().putInt("count", --count).apply()
                             Toasty.success(applicationContext, "Offer added", Toasty.LENGTH_SHORT, true).show()

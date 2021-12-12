@@ -8,21 +8,35 @@ import androidx.databinding.ViewDataBinding
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.android.testproject1.BR
-import com.android.testproject1.databinding.NotificationsItemBinding
 import com.android.testproject1.interfaces.IMainActivity
 import com.android.testproject1.model.Offer
 import com.android.testproject1.room.enteties.NotificationsRoomEntity
-import kotlinx.android.synthetic.main.home_recyclerview3.view.*
 import kotlinx.android.synthetic.main.notifications_item.view.*
 import android.view.Gravity
+import android.view.View
 import android.widget.Toast
+import com.android.testproject1.databinding.NotificationsItemBinding
+import com.android.testproject1.model.Users
+import com.android.testproject1.room.enteties.AppDatabase
+import com.android.testproject1.room.enteties.UserImagesRoomEntity
+import com.bumptech.glide.Glide
+import com.google.firebase.firestore.FirebaseFirestore
 import es.dmoral.toasty.Toasty
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 
 class NotificationsAdapter(private val context: Context, private var notificationList: MutableList<NotificationsRoomEntity>):
     RecyclerView.Adapter<NotificationsAdapter.BindingViewHolder>() {
 
+    private val localDatabase: AppDatabase = AppDatabase.getInstance(context)!!
+    private lateinit var firestore: FirebaseFirestore
+
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BindingViewHolder {
+        firestore= FirebaseFirestore.getInstance()
 
         val rooView: ViewDataBinding = NotificationsItemBinding.inflate(LayoutInflater.from(context),parent,false)
         return BindingViewHolder(rooView)
@@ -35,12 +49,91 @@ class NotificationsAdapter(private val context: Context, private var notificatio
         holder.itemBinding.setVariable(BR.listener, context as IMainActivity)
         holder.itemBinding.executePendingBindings()
 
-//        holder.itemBinding.root.Accept.setOnClickListener {
-//            holder.itemBinding.root.Reject.visibility=View.GONE
-//            holder.itemBinding.root.Accept.visibility=View.GONE
-//            holder.itemBinding.root.Cancelled.visibility=View.VISIBLE
-//            holder.itemBinding.root.Ready.visibility=View.VISIBLE
-//        }
+        if (notificationList[position].status=="Pending"){
+            holder.itemBinding.root.AcceptLayout.visibility=View.VISIBLE
+            holder.itemBinding.root.ReadyLayout.visibility=View.GONE
+            holder.itemBinding.root.WaitingLayout.visibility=View.GONE
+            holder.itemBinding.root.DeliveredLayout.visibility=View.GONE
+        }else if (notificationList[position].status=="Accepted"){
+            holder.itemBinding.root.AcceptLayout.visibility=View.GONE
+            holder.itemBinding.root.ReadyLayout.visibility=View.VISIBLE
+            holder.itemBinding.root.WaitingLayout.visibility=View.GONE
+            holder.itemBinding.root.DeliveredLayout.visibility=View.GONE
+        }else if (notificationList[position].status=="Order Ready"){
+            holder.itemBinding.root.AcceptLayout.visibility=View.GONE
+            holder.itemBinding.root.ReadyLayout.visibility=View.GONE
+            holder.itemBinding.root.WaitingLayout.visibility=View.VISIBLE
+            holder.itemBinding.root.DeliveredLayout.visibility=View.GONE
+        }else if (notificationList[position].status=="Delivered"){
+            holder.itemBinding.root.AcceptLayout.visibility=View.GONE
+            holder.itemBinding.root.ReadyLayout.visibility=View.GONE
+            holder.itemBinding.root.WaitingLayout.visibility=View.GONE
+            holder.itemBinding.root.DeliveredLayout.visibility=View.VISIBLE
+        }
+
+
+        var thumbnailImage:String?=null
+        var userName:String?=null
+        CoroutineScope(Dispatchers.IO).launch {
+
+            thumbnailImage = notificationList[position].userId?.let {
+                localDatabase.appDao()?.getUserImage(it) }
+
+            if (thumbnailImage==null){
+                notificationList[position].userId?.let {
+                    firestore.collection("Users").document(it).get().addOnSuccessListener {
+                        if (it != null) {
+
+                            if (it.exists()) {
+                                // convert document to POJO
+                                val userImage: UserImagesRoomEntity? = it.toObject(UserImagesRoomEntity::class.java)
+                                if (userImage != null) {
+                                    CoroutineScope(Dispatchers.IO).launch {
+
+                                        localDatabase.appDao()?.insertImage(userImage)
+                                        thumbnailImage = notificationList[position].userId?.let {
+                                            localDatabase.appDao()?.getUserImage(it) }
+
+                                        userName = notificationList[position].userId?.let {
+                                            localDatabase.appDao()?.getUserName(it) }
+
+                                        withContext(Dispatchers.Main){
+                                            holder.itemBinding.root.username.text = userName
+                                            if (thumbnailImage!=null) {
+                                                Glide.with(context)
+                                                    .load(thumbnailImage)
+                                                    .into(holder.itemBinding.root.image)
+
+                                            }
+
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+
+            }else{
+                userName = notificationList[position].userId?.let {
+                    localDatabase.appDao()?.getUserName(it) }
+
+                withContext(Dispatchers.Main){
+                    holder.itemBinding.root.username.text = userName
+                    if (thumbnailImage!=null) {
+                        Glide.with(context)
+                            .load(thumbnailImage)
+                            .into(holder.itemBinding.root.image)
+                    }
+
+//                    Log.d("MyTag"," thumbnail image is "+thumbnailImage)
+                }
+
+
+            }
+
+        }
+
 
     }
     override fun getItemCount(): Int {

@@ -48,7 +48,7 @@ class ViewPagerFragmentPostViewModel(application: Application) :AndroidViewModel
                 .limit(10)
         } else {
             db.collection("Offers") .whereEqualTo("userId",userIdOpened).orderBy("timestamp", Query.Direction.DESCENDING)
-                .startAfter(lastResult?.toObject(Post::class.java)?.timestamp)
+                .startAfter(lastResult?.toObject(OfferRoomEntity::class.java)?.timestamp)
                 .limit(10)
 
         }

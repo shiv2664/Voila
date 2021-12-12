@@ -29,6 +29,10 @@
 
     </style>
 
+    <style name="ShapeAppearanceOverlay.App.CornerSize50Percent" parent="">
+        <item name="cornerSize">50%</item>
+    </style>
+
     <style name="ToolbarColoredBackArrow" parent="AppTheme">
         <item name="android:textColorPrimary">@android:color/white</item>
 <!--        <item name="android:textColorSecondary">@color/black</item>-->

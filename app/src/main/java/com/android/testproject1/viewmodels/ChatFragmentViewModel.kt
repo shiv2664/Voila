@@ -69,8 +69,12 @@ val list2 = mutableListOf<ChatRoomEntity>()
                 viewModelScope.launch(Dispatchers.IO) {
                     localDatabase.appDao()?.insertMessage(chat)
                 }
-                lastResult = d
+//                lastResult = d
                 Log.d(myTAG,"query 0 is : "+chat.message)
+            }
+
+            if (it.size() > 0) {
+                lastResult = it.documents[it.size() - 1]
             }
 
         }

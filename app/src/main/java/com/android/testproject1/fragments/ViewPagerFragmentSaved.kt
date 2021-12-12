@@ -6,10 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.lifecycle.ViewModelProvider
-import com.android.testproject1.R
 import com.android.testproject1.databinding.FragmentViewpagerSavedBinding
-import com.android.testproject1.viewmodels.ChatFragmentViewModel
-import com.android.testproject1.viewmodels.MainActivityViewModel
 import com.android.testproject1.viewmodels.SavedFragmentViewModel
 
 

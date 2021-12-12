@@ -23,12 +23,13 @@
         <com.google.android.material.imageview.ShapeableImageView
             android:id="@+id/imageView"
             android:layout_width="wrap_content"
-            app:backgroundImage="@{offerItem.image_url_0.toString()}"
             android:layout_height="match_parent"
             android:layout_centerInParent="true"
-            app:shapeAppearanceOverlay="@style/roundimageview"
+            android:adjustViewBounds="true"
+            android:onClick="@{()->listener.onCurrentUserOfferClick(offerItem)}"
             android:scaleType="fitXY"
-            android:adjustViewBounds="true"/>
+            app:backgroundImage="@{offerItem.image_url_0.toString()}"
+            app:shapeAppearanceOverlay="@style/roundimageview" />
 
         <TextView
             android:id="@+id/textView"

@@ -16,7 +16,6 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat.startForegroundService
 import com.android.testproject1.adapter.PagerPhotosAdapter
 import com.android.testproject1.services.UploadServiceOffers
-import com.android.testproject1.services.UploadServicePosts
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.nguyenhoanglam.imagepicker.model.Image

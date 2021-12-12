@@ -11,17 +11,33 @@ import com.google.android.material.imageview.ShapeableImageView
 import java.text.NumberFormat
 import java.util.*
 
+
 @BindingAdapter("backgroundImage")
 fun setImageFromURls(view: ShapeableImageView, fileName: String?) {
-    val requestOptions: RequestOptions = RequestOptions()
-//            .setDefaultRequestOptions(requestOptions)
-
 
         Log.d("MyTag","file name is"+fileName)
 
     if (fileName != null) {
         if(fileName.isNotEmpty()){
             Glide.with(view.context)
+                .load(fileName)
+                .thumbnail(0.05f)
+                .into(view)
+        }
+    }
+
+}
+
+@BindingAdapter("backgroundImageCircle")
+fun setCircularImageFromURls(view: de.hdodenhof.circleimageview.CircleImageView, fileName: String?) {
+    val requestOptions = RequestOptions()
+    requestOptions.placeholder(R.drawable.ic_person_black_24dp)
+    requestOptions.error(R.drawable.ic_baseline_people_outline_24)
+//        Log.d("MyTag","file name is"+fileName)
+    if (fileName != null) {
+        if(fileName.isNotEmpty()){
+            Glide.with(view.context)
+                .applyDefaultRequestOptions(requestOptions)
                 .load(fileName)
                 .into(view)
         }

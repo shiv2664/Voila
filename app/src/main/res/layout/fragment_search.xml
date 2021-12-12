@@ -15,13 +15,14 @@
         
         <import type="com.android.testproject1.model.ProductExplore"/>
         <import type="com.android.testproject1.model.Offer"/>
+        <import type="com.android.testproject1.room.enteties.OfferRoomEntity"/>
             
             <variable
                 name="productExploreList"
                 type="List&lt;ProductExplore>" />
         <variable
             name="offerList"
-            type="List&lt;Offer>" />
+            type="List&lt;OfferRoomEntity>" />
 
     </data>
 
@@ -192,6 +193,7 @@
             app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
             <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/DiscoverRecyclerView"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 app:bindSearchRecyclerView="@{offerList}" />

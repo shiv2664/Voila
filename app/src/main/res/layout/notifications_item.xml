@@ -48,8 +48,7 @@
                 android:layout_alignParentStart="true"
                 android:layout_marginStart="15dp"
                 android:layout_marginTop="15dp"
-                android:layout_marginBottom="15dp"
-                android:src="@drawable/person3" />
+                android:layout_marginBottom="15dp"/>
 
 <!--            android:onClick="@{()->listener.onNotificationItemClick(notificationItem)}"-->
             <LinearLayout
@@ -69,12 +68,12 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content">
 
+                    <!--                    android:text="@{notificationItem.username}"-->
                     <TextView
-                        android:id="@+id/title"
+                        android:id="@+id/username"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_alignParentStart="true"
-                        android:text="@{notificationItem.username}"
                         android:textSize="17sp"
                         android:textStyle="bold" />
 
@@ -83,7 +82,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="5dp"
-                        android:layout_toEndOf="@+id/title"
+                        android:layout_toEndOf="@+id/username"
                         android:text="(+911234567890)"
                         android:textSize="16sp"
                         android:textStyle="bold" />
@@ -123,52 +122,61 @@
                 android:layout_marginBottom="15dp"
                 android:src="@drawable/ic_notifications_black_24dp" />
 
+<!--            <Chronometer-->
+<!--                android:id="@+id/simpleChronometer"-->
+<!--                android:layout_width="50dp"-->
+<!--                android:layout_height="30dp"-->
+<!--                android:layout_alignParentEnd="true"-->
+<!--                android:layout_marginTop="40dp"-->
+<!--                android:layout_marginEnd="15dp"-->
+<!--                android:layout_marginBottom="15dp" />-->
+
         </RelativeLayout>
 
-<!--            <LinearLayout-->
-<!--                android:id="@+id/buttons_layout"-->
-<!--                android:layout_width="match_parent"-->
-<!--                android:layout_height="wrap_content"-->
-<!--                android:orientation="vertical">-->
+            <!--            <LinearLayout-->
+            <!--                android:id="@+id/buttons_layout"-->
+            <!--                android:layout_width="match_parent"-->
+            <!--                android:layout_height="wrap_content"-->
+            <!--                android:orientation="vertical">-->
 
-<!--                &lt;!&ndash;                app:backgroundTint="?attr/colorAccent"&ndash;&gt;-->
-<!--                <com.google.android.material.button.MaterialButton-->
-<!--                    android:layout_marginStart="15dp"-->
-<!--                    android:layout_marginEnd="15dp"-->
-<!--                    android:id="@+id/Accept"-->
-<!--                    style="@style/Widget.MaterialComponents.Button.OutlinedButton"-->
-<!--                    android:layout_width="match_parent"-->
-<!--                    android:layout_height="wrap_content"-->
-<!--                    android:layout_marginTop="5dp"-->
-<!--                    android:text="Accept"-->
-<!--                    android:background="@drawable/backgroundgreen"-->
-<!--                    app:backgroundTint="@null"-->
-<!--                    android:textColor="@color/colorWhite"-->
-<!--                    app:cornerRadius="10dp" />-->
+            <!--                &lt;!&ndash;                app:backgroundTint="?attr/colorAccent"&ndash;&gt;-->
+            <!--                <com.google.android.material.button.MaterialButton-->
+            <!--                    android:layout_marginStart="15dp"-->
+            <!--                    android:layout_marginEnd="15dp"-->
+            <!--                    android:id="@+id/Accept"-->
+            <!--                    style="@style/Widget.MaterialComponents.Button.OutlinedButton"-->
+            <!--                    android:layout_width="match_parent"-->
+            <!--                    android:layout_height="wrap_content"-->
+            <!--                    android:layout_marginTop="5dp"-->
+            <!--                    android:text="Accept"-->
+            <!--                    android:background="@drawable/backgroundgreen"-->
+            <!--                    app:backgroundTint="@null"-->
+            <!--                    android:textColor="@color/colorWhite"-->
+            <!--                    app:cornerRadius="10dp" />-->
 
-<!--                <com.google.android.material.button.MaterialButton-->
-<!--                    android:layout_marginStart="15dp"-->
-<!--                    android:layout_marginEnd="15dp"-->
-<!--                    android:layout_marginTop="5dp"-->
-<!--                    android:layout_marginBottom="12dp"-->
-<!--                    android:id="@+id/Reject"-->
-<!--                    style="@style/Widget.MaterialComponents.Button.OutlinedButton"-->
-<!--                    android:layout_width="match_parent"-->
-<!--                    android:layout_height="wrap_content"-->
-<!--                    android:text="Reject"-->
-<!--                    android:textColor="@color/colorWhite"-->
-<!--                    android:background="@drawable/backgroundred"-->
-<!--                    app:backgroundTint="@null"-->
-<!--                    app:cornerRadius="10dp" />-->
+            <!--                <com.google.android.material.button.MaterialButton-->
+            <!--                    android:layout_marginStart="15dp"-->
+            <!--                    android:layout_marginEnd="15dp"-->
+            <!--                    android:layout_marginTop="5dp"-->
+            <!--                    android:layout_marginBottom="12dp"-->
+            <!--                    android:id="@+id/Reject"-->
+            <!--                    style="@style/Widget.MaterialComponents.Button.OutlinedButton"-->
+            <!--                    android:layout_width="match_parent"-->
+            <!--                    android:layout_height="wrap_content"-->
+            <!--                    android:text="Reject"-->
+            <!--                    android:textColor="@color/colorWhite"-->
+            <!--                    android:background="@drawable/backgroundred"-->
+            <!--                    app:backgroundTint="@null"-->
+            <!--                    app:cornerRadius="10dp" />-->
 
-<!--            </LinearLayout>-->
+            <!--            </LinearLayout>-->
+
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
-                android:weightSum="2"
-                >
+                android:weightSum="2">
 
                 <TextView
                     android:layout_marginStart="15dp"
@@ -194,98 +202,173 @@
 
             </LinearLayout>
 
+
+
+
+
+
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:weightSum="2">
+                android:orientation="vertical">
 
-                <!--                app:backgroundTint="?attr/colorAccent"-->
-<!--                android:visibility="@{Accept.callOnClick()?View.VISIBLE:View.GONE}"-->
-                <com.google.android.material.button.MaterialButton
-                    android:layout_weight="1"
-                    android:layout_marginStart="15dp"
-                    android:layout_marginEnd="15dp"
-                    android:layout_marginTop="5dp"
-                    android:layout_marginBottom="12dp"
-                    android:id="@+id/Reject"
-                    style="@style/Widget.MaterialComponents.Button.OutlinedButton"
-                    android:layout_width="match_parent"
-                    android:layout_height="59dp"
-                    android:text="Reject"
-                    android:textColor="@color/selected_icon"
-                    android:textSize="15sp"
-                    app:cornerRadius="10dp" />
-
-<!--                android:visibility="@{Accept.isPressed()?View.VISIBLE:View.GONE}"-->
-                <com.google.android.material.button.MaterialButton
-                    android:layout_weight="1"
-                    android:layout_marginStart="15dp"
-                    android:layout_marginEnd="15dp"
-                    android:id="@+id/Accept"
-                    style="@style/Widget.MaterialComponents.Button.OutlinedButton"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="5dp"
-                    android:text="Accept"
-                    android:onClick="@{(button)->listener.onAcceptClick(notificationItem,Reject,Accept,Cancelled,Ready)}"
-                    android:textSize="15sp"
-                    android:background="@drawable/backgroundgreen"
-                    app:backgroundTint="@null"
-                    android:textColor="@color/colorWhite"
-                    app:cornerRadius="10dp" />
-
-                <com.google.android.material.button.MaterialButton
+<!--                android:visibility="@{notificationItem.status==`Pending`?View.VISIBLE:View.GONE}"-->
+                <LinearLayout
                     android:visibility="gone"
-                    android:layout_weight="1"
-                    android:layout_marginStart="15dp"
-                    android:layout_marginEnd="15dp"
-                    android:layout_marginTop="5dp"
-                    android:layout_marginBottom="12dp"
-                    android:id="@+id/Cancelled"
-                    style="@style/Widget.MaterialComponents.Button.OutlinedButton"
-                    android:layout_width="match_parent"
-                    android:layout_height="59dp"
-                    android:text="Cancel"
-                    android:textColor="@color/selected_icon"
-                    android:textSize="15sp"
-                    app:cornerRadius="10dp" />
-
-                <com.google.android.material.button.MaterialButton
-                   android:visibility="gone"
-                    android:layout_weight="1"
-                    android:layout_marginStart="15dp"
-                    android:layout_marginEnd="15dp"
-                    android:id="@+id/Ready"
-                    style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                    android:id="@+id/AcceptLayout"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="5dp"
-                    android:text="Order Ready"
-                    android:onClick="@{(button)->listener.onOrderReadyClick(notificationItem,Cancelled,Ready,WaitingList)}"
-                    android:textSize="15sp"
-                    android:background="@drawable/backgroundgreen"
-                    app:backgroundTint="@null"
-                    android:textColor="@color/colorWhite"
-                    app:cornerRadius="10dp" />
+                    android:orientation="horizontal"
+                    android:weightSum="2">
 
-                <com.google.android.material.button.MaterialButton
+                    <com.google.android.material.button.MaterialButton
+                        android:layout_weight="1"
+                        android:layout_marginStart="15dp"
+                        android:layout_marginEnd="15dp"
+                        android:layout_marginTop="5dp"
+                        android:layout_marginBottom="12dp"
+                        android:id="@+id/Reject"
+                        style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                        android:layout_width="0dp"
+                        android:layout_height="59dp"
+                        android:text="Reject"
+                        android:textColor="@color/selected_icon"
+                        android:textSize="15sp"
+                        app:cornerRadius="10dp" />
+
+                    <!--                android:visibility="@{notificationItem.status!=`Pending`?View.INVISIBLE:View.VISIBLE}"-->
+                    <com.google.android.material.button.MaterialButton
+                        android:layout_weight="1"
+                        android:layout_marginStart="15dp"
+                        android:layout_marginEnd="15dp"
+                        android:id="@+id/Accept"
+                        style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="5dp"
+                        android:text="Accept"
+                        android:onClick="@{(button)->listener.onAcceptClick(notificationItem,Reject,Accept,Cancelled,Ready,AcceptLayout,ReadyLayout,WaitingLayout,DeliveredLayout)}"
+                        android:textSize="15sp"
+                        android:background="@drawable/backgroundgreen"
+                        app:backgroundTint="@null"
+                        android:textColor="@color/colorWhite"
+                        app:cornerRadius="10dp" />
+
+                </LinearLayout>
+
+<!--                android:visibility="@{notificationItem.status==`Accepted`?View.VISIBLE:View.GONE}"-->
+                <LinearLayout
                     android:visibility="gone"
-                    android:layout_weight="1"
-                    android:layout_marginStart="15dp"
-                    android:layout_marginEnd="15dp"
-                    android:layout_marginBottom="12dp"
-                    android:id="@+id/WaitingList"
-                    style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                    android:id="@+id/ReadyLayout"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="5dp"
-                    android:text="Waiting"
-                    android:textSize="15sp"
-                    android:background="@drawable/backgroundblue"
-                    app:backgroundTint="@null"
-                    android:textColor="@color/colorWhite"
-                    app:cornerRadius="10dp" />
+                    android:orientation="horizontal"
+                    android:weightSum="2">
+
+                    <com.google.android.material.button.MaterialButton
+                        android:layout_weight="1"
+                        android:layout_marginStart="15dp"
+                        android:layout_marginEnd="15dp"
+                        android:layout_marginTop="5dp"
+                        android:layout_marginBottom="12dp"
+                        android:id="@+id/Cancelled"
+                        style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                        android:layout_width="0dp"
+                        android:layout_height="59dp"
+                        android:text="Cancel"
+                        android:textColor="@color/selected_icon"
+                        android:textSize="15sp"
+                        app:cornerRadius="10dp" />
+
+                    <com.google.android.material.button.MaterialButton
+                        android:layout_weight="1"
+                        android:layout_marginStart="15dp"
+                        android:layout_marginEnd="15dp"
+                        android:id="@+id/Ready"
+                        style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="5dp"
+                        android:text="Order Ready"
+                        android:onClick="@{(button)->listener.onOrderReadyClick(notificationItem,Cancelled,Ready,WaitingList,AcceptLayout,ReadyLayout,WaitingLayout,DeliveredLayout)}"
+                        android:textSize="15sp"
+                        android:background="@drawable/backgroundgreen"
+                        app:backgroundTint="@null"
+                        android:textColor="@color/colorWhite"
+                        app:cornerRadius="10dp" />
+
+                </LinearLayout>
+
+<!--                android:visibility="@{notificationItem.status==`Waiting`?View.VISIBLE:View.GONE}"-->
+                <LinearLayout
+                    android:visibility="gone"
+                    android:id="@+id/WaitingLayout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:weightSum="2">
+
+                    <com.google.android.material.button.MaterialButton
+                        android:layout_weight="1"
+                        android:layout_marginStart="15dp"
+                        android:layout_marginEnd="15dp"
+                        android:layout_marginTop="5dp"
+                        android:layout_marginBottom="12dp"
+                        android:id="@+id/CancelWait"
+                        style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                        android:layout_width="0dp"
+                        android:layout_height="59dp"
+                        android:text="Cancel"
+                        android:textColor="@color/selected_icon"
+                        android:textSize="15sp"
+                        app:cornerRadius="10dp" />
+
+                    <com.google.android.material.button.MaterialButton
+                        android:layout_weight="1"
+                        android:layout_marginStart="15dp"
+                        android:layout_marginEnd="15dp"
+                        android:layout_marginBottom="12dp"
+                        android:id="@+id/WaitingList"
+                        style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="5dp"
+                        android:text="Waiting"
+                        android:onClick="@{(button)->listener.onWaitingClicked(notificationItem,AcceptLayout,ReadyLayout,WaitingLayout,DeliveredLayout)}"
+                        android:textSize="15sp"
+                        android:background="@drawable/backgroundblue"
+                        app:backgroundTint="@null"
+                        android:textColor="@color/colorWhite"
+                        app:cornerRadius="10dp" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/DeliveredLayout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:weightSum="1">
+
+                    <com.google.android.material.button.MaterialButton
+                        android:layout_weight="1"
+                        android:layout_marginStart="15dp"
+                        android:layout_marginEnd="15dp"
+                        android:layout_marginBottom="12dp"
+                        android:id="@+id/Delivered"
+                        style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="5dp"
+                        android:text="Delivered"
+                        android:textSize="15sp"
+                        android:background="@drawable/backgroundgreen"
+                        app:backgroundTint="@null"
+                        android:textColor="@color/colorWhite"
+                        app:cornerRadius="10dp" />
+
+                </LinearLayout>
 
             </LinearLayout>
 

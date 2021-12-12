@@ -2,12 +2,12 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <item
-        android:id="@+id/Refresh"
-        android:icon="@drawable/ic_baseline_refresh_24"
-        android:title="Refresh"
-        app:showAsAction="ifRoom"
-        />
+<!--    <item-->
+<!--        android:id="@+id/Refresh"-->
+<!--        android:icon="@drawable/ic_baseline_refresh_24"-->
+<!--        android:title="Refresh"-->
+<!--        app:showAsAction="ifRoom"-->
+<!--        />-->
 
     <item
         android:id="@+id/Post"
@@ -21,6 +21,13 @@
         android:icon="@drawable/ic_baseline_notifications_24_white"
         android:title="Notifications"
         app:showAsAction="ifRoom"
+        />
+
+    <item
+        android:id="@+id/SignOut"
+        android:icon="@drawable/ic_baseline_logout_24"
+        android:title="SignOut"
+        app:showAsAction="never"
         />
 
 <!--    <item-->

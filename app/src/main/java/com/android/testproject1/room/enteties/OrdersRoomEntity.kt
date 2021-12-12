@@ -15,7 +15,10 @@ data class OrdersRoomEntity(
     var idOrder:String="",
     var id: String? = "",
     var username: String? = "",
+    var thumbnailImage:String?="",
     var image: String? ="",
+    var foodImage: String? ="",
+    var userNameOffer:String="",
     var message: String? = "",
     var type: String? = "",
     var orderName:String?="",
@@ -24,6 +27,7 @@ data class OrdersRoomEntity(
     var action_id: String? ="",
     var Quantity:String?="",
     var orderFrom:String?="",
+    var userId:String?="",
     var orderTo:String?="",
     @ServerTimestamp
     var timestamp: Date? = null
@@ -84,24 +88,16 @@ data class OrdersRoomEntity(
             return false
         }
 
+        if (foodImage != other.foodImage) {
+            return false
+        }
+
+        if (userNameOffer!= other.userNameOffer){
+            return false
+        }
+
         return true
     }
 
-    override fun hashCode(): Int {
-        var result = idOrder.hashCode()
-        result = 31 * result + (id?.hashCode() ?: 0)
-        result = 31 * result + (username?.hashCode() ?: 0)
-        result = 31 * result + (image?.hashCode() ?: 0)
-        result = 31 * result + (message?.hashCode() ?: 0)
-        result = 31 * result + (type?.hashCode() ?: 0)
-        result = 31 * result + (orderName?.hashCode() ?: 0)
-        result = 31 * result + (status?.hashCode() ?: 0)
-        result = 31 * result + (price?.hashCode() ?: 0)
-        result = 31 * result + (action_id?.hashCode() ?: 0)
-        result = 31 * result + (Quantity?.hashCode() ?: 0)
-        result = 31 * result + (orderFrom?.hashCode() ?: 0)
-        result = 31 * result + (orderTo?.hashCode() ?: 0)
-        result = 31 * result + (timestamp?.hashCode() ?: 0)
-        return result
-    }
+
 }

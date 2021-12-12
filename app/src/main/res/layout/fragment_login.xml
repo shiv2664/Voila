@@ -87,6 +87,7 @@
                 android:layout_marginTop="10dp"
                 app:boxStrokeColor="?attr/colorAccent"
                 app:hintTextColor="?attr/colorAccent"
+                app:passwordToggleEnabled="true"
                 android:hint="Password"
                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
 

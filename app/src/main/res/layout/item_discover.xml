@@ -5,9 +5,12 @@
 
     <data>
 
+<!--        <variable-->
+<!--            name="offerItem"-->
+<!--            type="com.android.testproject1.model.Offer" />-->
         <variable
             name="offerItem"
-            type="com.android.testproject1.model.Offer" />
+            type="com.android.testproject1.room.enteties.OfferRoomEntity" />
 
         <variable
             name="listener"
@@ -51,17 +54,17 @@
                 <com.google.android.material.imageview.ShapeableImageView
                     android:id="@+id/img"
                     android:layout_width="match_parent"
-                    android:layout_height="280dp"
-                    android:scaleType="fitXY"
+                    android:layout_height="300dp"
+                    android:scaleType="centerCrop"
                     android:transitionName="img"
                     app:backgroundImage="@{offerItem.image_url_0}" />
 
                 <ImageView
                     android:id="@+id/shadow_bottom"
-                    android:background="@drawable/bottom_shadow"
-                    android:layout_alignBottom="@id/img"
                     android:layout_width="match_parent"
-                    android:layout_height="80dp" />
+                    android:layout_height="80dp"
+                    android:layout_alignBottom="@id/img"
+                    android:background="@drawable/bottom_shadow" />
 
                 <ProgressBar
                     android:visibility="gone"
@@ -96,12 +99,22 @@
                     android:layout_alignBottom="@id/img"
                     android:paddingBottom="5dp">
 
-                    <de.hdodenhof.circleimageview.CircleImageView
+                    <!--                    <de.hdodenhof.circleimageview.CircleImageView-->
+                    <!--                        android:id="@+id/profileImage"-->
+                    <!--                        android:layout_width="50dp"-->
+                    <!--                        android:layout_height="50dp"-->
+                    <!--                        android:onClick="@{()->listener.onProfileOpenedDiscover(offerItem)}"-->
+                    <!--                        android:src="@{offerItem.userimage}"-->
+                    <!--                        android:transitionName="img" />-->
+
+                    <com.google.android.material.imageview.ShapeableImageView
                         android:id="@+id/profileImage"
-                        android:onClick="@{()->listener.onProfileOpenedDiscover(offerItem)}"
                         android:layout_width="50dp"
                         android:layout_height="50dp"
-                        android:src="@drawable/person3" />
+                        android:scaleType="centerCrop"
+                        android:transitionName="img"
+                        android:visibility="visible"
+                        app:shapeAppearanceOverlay="@style/ShapeAppearanceOverlay.App.CornerSize50Percent" />
 
                     <!--                    android:layout_toStartOf="@+id/locationLayout"-->
                     <RelativeLayout
@@ -114,7 +127,7 @@
                         android:paddingEnd="1dp">
 
                         <!--android:text="@{offerItem.name}"-->
-<!--                        android:fontFamily="sans-serif-light"-->
+                        <!--                        android:fontFamily="sans-serif-light"-->
                         <TextView
                             android:id="@+id/title"
                             android:layout_width="match_parent"
@@ -124,7 +137,6 @@
                             android:layout_marginEnd="10dp"
                             android:maxLines="2"
                             android:onClick="@{()->listener.onProfileOpenedDiscover(offerItem)}"
-                            android:text="@{offerItem.name}"
                             android:textColor="@color/colorWhite"
                             android:textSize="18sp"
                             android:textStyle="bold" />
@@ -193,7 +205,7 @@
                         android:background="@drawable/round_white"
                         android:padding="5dp">
 
-<!--                        android:text="@{``+`₹`+offerItem.discountPrice}"-->
+                        <!--                        android:text="@{``+`₹`+offerItem.discountPrice}"-->
                         <TextView
                             android:id="@+id/DiscountedPrice"
                             android:layout_width="wrap_content"
@@ -461,7 +473,7 @@
                             android:layout_alignParentEnd="true"
                             android:layout_marginTop="10dp"
                             android:layout_marginBottom="20dp"
-                            android:onClick="@{()->listener.onRecyclerViewItemClick(offerItem)}"
+                            android:onClick="@{()->listener.onRecyclerViewGroupsItemClick(offerItem)}"
                             android:text="Groups"
                             app:backgroundTint="?attr/colorAccent"
                             app:cornerRadius="10dp" />

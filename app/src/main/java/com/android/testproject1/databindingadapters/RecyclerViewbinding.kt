@@ -424,7 +424,7 @@ fun bindGroupChat(view:RecyclerView,groupChatList:List<ChatRoomEntity>?) {
 
 
 @BindingAdapter("bindSearchRecyclerView")
-fun bindSearchRecyclerView(view: RecyclerView,dataList:List<Offer>?){
+fun bindSearchRecyclerView(view: RecyclerView,dataList:List<OfferRoomEntity>?){
 
     if (dataList != null) {
         if (dataList.isEmpty())
@@ -445,10 +445,22 @@ fun bindSearchRecyclerView(view: RecyclerView,dataList:List<Offer>?){
             view.adapter = adapter
         }
     }
+//    if (dataList != null) {
+//        adapter?.updateData(dataList)
+//    }
+
     if (dataList != null) {
         adapter?.updateData(dataList)
-    }
+        if (adapter != null) {
+            if(!view.canScrollVertically(-1)){
+                // Its at top
+                view.scrollToPosition(0)
+            }else{
+                adapter.showToast()
+            }
 
+        }
+    }
 
 }
 

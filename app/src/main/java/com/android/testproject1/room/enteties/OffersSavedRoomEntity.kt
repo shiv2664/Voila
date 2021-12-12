@@ -4,7 +4,9 @@ import android.os.Parcelable
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 import com.android.testproject1.model.Offer
+import com.google.firebase.firestore.ServerTimestamp
 import kotlinx.android.parcel.Parcelize
+import java.util.*
 
 @Entity
 @Parcelize
@@ -13,7 +15,6 @@ data class OffersSavedRoomEntity(
     var postId:String=""
     ,var userId: String=""
     ,var name: String=""
-    ,var timestamp: String=""
     ,var  likes: String=""
     ,var favourites: String=""
     ,var description: String=""
@@ -37,7 +38,9 @@ data class OffersSavedRoomEntity(
     ,var image_url_3: String=""
     ,var image_url_4: String=""
     ,var image_url_5: String=""
-    ,var image_url_6: String="") : Parcelable{
+    ,var image_url_6: String=""
+    ,@ServerTimestamp
+    var timestamp: Date? = null) : Parcelable{
 
     override fun equals(other: Any?): Boolean {
 

@@ -26,6 +26,10 @@
         <item name="actionBarPopupTheme">@style/AppTheme.PopupOverlay</item>
     </style>
 
+    <style name="ShapeAppearanceOverlay.App.CornerSize50Percent" parent="">
+        <item name="cornerSize">50%</item>
+    </style>
+
     <style name="ToolbarColoredBackArrow" parent="AppTheme">
         <item name="android:textColorSecondary">@color/black</item>
     </style>

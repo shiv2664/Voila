@@ -2,6 +2,12 @@ package com.android.testproject1.room.enteties
 
 import androidx.lifecycle.LiveData
 import androidx.room.*
+import android.provider.SyncStateContract.Helpers.insert
+
+import com.android.testproject1.model.Users
+
+
+
 
 @Dao
 interface AppDao {
@@ -38,14 +44,27 @@ interface AppDao {
     fun deleteOfferById(postId: String)
 
 
+
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun addOfferUser(OfferEntity: OfferRoomEntity)
 
-    @Query("Select * from OfferRoomEntity where userId=:userId")
+    @Query("Select * from OfferRoomEntity where userId=:userId order by timestamp desc")
     fun getOffersUser(userId:String):LiveData<MutableList<OfferRoomEntity>>
+
+    @Query("Select * from OfferRoomEntity order by timestamp desc")
+    fun getAllOffers():LiveData<MutableList<OfferRoomEntity>>
 
     @Query("DELETE FROM OfferRoomEntity WHERE postId = :postId")
     fun deleteOfferByIdUser(postId: String)
+
+    @Query("DELETE FROM OfferRoomEntity ")
+    fun deleteTableOfferRoomEntity()
+
+    @Transaction
+    fun deleteAndInsert(OfferEntity: OfferRoomEntity) {
+        deleteTableOfferRoomEntity()
+        addOfferUser(OfferEntity)
+    }
 
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
@@ -56,6 +75,17 @@ interface AppDao {
 
     @Query("Select * From ChatRoomEntity where chatKey= :chatKey order by timestamp ")
     fun getMessages(chatKey: String): LiveData<List<ChatRoomEntity>>
+
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    fun insertImage(imageRoomEntity: UserImagesRoomEntity)
+
+    @Query("Select thumbnailImage From UserImagesRoomEntity where userId= :userId")
+    fun getUserImage(userId: String) :String
+
+    @Query("Select username From UserImagesRoomEntity where userId= :userId")
+    fun getUserName(userId: String) :String
+
 
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)

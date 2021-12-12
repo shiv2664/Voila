@@ -4,6 +4,7 @@ import android.Manifest
 import android.content.pm.PackageManager
 import android.os.Bundle
 import android.view.View
+import android.widget.LinearLayout
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
@@ -13,10 +14,10 @@ import androidx.lifecycle.ViewModelProvider
 import com.android.testproject1.fragments.*
 import com.android.testproject1.interfaces.IMainActivity
 import com.android.testproject1.room.enteties.NotificationsRoomEntity
-import com.android.testproject1.model.Offer
 import com.android.testproject1.model.Users
+import com.android.testproject1.room.enteties.OfferRoomEntity
 import com.android.testproject1.room.enteties.UsersChatListEntity
-import com.android.testproject1.viewmodels.MainActivityViewModel
+import com.android.testproject1.viewmodels.MainActivity2ViewModel
 import com.google.android.material.button.MaterialButton
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
@@ -33,7 +34,7 @@ class MainActivity : AppCompatActivity() , IMainActivity {
         private var GROUP_USER_ID:String?=null
     }
 
-    private lateinit var mViewModel: MainActivityViewModel
+    private lateinit var mViewModel: MainActivity2ViewModel
     private lateinit var firebaseFirestore: FirebaseFirestore
     private lateinit var firebaseAuth:FirebaseAuth
     var postId:String=""
@@ -46,7 +47,7 @@ class MainActivity : AppCompatActivity() , IMainActivity {
 
         mViewModel = ViewModelProvider(this, ViewModelProvider.AndroidViewModelFactory
             .getInstance(this.application))
-            .get(MainActivityViewModel::class.java)
+            .get(MainActivity2ViewModel::class.java)
 
 
         val bottomNavigationView = bottomNav
@@ -126,7 +127,7 @@ class MainActivity : AppCompatActivity() , IMainActivity {
         TODO("Not yet implemented")
     }
 
-    override fun onRecyclerViewItemClick(offerItem: Offer) {
+    override fun onRecyclerViewGroupsItemClick(offerItem: OfferRoomEntity) {
         TODO("Not yet implemented")
 //        val fragment = DetailsFragment()
 //
@@ -146,7 +147,7 @@ class MainActivity : AppCompatActivity() , IMainActivity {
 
     }
 
-    override fun onPlaceOrderClick(offerItem: Offer, Total: String, Quantity: String) {
+    override fun onPlaceOrderClick(offerItem: OfferRoomEntity, Total: String, Quantity: String) {
         TODO("Not yet implemented")
     }
 
@@ -155,7 +156,11 @@ class MainActivity : AppCompatActivity() , IMainActivity {
         reject: MaterialButton,
         accept: MaterialButton,
         cancel: MaterialButton,
-        ready: MaterialButton
+        ready: MaterialButton,
+        linearLayout: LinearLayout,
+        linearlayout2: LinearLayout,
+        linearLayout3: LinearLayout,
+        linearlayout4: LinearLayout
     ) {
         TODO("Not yet implemented")
     }
@@ -164,12 +169,30 @@ class MainActivity : AppCompatActivity() , IMainActivity {
         notificationsRoomEntityItem: NotificationsRoomEntity,
         cancel: MaterialButton,
         ready: MaterialButton,
-        waiting: MaterialButton
+        waiting: MaterialButton,
+        linearLayout: LinearLayout,
+        linearLayout2: LinearLayout,
+        linearLayout3: LinearLayout,
+        linearLayout4: LinearLayout
     ) {
         TODO("Not yet implemented")
     }
 
-    override fun onProfileOpenedDiscover(offerItem: Offer) {
+    override fun onWaitingClicked(
+        notificationItem: NotificationsRoomEntity,
+        linearLayout: LinearLayout,
+        linearLayout2: LinearLayout,
+        linearLayout3: LinearLayout,
+        linearLayout4: LinearLayout
+    ) {
+        TODO("Not yet implemented")
+    }
+
+    override fun onCurrentUserOfferClick(offerItem: OfferRoomEntity) {
+        TODO("Not yet implemented")
+    }
+
+    override fun onProfileOpenedDiscover(offerItem: OfferRoomEntity) {
         TODO("Not yet implemented")
     }
 
@@ -242,7 +265,7 @@ class MainActivity : AppCompatActivity() , IMainActivity {
         TODO("Not yet implemented")
     }
 
-    override fun onBookMarkItemClick(offerItem: Offer) {
+    override fun onBookMarkItemClick(offerItem: OfferRoomEntity) {
         TODO("Not yet implemented")
     }
 

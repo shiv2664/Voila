@@ -3,14 +3,15 @@ package com.android.testproject1
 import android.animation.ObjectAnimator
 import android.os.Bundle
 import android.view.View
+import android.widget.LinearLayout
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.FragmentManager
 import com.android.testproject1.fragments.LoginFragment
 import com.android.testproject1.fragments.SignUpFragment
 import com.android.testproject1.interfaces.IMainActivity
 import com.android.testproject1.room.enteties.NotificationsRoomEntity
-import com.android.testproject1.model.Offer
 import com.android.testproject1.model.Users
+import com.android.testproject1.room.enteties.OfferRoomEntity
 import com.android.testproject1.room.enteties.UsersChatListEntity
 import com.google.android.material.button.MaterialButton
 import kotlinx.android.synthetic.main.activity_register.*
@@ -18,6 +19,9 @@ import kotlinx.android.synthetic.main.activity_register.*
 class RegisterActivity : AppCompatActivity(), IMainActivity {
     private var fragmentmanager:FragmentManager?=null
 
+    companion object{
+        var isUploadPicFragmentActive=false
+    }
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_register)
@@ -43,7 +47,6 @@ class RegisterActivity : AppCompatActivity(), IMainActivity {
 
     override fun onRegisterClick() {
         fragmentmanager= supportFragmentManager
-
         fragmentmanager!!
                 .beginTransaction()
                 .setCustomAnimations(R.anim.right_enter,R.anim.left_out)
@@ -55,11 +58,11 @@ class RegisterActivity : AppCompatActivity(), IMainActivity {
         textAnim()
     }
 
-    override fun onRecyclerViewItemClick(offerItem: Offer) {
+    override fun onRecyclerViewGroupsItemClick(offerItem: OfferRoomEntity) {
         TODO("Not yet implemented")
     }
 
-    override fun onPlaceOrderClick(offerItem: Offer, Total: String, Quantity: String) {
+    override fun onPlaceOrderClick(offerItem: OfferRoomEntity, Total: String, Quantity: String) {
         TODO("Not yet implemented")
     }
 
@@ -68,7 +71,11 @@ class RegisterActivity : AppCompatActivity(), IMainActivity {
         reject: MaterialButton,
         accept: MaterialButton,
         cancel: MaterialButton,
-        ready: MaterialButton
+        ready: MaterialButton,
+        linearLayout: LinearLayout,
+        linearlayout2: LinearLayout,
+        linearLayout3: LinearLayout,
+        linearlayout4: LinearLayout
     ) {
         TODO("Not yet implemented")
     }
@@ -77,12 +84,30 @@ class RegisterActivity : AppCompatActivity(), IMainActivity {
         notificationsRoomEntityItem: NotificationsRoomEntity,
         cancel: MaterialButton,
         ready: MaterialButton,
-        waiting: MaterialButton
+        waiting: MaterialButton,
+        linearLayout: LinearLayout,
+        linearLayout2: LinearLayout,
+        linearLayout3: LinearLayout,
+        linearLayout4: LinearLayout
     ) {
         TODO("Not yet implemented")
     }
 
-    override fun onProfileOpenedDiscover(offerItem: Offer) {
+    override fun onWaitingClicked(
+        notificationItem: NotificationsRoomEntity,
+        linearLayout: LinearLayout,
+        linearLayout2: LinearLayout,
+        linearLayout3: LinearLayout,
+        linearLayout4: LinearLayout
+    ) {
+        TODO("Not yet implemented")
+    }
+
+    override fun onCurrentUserOfferClick(offerItem: OfferRoomEntity) {
+        TODO("Not yet implemented")
+    }
+
+    override fun onProfileOpenedDiscover(offerItem: OfferRoomEntity) {
         TODO("Not yet implemented")
     }
 
@@ -113,7 +138,7 @@ class RegisterActivity : AppCompatActivity(), IMainActivity {
         TODO("Not yet implemented")
     }
 
-    override fun onBookMarkItemClick(offerItem: Offer) {
+    override fun onBookMarkItemClick(offerItem: OfferRoomEntity) {
         TODO("Not yet implemented")
     }
 
@@ -132,11 +157,29 @@ class RegisterActivity : AppCompatActivity(), IMainActivity {
         textView2.text="We missed you! Login to get started"
         textAnim()
     }
+
+    private fun replaceSignupFragment() {
+//        fragmentmanager!!.popBackStack()
+        fragmentmanager!!
+            .beginTransaction()
+            .setCustomAnimations(R.anim.left_enter,R.anim.right_out)
+            .replace(R.id.fragmentcontainer, SignUpFragment())
+            .commit()
+        textView1.text = "Hello there,"
+        textView2.text="SignUp to get started"
+        textAnim()
+    }
     override fun onBackPressed() {
         val signUpFragment = fragmentmanager?.findFragmentByTag("SignUp Fragment")
+
         if (signUpFragment != null) {
             replaceLoginFragment()
         }
-        else super.onBackPressed()
+        if (isUploadPicFragmentActive){
+            replaceSignupFragment()
+            isUploadPicFragmentActive=false
+        }
+        if (signUpFragment== null && !isUploadPicFragmentActive)
+            super.onBackPressed()
     }
 }
