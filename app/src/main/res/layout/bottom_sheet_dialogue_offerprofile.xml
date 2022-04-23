@@ -1,41 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <data>
 
-<!--        <variable-->
-<!--            name="offerItem"-->
-<!--            type="com.android.testproject1.model.Offer" />-->
-        <variable
-            name="offerItem"
-            type="com.android.testproject1.room.enteties.OfferRoomEntity" />
-
-        <variable
-            name="listener"
-            type="com.android.testproject1.interfaces.IMainActivity" />
-        <variable
-            name="layout"
-            type="com.android.testproject1.adapter.SearchAdapter2.BindingViewHolder" />
-
     </data>
 
-    <FrameLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+<!--    <LinearLayout-->
+<!--        android:paddingBottom="20dp"-->
+<!--        android:id="@+id/fragment_history_menu_bottom"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:background="@drawable/card_background"-->
+<!--        android:orientation="vertical"-->
+<!--        app:layout_behavior="android.support.design.widget.BottomSheetBehavior">-->
 
-
-<!--        android:layout_marginLeft="11dp"-->
-<!--        android:layout_marginRight="11dp"-->
-<!--        android:layout_marginTop="7dp"-->
-<!--        android:layout_marginBottom="7dp"-->
-<!--        app:cardElevation="@dimen/cardview_default_elevation"-->
-<!--        app:cardCornerRadius="10dp"-->
         <androidx.cardview.widget.CardView
+            app:layout_behavior="android.support.design.widget.BottomSheetBehavior"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-
             android:layout_marginBottom="-4dp"
             android:layout_marginLeft="3dp"
             android:layout_marginStart="3dp"
@@ -51,36 +34,12 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
 
-                <FrameLayout
+                <com.google.android.material.imageview.ShapeableImageView
                     android:id="@+id/img"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
-
-<!--                    app:backgroundImage="@{offerItem.image_url_0}"-->
-                    <com.google.android.material.imageview.ShapeableImageView
-                        android:id="@+id/img2"
-                        android:layout_width="match_parent"
-                        android:layout_height="300dp"
-                        android:scaleType="centerCrop"
-                        android:transitionName="img"
-                        app:lottieView="@{lottiView}"
-                        app:imageUrl="@{offerItem.image_url_0}"
-
-                        />
-<!--                    app:lottieView="@{lottiView}"-->
-<!--                    app:imageUrl="@{offerItem.image_url_0}"-->
-
-                    <com.airbnb.lottie.LottieAnimationView
-                        android:id="@+id/lottiView"
-                        android:layout_width="match_parent"
-                        android:layout_height="300dp"
-                        app:lottie_autoPlay="true"
-                        app:lottie_rawRes="@raw/loading_dots"
-                        app:lottie_loop="true"
-                        android:padding="50dp"
-                        />
-
-                </FrameLayout>
+                    android:layout_height="300dp"
+                    android:scaleType="centerCrop"
+                    android:transitionName="img" />
 
                 <ImageView
                     android:id="@+id/shadow_bottom"
@@ -130,29 +89,14 @@
                     <!--                        android:src="@{offerItem.userimage}"-->
                     <!--                        android:transitionName="img" />-->
 
-                    <FrameLayout
-                        android:id="@+id/frame_profile_image"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content">
-                        <com.google.android.material.imageview.ShapeableImageView
-                            android:id="@+id/profileImage"
-                            android:layout_width="50dp"
-                            android:layout_height="50dp"
-                            android:scaleType="centerCrop"
-                            android:transitionName="img"
-                            android:visibility="visible"
-                            app:shapeAppearanceOverlay="@style/ShapeAppearanceOverlay.App.CornerSize50Percent"/>
-
-                        <com.airbnb.lottie.LottieAnimationView
-                            android:id="@+id/lottiViewProfile"
-                            android:layout_width="50dp"
-                            android:layout_height="50dp"
-                            app:lottie_autoPlay="true"
-                            app:lottie_rawRes="@raw/loading_circle"
-                            app:lottie_loop="true"
-                            />
-
-                    </FrameLayout>
+                    <com.google.android.material.imageview.ShapeableImageView
+                        android:id="@+id/profileImage"
+                        android:layout_width="50dp"
+                        android:layout_height="50dp"
+                        android:scaleType="centerCrop"
+                        android:transitionName="img"
+                        android:visibility="gone"
+                        app:shapeAppearanceOverlay="@style/ShapeAppearanceOverlay.App.CornerSize50Percent" />
 
                     <!--                    android:layout_toStartOf="@+id/locationLayout"-->
                     <RelativeLayout
@@ -160,7 +104,7 @@
                         android:layout_height="wrap_content"
                         android:layout_centerVertical="true"
                         android:layout_toStartOf="@+id/priceLayout"
-                        android:layout_toEndOf="@+id/frame_profile_image"
+                        android:layout_toEndOf="@+id/profileImage"
                         android:paddingStart="1dp"
                         android:paddingEnd="1dp">
 
@@ -174,7 +118,6 @@
                             android:layout_marginStart="10dp"
                             android:layout_marginEnd="10dp"
                             android:maxLines="2"
-                            android:onClick="@{()->listener.onProfileOpenedDiscover(offerItem)}"
                             android:textColor="@color/colorWhite"
                             android:textSize="18sp"
                             android:textStyle="bold" />
@@ -243,7 +186,7 @@
                         android:background="@drawable/round_white"
                         android:padding="5dp">
 
-<!--                        android:text="@{` `+`₹`+offerItem.discountPrice+` `}"-->
+                        <!--                        android:text="@{` `+`₹`+offerItem.discountPrice+` `}"-->
                         <TextView
                             android:id="@+id/DiscountedPrice"
                             android:layout_width="wrap_content"
@@ -253,9 +196,7 @@
                             android:padding="2dp"
                             android:singleLine="true"
                             android:textSize="18sp"
-                            android:textStyle="bold"
-                            app:discountedPrice="@{offerItem.discountPrice}"
-                            app:originalPrice="@{offerItem.originalPrice}" />
+                            android:textStyle="bold" />
 
                         <TextView
                             android:id="@+id/price_total"
@@ -320,7 +261,7 @@
                         android:layout_height="wrap_content">
 
                         <!--                        android:text="@{`Eligibility : `+offerItem.minPeople+`+ People`}"-->
-<!--                        android:text="@{`Quantity : `+offerItem.minPeople+` `}"-->
+                        <!--                        android:text="@{`Quantity : `+offerItem.minPeople+` `}"-->
                         <TextView
                             android:layout_centerVertical="true"
                             android:layout_alignParentStart="true"
@@ -363,7 +304,6 @@
                                 android:layout_height="18dp"
                                 android:layout_marginLeft="5dp"
                                 android:layout_marginRight="5dp"
-                                android:onClick="@{()->listener.onLocationClick()}"
                                 android:src="@drawable/ic_location_24dp" />
 
                             <TextView
@@ -372,8 +312,6 @@
                                 android:layout_height="wrap_content"
                                 android:layout_marginStart="27dp"
                                 android:layout_marginEnd="10dp"
-                                android:onClick="@{()->listener.onLocationClick()}"
-                                android:text="@{offerItem.city}"
                                 android:textColor="#606060" />
                         </RelativeLayout>
 
@@ -391,13 +329,12 @@
                         <!--                            app:mfb_favorite_image="@drawable/ic_baseline_bookmark_24" />-->
 
 
-<!--                        android:src="@drawable/ic_bookmark_border_black_24dp"-->
+                        <!--                        android:src="@drawable/ic_bookmark_border_black_24dp"-->
                         <ImageView
                             android:id="@+id/bookMark"
                             android:layout_width="30dp"
                             android:layout_height="30dp"
                             android:layout_alignParentEnd="true"
-                            android:onClick="@{()->listener.onBookMarkItemClick(offerItem,bookMark)}"
                             android:src="@drawable/ic_bookmark_border_black_24dp" />
 
 
@@ -405,18 +342,18 @@
                     </RelativeLayout>
 
 
-<!--                    android:text="@{offerItem.name}"-->
-<!--                        <TextView-->
-<!--                            android:layout_marginTop="10dp"-->
-<!--                            android:layout_width="match_parent"-->
-<!--                            android:layout_height="wrap_content"-->
-<!--                            android:fontFamily="sans-serif-light"-->
-<!--                            android:textStyle="bold"-->
-<!--                            android:layout_marginEnd="10dp"-->
-<!--                            android:text="Tipsy"-->
-<!--                            android:maxLines="2"-->
-<!--                            android:textSize="18sp"-->
-<!--                            android:id="@+id/title" />-->
+                    <!--                    android:text="@{offerItem.name}"-->
+                    <!--                        <TextView-->
+                    <!--                            android:layout_marginTop="10dp"-->
+                    <!--                            android:layout_width="match_parent"-->
+                    <!--                            android:layout_height="wrap_content"-->
+                    <!--                            android:fontFamily="sans-serif-light"-->
+                    <!--                            android:textStyle="bold"-->
+                    <!--                            android:layout_marginEnd="10dp"-->
+                    <!--                            android:text="Tipsy"-->
+                    <!--                            android:maxLines="2"-->
+                    <!--                            android:textSize="18sp"-->
+                    <!--                            android:id="@+id/title" />-->
 
 
                     <RelativeLayout
@@ -433,21 +370,19 @@
                             android:layout_toStartOf="@+id/priceCardView"
                             android:fontFamily="sans-serif-light"
                             android:maxLines="3"
-                            android:text="@{offerItem.title}"
                             android:textSize="17sp"
                             android:textStyle="bold" />
-<!--                        android:layout_toStartOf="@+id/DiscountedPrice"-->
+                        <!--                        android:layout_toStartOf="@+id/DiscountedPrice"-->
 
                         <androidx.cardview.widget.CardView
-                            android:visibility="gone"
                             android:id="@+id/priceCardView"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_alignParentEnd="true"
                             android:layout_marginTop="10dp"
                             android:layout_marginEnd="4dp"
-                            app:cardCornerRadius="10dp"
-                            app:contentPadding="5dp">
+                            android:layout_alignParentEnd="true"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            app:contentPadding="5dp"
+                            app:cardCornerRadius="10dp">
 
                             <!--                            <TextView-->
                             <!--                                android:id="@+id/DiscountedPrice"-->
@@ -472,38 +407,37 @@
                         android:layout_marginTop="5dp"
                         app:trimMode="trimModeLine"
                         app:trimLines="5"
-                        android:text="@{offerItem.description}"
                         android:layout_marginBottom="20dp"/>
 
-<!--                    <TextView-->
-<!--                        android:id="@+id/DiscountedPrice"-->
-<!--                        android:layout_width="match_parent"-->
-<!--                        android:layout_height="wrap_content"-->
-<!--                        android:textSize="24sp"-->
-<!--                        android:layout_marginTop="10dp"-->
-<!--                        android:layout_marginBottom="20dp"-->
-<!--                        android:fontFamily="sans-serif-light"-->
-<!--                        android:textStyle="bold"-->
-<!--                        android:maxLines="1"-->
-<!--                        android:singleLine="true"-->
-<!--                        android:text="@{`₹`+offerItem.discountPrice}" />-->
+                    <!--                    <TextView-->
+                    <!--                        android:id="@+id/DiscountedPrice"-->
+                    <!--                        android:layout_width="match_parent"-->
+                    <!--                        android:layout_height="wrap_content"-->
+                    <!--                        android:textSize="24sp"-->
+                    <!--                        android:layout_marginTop="10dp"-->
+                    <!--                        android:layout_marginBottom="20dp"-->
+                    <!--                        android:fontFamily="sans-serif-light"-->
+                    <!--                        android:textStyle="bold"-->
+                    <!--                        android:maxLines="1"-->
+                    <!--                        android:singleLine="true"-->
+                    <!--                        android:text="@{`₹`+offerItem.discountPrice}" />-->
 
                     <RelativeLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content">
 
-<!--                        <com.google.android.material.button.MaterialButton-->
-<!--                            android:id="@+id/Pay"-->
-<!--                            android:layout_width="wrap_content"-->
-<!--                            android:layout_height="wrap_content"-->
-<!--                            android:text="Pay"-->
-<!--                            app:backgroundTint="@color/colorAccentt"-->
-<!--                            app:cornerRadius="10dp"-->
-<!--                            android:layout_marginTop="10dp"-->
-<!--                            android:layout_marginBottom="20dp"-->
-<!--                            style="@style/Widget.MaterialComponents.Button.OutlinedButton"/>-->
+                        <!--                        <com.google.android.material.button.MaterialButton-->
+                        <!--                            android:id="@+id/Pay"-->
+                        <!--                            android:layout_width="wrap_content"-->
+                        <!--                            android:layout_height="wrap_content"-->
+                        <!--                            android:text="Pay"-->
+                        <!--                            app:backgroundTint="@color/colorAccentt"-->
+                        <!--                            app:cornerRadius="10dp"-->
+                        <!--                            android:layout_marginTop="10dp"-->
+                        <!--                            android:layout_marginBottom="20dp"-->
+                        <!--                            style="@style/Widget.MaterialComponents.Button.OutlinedButton"/>-->
 
-<!--                        android:onClick="@{()->listener.onRecyclerViewItemClick()}"-->
+                        <!--                        android:onClick="@{()->listener.onRecyclerViewItemClick()}"-->
                         <com.google.android.material.button.MaterialButton
                             android:visibility="gone"
                             android:id="@+id/Groups"
@@ -513,13 +447,12 @@
                             android:layout_alignParentEnd="true"
                             android:layout_marginTop="10dp"
                             android:layout_marginBottom="20dp"
-                            android:onClick="@{()->listener.onRecyclerViewGroupsItemClick(offerItem)}"
                             android:text="Groups"
                             app:backgroundTint="?attr/colorAccent"
                             app:cornerRadius="10dp" />
 
-<!--                        android:onClick="@={()->listener.onPlaceOrderClick(offerItem,((Integer.parseInt(offerItem.discountPrice)) * (Integer.parseInt(itemCounter.counterValue))))}"-->
-<!--&lt;!&ndash;                        &ndash;&gt;(Integer.parseInt(DiscountedPrice.text.toString()))-->
+                        <!--                        android:onClick="@={()->listener.onPlaceOrderClick(offerItem,((Integer.parseInt(offerItem.discountPrice)) * (Integer.parseInt(itemCounter.counterValue))))}"-->
+                        <!--&lt;!&ndash;                        &ndash;&gt;(Integer.parseInt(DiscountedPrice.text.toString()))-->
                         <com.google.android.material.button.MaterialButton
                             android:id="@+id/order_product"
                             style="@style/Widget.MaterialComponents.Button.OutlinedButton"
@@ -528,44 +461,43 @@
                             android:layout_alignParentEnd="true"
                             android:layout_marginTop="10dp"
                             android:layout_marginBottom="20dp"
-                            android:onClick="@{()->listener.onPlaceOrderClick(offerItem,priceTotal.getText().toString(),orderQuantityTotal.getText().toString())}"
                             android:text="Place Order"
                             android:textColor="@color/colorWhite"
                             app:backgroundTint="?attr/colorAccent"
                             app:cornerRadius="10dp" />
 
-<!--                        <TextView-->
-<!--                            android:id="@+id/source"-->
-<!--                            android:layout_width="wrap_content"-->
-<!--                            android:layout_height="20dp"-->
-<!--                            android:layout_marginTop="10dp"-->
-<!--                            android:layout_marginBottom="20dp"-->
-<!--                            android:fontFamily="sans-serif-light"-->
-<!--                            android:textStyle="bold"-->
-<!--                            android:maxLines="1"-->
-<!--                            android:textSize="16sp"-->
-<!--                            android:drawablePadding="10dp"-->
-<!--                            android:singleLine="true"-->
-<!--                            android:ellipsize="end"-->
-<!--                            android:text="Pay" />-->
+                        <!--                        <TextView-->
+                        <!--                            android:id="@+id/source"-->
+                        <!--                            android:layout_width="wrap_content"-->
+                        <!--                            android:layout_height="20dp"-->
+                        <!--                            android:layout_marginTop="10dp"-->
+                        <!--                            android:layout_marginBottom="20dp"-->
+                        <!--                            android:fontFamily="sans-serif-light"-->
+                        <!--                            android:textStyle="bold"-->
+                        <!--                            android:maxLines="1"-->
+                        <!--                            android:textSize="16sp"-->
+                        <!--                            android:drawablePadding="10dp"-->
+                        <!--                            android:singleLine="true"-->
+                        <!--                            android:ellipsize="end"-->
+                        <!--                            android:text="Pay" />-->
 
 
-<!--                        <TextView-->
-<!--                            android:layout_alignParentEnd="true"-->
-<!--                            android:id="@+id/JoinGroupRecyclerView"-->
-<!--                            android:layout_width="wrap_content"-->
-<!--                            android:fontFamily="sans-serif-light"-->
-<!--                            android:layout_height="20dp"-->
-<!--                            android:textStyle="bold"-->
-<!--                            android:textSize="16sp"-->
-<!--                            android:onClick="@{()->listener.onLocationClick()}"-->
-<!--                            android:layout_marginTop="10dp"-->
-<!--                            android:layout_marginBottom="10dp"-->
-<!--                            android:maxLines="1"-->
-<!--                            android:drawablePadding="10dp"-->
-<!--                            android:singleLine="true"-->
-<!--                            android:ellipsize="end"-->
-<!--                            android:text="Join/Create group" />-->
+                        <!--                        <TextView-->
+                        <!--                            android:layout_alignParentEnd="true"-->
+                        <!--                            android:id="@+id/JoinGroupRecyclerView"-->
+                        <!--                            android:layout_width="wrap_content"-->
+                        <!--                            android:fontFamily="sans-serif-light"-->
+                        <!--                            android:layout_height="20dp"-->
+                        <!--                            android:textStyle="bold"-->
+                        <!--                            android:textSize="16sp"-->
+                        <!--                            android:onClick="@{()->listener.onLocationClick()}"-->
+                        <!--                            android:layout_marginTop="10dp"-->
+                        <!--                            android:layout_marginBottom="10dp"-->
+                        <!--                            android:maxLines="1"-->
+                        <!--                            android:drawablePadding="10dp"-->
+                        <!--                            android:singleLine="true"-->
+                        <!--                            android:ellipsize="end"-->
+                        <!--                            android:text="Join/Create group" />-->
 
 
 
@@ -573,9 +505,12 @@
 
                 </LinearLayout>
 
+
+
+
             </RelativeLayout>
 
         </androidx.cardview.widget.CardView>
 
-    </FrameLayout>
+<!--    </LinearLayout>-->
 </layout>

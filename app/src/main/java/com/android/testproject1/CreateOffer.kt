@@ -38,6 +38,8 @@ class CreateOffer : AppCompatActivity() {
     var currentId: String? = null
     private lateinit var firestore: FirebaseFirestore
     private lateinit var firebaseAuth: FirebaseAuth
+    private lateinit var sharedPrefDynamic: SharedPreferences
+    lateinit var profileImage:String
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -46,14 +48,19 @@ class CreateOffer : AppCompatActivity() {
         setSupportActionBar(toolbarPostOffer)
 
 
+        firebaseAuth = FirebaseAuth.getInstance()
+        firestore = FirebaseFirestore.getInstance()
+        val currentUserID=firebaseAuth.currentUser?.uid.toString()
+        sharedPrefDynamic= getSharedPreferences(currentUserID, Context.MODE_PRIVATE)!!
+        profileImage= sharedPrefDynamic.getString("profileimage","").toString()
+
+
         imagesList1 = intent.getParcelableArrayListExtra<Image>("imagesList") as ArrayList<Image>
 
         if (imagesList1.isEmpty()) {
             finish()
         }
 
-        firebaseAuth = FirebaseAuth.getInstance()
-        firestore = FirebaseFirestore.getInstance()
         currentId = firebaseAuth.currentUser?.uid
         Log.d(myTag, "image list size is" + imagesList1.size.toString())
 
@@ -170,19 +177,30 @@ class CreateOffer : AppCompatActivity() {
 
                 intent.action = UploadServiceOffers.ACTION_START_FOREGROUND_SERVICE_UPLOAD_OFFERS
 
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                    startForegroundService(intent)
-
-                    Log.d(myTag, "Build Version OP")
-//                startForegroundService(activity!!,intent)
-                } else {
-
-                    Log.d(myTag, "Build Version NP")
-//                activity!!.startService(intent)
-                    startService(intent)
+                if(DiscountedPrice.text.toString().trim().isBlank() && OriginalPrice.text.toString().trim().isBlank()){
+                    Toasty.error(this,"Price is required",Toasty.LENGTH_SHORT).show()
+                }else if (profileImage.isBlank()){
+                    Toasty.error(this,"Please upload a Profile Picture",Toasty.LENGTH_SHORT).show()
+                }else if(DiscountedPrice.text.toString().trim()=="0" ||OriginalPrice.text.toString().trim()=="0" ){
+                    Toasty.error(this,"Please enter a valid price",Toasty.LENGTH_SHORT).show()
                 }
-                Toasty.info(applicationContext, "Uploading images..", Toasty.LENGTH_SHORT, true).show()
-                finish()
+                else{
+
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                        startForegroundService(intent)
+
+                        Log.d(myTag, "Build Version OP")
+//                startForegroundService(activity!!,intent)
+                    } else {
+
+                        Log.d(myTag, "Build Version NP")
+//                activity!!.startService(intent)
+                        startService(intent)
+                    }
+                    Toasty.info(applicationContext, "Uploading images..", Toasty.LENGTH_SHORT, true).show()
+                    finish()
+                }
+
 
 
             }

@@ -29,6 +29,7 @@ import com.android.testproject1.viewmodels.SignUpViewModel
 import com.google.firebase.auth.FirebaseAuth
 import com.theartofdev.edmodo.cropper.CropImage
 import com.theartofdev.edmodo.cropper.CropImageView
+import es.dmoral.toasty.Toasty
 import java.io.IOException
 
 class UploadProfilePicFragment : Fragment() {
@@ -52,23 +53,23 @@ class UploadProfilePicFragment : Fragment() {
         binding= FragmentUploadProfilePicBinding.inflate(inflater,container,false)
 
         firebaseAuth= FirebaseAuth.getInstance()
-        val username = arguments!!.getString("fullName")
-        val email=arguments!!.getString("email")
-        val password1=arguments!!.getString("password1")
-        val phoneNumber=arguments!!.getString("phoneNumber")
+//        val username = arguments!!.getString("fullName")
+//        val email=arguments!!.getString("email")
+//        val password1=arguments!!.getString("password1")
+//        val phoneNumber=arguments!!.getString("phoneNumber")
 
-        Log.d("MyTag","$")
+//        Log.d("MyTag","username is $username")
 
         mViewModel= ViewModelProvider(this, ViewModelProvider.AndroidViewModelFactory
             .getInstance(requireActivity().application))
             .get(SignUpViewModel::class.java)
 
-        mViewModel.getUserLiveData().observe(viewLifecycleOwner, Observer {
-            if (it != null) {
-                val intent = Intent(activity, MainActivity2::class.java)
-                startActivity(intent)
-            }
-        })
+//        mViewModel.getUserLiveData().observe(viewLifecycleOwner, Observer {
+//            if (it != null) {
+//                val intent = Intent(activity, MainActivity2::class.java)
+//                startActivity(intent)
+//            }
+//        })
 
         addPic()
 
@@ -85,30 +86,47 @@ class UploadProfilePicFragment : Fragment() {
 
         binding.signUp.setOnClickListener {
             if (resultUri!=null){
-                if (email != null && password1!=null && username!=null&&phoneNumber!=null) {
-                    mViewModel.register(email,password1,username,phoneNumber)
-                    val intent = Intent(requireActivity(), UploadServiceOffers::class.java)
-                    intent.putExtra("imageUri",imageUri.toString())
-                    intent.action = UploadServiceOffers.ACTION_START_FOREGROUND_SERVICE_UPLOAD_PROFILE_PIC
+                val intent = Intent(requireActivity(), UploadServiceOffers::class.java)
+                intent.putExtra("imageUri",resultUri.toString())
+                intent.action = UploadServiceOffers.ACTION_START_FOREGROUND_SERVICE_UPLOAD_PROFILE_PIC
 
-                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                        requireActivity().startForegroundService(intent)
-                    } else {
-                        requireActivity().startService(intent)
-                    }
-//                    Toasty.info(requireActivity(), "Updating Profile Picture...", Toasty.LENGTH_SHORT, true).show()
-//                    val intent2=Intent(requireActivity(),MainActivity2::class.java)
-//                    startActivity(intent2)
-
-
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                    requireActivity().startForegroundService(intent)
+                } else {
+                    requireActivity().startService(intent)
                 }
+                val intent2 = Intent(activity, MainActivity2::class.java)
+                startActivity(intent2)
+                activity?.finish()
             }else{
-                if (email != null && password1!=null && username!=null&&phoneNumber!=null) {
-                    mViewModel.register(email,password1,username,phoneNumber)
-//                    val intent2=Intent(requireActivity(),MainActivity2::class.java)
-//                    startActivity(intent2)
-                }
+                Toasty.error(requireActivity(),"Please Select a Profile Picture",Toasty.LENGTH_SHORT).show()
             }
+
+//            if (resultUri!=null){
+//                if (email != null && password1!=null && username!=null&&phoneNumber!=null) {
+//                    mViewModel.register(email,password1,username,phoneNumber)
+//                    val intent = Intent(requireActivity(), UploadServiceOffers::class.java)
+//                    intent.putExtra("imageUri",imageUri.toString())
+//                    intent.action = UploadServiceOffers.ACTION_START_FOREGROUND_SERVICE_UPLOAD_PROFILE_PIC
+//
+//                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+//                        requireActivity().startForegroundService(intent)
+//                    } else {
+//                        requireActivity().startService(intent)
+//                    }
+////                    Toasty.info(requireActivity(), "Updating Profile Picture...", Toasty.LENGTH_SHORT, true).show()
+////                    val intent2=Intent(requireActivity(),MainActivity2::class.java)
+////                    startActivity(intent2)
+//
+//
+//                }
+//            }else{
+//                if (email != null && password1!=null && username!=null&&phoneNumber!=null) {
+//                    mViewModel.register(email,password1,username,phoneNumber)
+////                    val intent2=Intent(requireActivity(),MainActivity2::class.java)
+////                    startActivity(intent2)
+//                }
+//            }
         }
 
         return binding.root

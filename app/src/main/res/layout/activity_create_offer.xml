@@ -146,6 +146,7 @@
 
                     <EditText
                         android:id="@+id/descriptionTextMain"
+                        android:maxLength="20"
                         android:maxLines="1"
                         android:inputType="text"
                         android:layout_width="match_parent"

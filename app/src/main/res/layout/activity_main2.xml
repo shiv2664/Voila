@@ -55,14 +55,13 @@
             <!--            app:backgroundTint="@color/greybackground"-->
 
         <com.google.android.material.bottomnavigation.BottomNavigationView
-            android:layout_alignParentBottom="true"
             android:id="@+id/bottomNav"
-            android:layout_gravity="bottom"
-            app:elevation="8dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:menu="@menu/bottom_menu"
-            app:itemIconTint="@color/bottom_nav_selector" />
+            android:layout_alignParentBottom="true"
+            android:layout_gravity="bottom"
+            app:itemIconTint="@color/bottom_nav_selector"
+            app:menu="@menu/mainactivity2_menu" />
 
         <androidx.fragment.app.FragmentContainerView
             android:id="@+id/fragmentContainerView2"

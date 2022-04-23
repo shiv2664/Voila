@@ -27,7 +27,20 @@
             android:layout_marginTop="36dp"
             android:layout_marginStart="48dp" />
 
+        <com.airbnb.lottie.LottieAnimationView
+            android:visibility="gone"
+            android:id="@+id/lottiView"
+            android:layout_width="match_parent"
+            android:layout_height="300dp"
+            app:lottie_autoPlay="true"
+            app:lottie_rawRes="@raw/loading_dots"
+            app:lottie_loop="true"
+            android:padding="50dp"
+            android:layout_alignParentBottom="true"
+            />
+
         <LinearLayout
+            android:id="@+id/content_layout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
@@ -40,14 +53,16 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="40dp"
                 android:layout_marginEnd="40dp"
-                app:boxStrokeColor="?attr/colorAccent"
-                app:hintTextColor="?attr/colorAccent"
+                app:boxStrokeColor="@color/colorAccent"
+                app:hintTextColor="@color/colorAccent"
+                android:textColorHint="@color/colorAccent"
                 android:hint="Email"
                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
 
                 <EditText
                     android:id="@+id/login_emailid"
                     android:inputType="textEmailAddress"
+                    android:textColor="@color/colorLoginCardBackground"
                     android:singleLine="true"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -85,8 +100,9 @@
                 android:layout_marginStart="40dp"
                 android:layout_marginEnd="40dp"
                 android:layout_marginTop="10dp"
-                app:boxStrokeColor="?attr/colorAccent"
-                app:hintTextColor="?attr/colorAccent"
+                app:boxStrokeColor="@color/colorAccent"
+                app:hintTextColor="@color/colorAccent"
+                android:textColorHint="@color/colorAccent"
                 app:passwordToggleEnabled="true"
                 android:hint="Password"
                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
@@ -94,6 +110,7 @@
                 <EditText
                     android:id="@+id/login_password"
                     android:inputType="textPassword"
+                    android:textColor="@color/colorLoginCardBackground"
                     android:singleLine="true"
                     android:fontFamily="@font/seg_ui_semibold"
                     android:layout_width="match_parent"
@@ -181,6 +198,7 @@
         </LinearLayout>
 
         <LinearLayout
+            android:id="@+id/bottom_layout"
             android:layout_marginBottom="26dp"
             android:layout_centerHorizontal="true"
             android:layout_width="wrap_content"
@@ -202,7 +220,7 @@
                 android:id="@+id/createAccount"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textColor="?attr/colorAccent"
+                android:textColor="@color/colorAccent"
                 android:textSize="18sp"
                 android:text="Register instead"
                 android:onClick="@{()->listener.onRegisterClick()}"

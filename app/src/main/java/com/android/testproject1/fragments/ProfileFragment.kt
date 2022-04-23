@@ -1,6 +1,9 @@
 package com.android.testproject1.fragments
 
+import android.content.Context
 import android.content.Intent
+import android.content.SharedPreferences
+import android.graphics.drawable.Drawable
 import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
@@ -11,6 +14,7 @@ import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.viewpager2.widget.ViewPager2
+import com.airbnb.lottie.LottieAnimationView
 import com.android.testproject1.ChatActivity
 import com.android.testproject1.MainActivity2
 import com.android.testproject1.R
@@ -24,9 +28,13 @@ import com.android.testproject1.room.enteties.OfferRoomEntity
 import com.android.testproject1.room.enteties.UserImagesRoomEntity
 import com.android.testproject1.viewmodels.ViewPagerFragmentPostViewModel
 import com.bumptech.glide.Glide
+import com.bumptech.glide.load.DataSource
+import com.bumptech.glide.load.engine.GlideException
+import com.bumptech.glide.request.RequestListener
 import com.google.android.material.tabs.TabLayout
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
+import kotlinx.android.synthetic.main.item_discover.view.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -40,6 +48,9 @@ class ProfileFragment : Fragment() {
     private lateinit var firebaseAuth: FirebaseAuth
     private lateinit var mViewModel: ViewPagerFragmentPostViewModel
 
+    private lateinit var sharedPrefDynamic: SharedPreferences
+    private lateinit var userId:String
+
 
     companion object{
         var userIdOpened:String=""
@@ -52,28 +63,38 @@ class ProfileFragment : Fragment() {
 //        requireActivity().bottomNav.menu.getItem(4).isChecked=true
 
         val offerItem=arguments?.getParcelable<OfferRoomEntity>("offerItem")
+        val userIdBundle=arguments?.getString("userId")
+        if (offerItem!=null){
 
-       val localDatabase: AppDatabase? = AppDatabase.getInstance(requireActivity())
+            userId= offerItem.userId
+        }else if (userIdBundle!=null){
+            userId= userIdBundle
+        }
+
+        val localDatabase: AppDatabase? = AppDatabase.getInstance(requireActivity())
+
+        sharedPrefDynamic= activity?.getSharedPreferences(userId,Context.MODE_PRIVATE)!!
+        val dynamicEditor= sharedPrefDynamic?.edit()
+        var firstTimeCheck= sharedPrefDynamic?.getInt("firstTimeCheck",0)
+        firstTimeCheck++
+        dynamicEditor?.putInt("firstTimeCheck",firstTimeCheck)
+        dynamicEditor?.apply()
 
         val fmc: FragmentManager = childFragmentManager
         firebaseFirestore= FirebaseFirestore.getInstance()
         firebaseAuth= FirebaseAuth.getInstance()
         val currentUserId=firebaseAuth.currentUser?.uid
 
-        if (offerItem != null) {
-            if (currentUserId==offerItem.userId){
+        if (currentUserId==userId){
 
-                binding.sendMessage.visibility=View.GONE
-            }
+            binding.sendMessage.visibility=View.GONE
         }
 
 
         mViewModel = ViewModelProvider(this, ViewModelProvider.AndroidViewModelFactory.getInstance(requireActivity().application))
             .get(ViewPagerFragmentPostViewModel::class.java)
 
-        if (offerItem != null) {
-            userIdOpened = offerItem.userId
-        }
+        userIdOpened = userId
 
 
 //        val toolbar = binding.toolbarProfile
@@ -81,36 +102,55 @@ class ProfileFragment : Fragment() {
 //        (activity as AppCompatActivity).supportActionBar?.title = "Profile"
 //        setHasOptionsMenu(true)
 
-        if (offerItem != null) {
-            binding.name.text = offerItem.name
+        if (firstTimeCheck!=1){
+
+//            binding.name.text = sharedPref?.getString("userName","")
+//            binding.email.text = sharedPref?.getString("userEmail","")
+//            binding.bio.text = sharedPref?.getString("userBio","")
+//            Glide.with(requireActivity())
+//                .load(sharedPref?.getString("profileimage",""))
+//                .into(binding.imageView)
+            binding.name.text = sharedPrefDynamic?.getString("username","")
+            binding.email.text = sharedPrefDynamic?.getString("userEmail","")
+//            binding.bio.text = sharedPrefDynamic?.getString("userBio","")
+            Glide.with(requireActivity())
+                .load(sharedPrefDynamic?.getString("profileimage",""))
+                .addListener(imageLoadingListener(binding.lottiViewProfile))
+                .into(binding.profilepic)
         }
 
         val reference=FirebaseFirestore.getInstance()
-//        val fUser=FirebaseAuth.getInstance().currentUser?.uid
-        val fUser= offerItem?.userId
-        reference.collection("Users").document(fUser.toString()).get().addOnSuccessListener {
+        val fUser= userId
+        reference.collection("Users").document(fUser).get().addOnSuccessListener {
             if (it != null) {
 
                 if (it.exists()) {
                     // convert document to POJO
-                    val notifPojo: Users? = it.toObject(Users::class.java)
 
-                    if (notifPojo != null) {
-                        if (notifPojo.profileimage.isNotEmpty()) {
-                            activity?.let { it1 -> Glide.with(it1).load(notifPojo.profileimage).into(binding.profilepic) }
-                            binding.name.text = notifPojo.name
-                            binding.email.text = notifPojo.email
+                    if (firstTimeCheck==1){
 
-                            val userImageRoomEntity: UserImagesRoomEntity? = it.toObject(UserImagesRoomEntity::class.java)
-                            CoroutineScope(Dispatchers.IO).launch {
-                                if (userImageRoomEntity != null) {
-                                    localDatabase?.appDao()?.insertImage(userImageRoomEntity)
-                                }
-                            }
-
-                        }
-                        Log.d("MyTag"," Image Url is "+notifPojo.profileimage)
+                        binding.name.text = it.getString("username")
+                        binding.email.text = it.getString("email")
+//                        binding.bio.text = it.getString("bio")
+                        Glide.with(requireActivity())
+                            .load(it.getString("profileimage"))
+                            .addListener(imageLoadingListener(binding.lottiViewProfile))
+                            .into(binding.profilepic)
                     }
+
+                    val userImageRoomEntity: UserImagesRoomEntity? = it.toObject(UserImagesRoomEntity::class.java)
+                    CoroutineScope(Dispatchers.IO).launch {
+                        if (userImageRoomEntity != null) {
+                            localDatabase?.appDao()?.insertImage(userImageRoomEntity)
+                        }
+                    }
+
+                    dynamicEditor?.putString("username",it.getString("username"))
+                    dynamicEditor?.putString("userEmail",it.getString("email"))
+                    dynamicEditor?.putString("profileimage",it.getString("profileimage"))
+                    dynamicEditor?.putString("userBio",it.getString("bio"))
+                    dynamicEditor?.apply()
+
                 }
             }
 
@@ -165,21 +205,17 @@ class ProfileFragment : Fragment() {
         }
 
         val bundle = Bundle()
-        if (offerItem != null) {
-            bundle.putString("userId",offerItem.userId)
-            bundle.putString("chatsOpened","fromProfile")
-        }
+        bundle.putString("userId",userId)
+        bundle.putString("chatsOpened","fromProfile")
 
         binding.sendMessage.setOnClickListener {
 
             val intent = Intent(activity,ChatActivity::class.java)
-            if (offerItem != null) {
-                intent.putExtra("userId",offerItem.userId)
-                intent.putExtra("chatsOpened","fromProfile")
-                intent.putExtra("openChat","openUserChat")
-                intent.putExtra("name",offerItem.name)
-                startActivity(intent)
-            }
+            intent.putExtra("userId",userId)
+            intent.putExtra("chatsOpened","fromProfile")
+            intent.putExtra("openChat","openUserChat")
+//            intent.putExtra("name",offerItem.name)
+            startActivity(intent)
 
 //            findNavController().navigate(R.id.action_profileFragment_to_chatFragment,bundle)
         }
@@ -187,6 +223,26 @@ class ProfileFragment : Fragment() {
 
 
         return binding.root
+    }
+
+    private fun imageLoadingListener(pendingImage: LottieAnimationView): RequestListener<Drawable?>? {
+        return object : RequestListener<Drawable?> {
+            override fun onLoadFailed(e: GlideException?, model: Any?, target: com.bumptech.glide.request.target.Target<Drawable?>?, isFirstResource: Boolean): Boolean {
+                return false
+            }
+
+            override fun onResourceReady(
+                resource: Drawable?,
+                model: Any?,
+                target: com.bumptech.glide.request.target.Target<Drawable?>?,
+                dataSource: DataSource?,
+                isFirstResource: Boolean
+            ): Boolean {
+                pendingImage.pauseAnimation()
+                pendingImage.visibility = View.GONE
+                return false
+            }
+        }
     }
 
 }

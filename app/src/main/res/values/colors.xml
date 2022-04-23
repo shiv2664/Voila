@@ -36,6 +36,8 @@
     <color name="colorPrimaryDark">#0045f5</color>
     <color name="colorAccent">#293859</color>
 
+    <color name="colorLoginCardBackground">#16161d</color>
+
     <color name="colorPrimaryNight">#172027</color>
     <color name="colorPrimaryNightDark">#0c151a</color>
     <color name="colorAccentNight">#5093FF</color>

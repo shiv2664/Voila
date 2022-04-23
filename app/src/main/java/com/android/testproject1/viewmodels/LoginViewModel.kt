@@ -1,6 +1,8 @@
 package com.android.testproject1.viewmodels
 
 import android.app.Application
+import android.content.Context
+import android.content.SharedPreferences
 import android.util.Log
 import android.util.Patterns
 import android.widget.EditText
@@ -20,6 +22,9 @@ import es.dmoral.toasty.Toasty
 import kotlinx.android.synthetic.main.fragment_login.*
 import java.util.HashMap
 import java.util.regex.Pattern
+import com.google.firebase.auth.FirebaseAuthException
+import com.android.testproject1.MainActivity
+import com.android.testproject1.sealedclasses.LoginUiStates
 
 
 class LoginViewModel(application: Application) : AndroidViewModel(application) {
@@ -28,10 +33,15 @@ class LoginViewModel(application: Application) : AndroidViewModel(application) {
     private val firebaseFirestore: FirebaseFirestore = FirebaseFirestore.getInstance()
     private val myTAG:String="MyTag"
 
+    var profileImage:MutableLiveData<String> = MutableLiveData()
+
     private val authAppRepository: Repository = application.let { Repository(it) }
     private val userLiveData: MutableLiveData<FirebaseUser> = authAppRepository.getUserLiveData()
 //private val userLiveData: MutableLiveData<FirebaseUser> = MutableLiveData()
     private val detailsRegisteredData: MutableLiveData<Boolean> = authAppRepository.getDetailsRegisteredData()
+
+    val uiState=MutableLiveData<LoginUiStates>()
+
 
     fun validateEmailAddress(login_emailid: TextView): Boolean {
         val email = login_emailid.text.toString().trim { it <= ' ' }
@@ -100,11 +110,35 @@ class LoginViewModel(application: Application) : AndroidViewModel(application) {
     }
 
     fun login(email: String, password: String){
+        var sharedPrefDynamic: SharedPreferences
+        uiState.value=LoginUiStates.Loading
 
         firebaseAuth.signInWithEmailAndPassword(email, password)
             .addOnCompleteListener { task ->
                 if (task.isSuccessful) {
-                    userLiveData.postValue(firebaseAuth.currentUser)
+
+                    uiState.value=LoginUiStates.Success()
+
+                    firebaseFirestore.collection("Users").document(firebaseAuth.currentUser?.uid!!)
+                        .get().addOnSuccessListener {
+                            sharedPrefDynamic= getApplication<Application>().getSharedPreferences(firebaseAuth.currentUser?.uid!!,Context.MODE_PRIVATE)!!
+                            val dynamicEditor= sharedPrefDynamic.edit()
+                            if (it.getString("profileimage").toString().isNotBlank()) {
+                                profileImage.postValue(it.getString("profileimage").toString())
+                                Log.d(myTAG, "profileImage inside $profileImage")
+                                it.getString("profileimage").toString()
+                                dynamicEditor?.putString("profileimage", it.getString("profileimage").toString())
+                                dynamicEditor?.apply()
+                                userLiveData.postValue(firebaseAuth.currentUser)
+                                userLiveData.postValue(firebaseAuth.currentUser)
+                            }
+                            userLiveData.postValue(firebaseAuth.currentUser)
+
+                        }.addOnFailureListener {
+                        Log.d(myTAG," "+it.localizedMessage)
+                        }
+
+//                    userLiveData.postValue(firebaseAuth.currentUser)
 
                     try{
 
@@ -115,18 +149,38 @@ class LoginViewModel(application: Application) : AndroidViewModel(application) {
                                     Log.d(myTAG, tokenId)
                                     val currentId = firebaseAuth.currentUser?.uid.toString()
                                     firebaseFirestore.collection("Tokens").document(currentId).get().addOnSuccessListener {
-                                        val tokenMap2: MutableMap<String, Any> = HashMap()
-                                        tokenMap2["id"] = tokenId
-                                        firebaseFirestore.collection("Tokens")
-                                            .document(currentId)
-                                            .update(tokenMap2)
-                                            .addOnSuccessListener(OnSuccessListener<Void?> {
-                                                Log.d(myTAG, "token Updated")
+                                        if (it.exists()){
 
-                                            }).addOnFailureListener(OnFailureListener {
-                                                Log.d(myTAG, "token NotUpdated")
-                                                Log.d(myTAG, ""+it.localizedMessage?.toString())
-                                            }) }
+                                            val tokenMap2: MutableMap<String, Any> = HashMap()
+                                            tokenMap2["id"] = tokenId
+                                            firebaseFirestore.collection("Tokens")
+                                                .document(currentId)
+                                                .update(tokenMap2)
+                                                .addOnSuccessListener(OnSuccessListener<Void?> {
+                                                    Log.d(myTAG, "token Updated")
+
+                                                }).addOnFailureListener(OnFailureListener {
+                                                    Log.d(myTAG, "token NotUpdated")
+                                                    Log.d(myTAG, ""+it.localizedMessage?.toString())
+                                                })
+                                        }else if (!it.exists()){
+
+                                            val tokenMap2: MutableMap<String, Any> = HashMap()
+                                            tokenMap2["id"] = tokenId
+                                            firebaseFirestore.collection("Tokens")
+                                                .document(currentId)
+                                                .set(tokenMap2)
+                                                .addOnSuccessListener(OnSuccessListener<Void?> {
+                                                    Log.d(myTAG, "token Updated")
+
+                                                }).addOnFailureListener(OnFailureListener {
+                                                    Log.d(myTAG, "token NotUpdated")
+                                                    Log.d(myTAG, ""+it.localizedMessage?.toString())
+                                                })
+
+                                        }
+
+                                    }
                                 }
                                 else{
                                     Log.d(myTAG,"error is "+" ")
@@ -161,26 +215,127 @@ class LoginViewModel(application: Application) : AndroidViewModel(application) {
 
 
                 } else if (!task.isSuccessful) {
-                    try {
-                        throw task.exception!!
-                    } catch (e: FirebaseAuthWeakPasswordException) {
-                        Log.d(myTAG, e.message!!+"FirebaseAuthWeakPasswordException")
-                        Toasty.error(getApplication(), "Weak Password", Toasty.LENGTH_SHORT, true).show()
-                    } catch (e: FirebaseAuthInvalidCredentialsException) {
-                        Log.d(myTAG, e.message!!+"FirebaseAuthInvalidCredentialsException")
-                        Toasty.error(getApplication(), "Invalid Credentials", Toasty.LENGTH_SHORT, true).show()
-                    } catch (e: FirebaseAuthUserCollisionException) {
-                        Log.d(myTAG, e.message!!+"FirebaseAuthUserCollisionException")
-                        Toasty.error(getApplication(), "User already exists", Toasty.LENGTH_SHORT, true).show()
-                    } catch (e: Exception) {
-                        Log.d(myTAG, e.message!!)
-                    }catch (e: FirebaseAuthEmailException){
-                        Log.d(myTAG, e.message!!+"FirebaseAuthEmailException")
-                        Toasty.error(getApplication(), "Invalid Email", Toasty.LENGTH_SHORT, true).show()
-                    } catch (e: FirebaseAuthInvalidUserException){
-                        Log.d(myTAG, e.message!!+"FirebaseAuthInvalidUserException")
-                        Toasty.error(getApplication(), "Invalid User", Toasty.LENGTH_SHORT, true).show()
+
+                    uiState.value=LoginUiStates.Error()
+
+                    when ((task.exception as FirebaseAuthException?)!!.errorCode) {
+                        "ERROR_INVALID_CUSTOM_TOKEN" -> Toast.makeText(getApplication(),
+                            "The custom token format is incorrect. Please check the documentation."
+                            ,Toast.LENGTH_LONG).show()
+                        "ERROR_CUSTOM_TOKEN_MISMATCH" -> Toast.makeText(getApplication(),
+                            "The custom token corresponds to a different audience."
+                            , Toast.LENGTH_LONG).show()
+                        "ERROR_INVALID_CREDENTIAL" -> Toast.makeText(
+                            getApplication(),
+                            "The supplied auth credential is malformed or has expired.",
+                            Toast.LENGTH_LONG
+                        ).show()
+                        "ERROR_INVALID_EMAIL" -> {
+                            Toast.makeText(
+                                getApplication(),
+                                "The email address is badly formatted.",
+                                Toast.LENGTH_LONG
+                            ).show()
+//                            etEmail.setError("The email address is badly formatted.")
+//                            etEmail.requestFocus()
+                        }
+                        "ERROR_WRONG_PASSWORD" -> {
+                            Toast.makeText(
+                                getApplication(),
+                                "The password is invalid or the user does not have a password.",
+                                Toast.LENGTH_LONG
+                            ).show()
+//                            etPassword.setError("password is incorrect ")
+//                            etPassword.requestFocus()
+//                            etPassword.setText("")
+                        }
+                        "ERROR_USER_MISMATCH" -> Toast.makeText(
+                            getApplication(),
+                            "The supplied credentials do not correspond to the previously signed in user.",
+                            Toast.LENGTH_LONG
+                        ).show()
+                        "ERROR_REQUIRES_RECENT_LOGIN" -> Toast.makeText(
+                            getApplication(),
+                            "This operation is sensitive and requires recent authentication. Log in again before retrying this request.",
+                            Toast.LENGTH_LONG
+                        ).show()
+                        "ERROR_ACCOUNT_EXISTS_WITH_DIFFERENT_CREDENTIAL" -> Toast.makeText(
+                            getApplication(),
+                            "An account already exists with the same email address but different sign-in credentials. Sign in using a provider associated with this email address.",
+                            Toast.LENGTH_LONG
+                        ).show()
+                        "ERROR_EMAIL_ALREADY_IN_USE" -> {
+                            Toast.makeText(
+                                getApplication(),
+                                "The email address is already in use by another account.   ",
+                                Toast.LENGTH_LONG
+                            ).show()
+//                            etEmail.setError("The email address is already in use by another account.")
+//                            etEmail.requestFocus()
+                        }
+                        "ERROR_CREDENTIAL_ALREADY_IN_USE" -> Toast.makeText(
+                            getApplication(),
+                            "This credential is already associated with a different user account.",
+                            Toast.LENGTH_LONG
+                        ).show()
+                        "ERROR_USER_DISABLED" -> Toast.makeText(
+                            getApplication(),
+                            "The user account has been disabled by an administrator.",
+                            Toast.LENGTH_LONG
+                        ).show()
+                        "ERROR_USER_TOKEN_EXPIRED" -> Toast.makeText(
+                            getApplication(),
+                            "The user\\'s credential is no longer valid. The user must sign in again.",
+                            Toast.LENGTH_LONG
+                        ).show()
+                        "ERROR_USER_NOT_FOUND" -> Toast.makeText(
+                            getApplication(),
+                            "There is no user record corresponding to this identifier. The user may have been deleted.",
+                            Toast.LENGTH_LONG
+                        ).show()
+                        "ERROR_INVALID_USER_TOKEN" -> Toast.makeText(
+                            getApplication(),
+                            "The user\\'s credential is no longer valid. The user must sign in again.",
+                            Toast.LENGTH_LONG
+                        ).show()
+                        "ERROR_OPERATION_NOT_ALLOWED" -> Toast.makeText(
+                            getApplication(),
+                            "This operation is not allowed. You must enable this service in the console.",
+                            Toast.LENGTH_LONG
+                        ).show()
+                        "ERROR_WEAK_PASSWORD" -> {
+                            Toast.makeText(
+                                getApplication(),
+                                "The given password is invalid.",
+                                Toast.LENGTH_LONG
+                            ).show()
+//                            etPassword.setError("The password is invalid it must 6 characters at least")
+//                            etPassword.requestFocus()
+                        }
                     }
+
+
+
+//                    try {
+//                        throw task.exception!!
+//                    } catch (e: FirebaseAuthWeakPasswordException) {
+//                        Log.d(myTAG, e.message!!+"FirebaseAuthWeakPasswordException")
+//                        Toasty.error(getApplication(), "Weak Password", Toasty.LENGTH_SHORT, true).show()
+//                    } catch (e: FirebaseAuthInvalidCredentialsException) {
+//                        Log.d(myTAG, e.message!!+"FirebaseAuthInvalidCredentialsException")
+//                        Toasty.error(getApplication(), "Invalid Credentials", Toasty.LENGTH_SHORT, true).show()
+//                    } catch (e: FirebaseAuthUserCollisionException) {
+//                        Log.d(myTAG, e.message!!+"FirebaseAuthUserCollisionException")
+//                        Toasty.error(getApplication(), "User already exists", Toasty.LENGTH_SHORT, true).show()
+//                    } catch (e: Exception) {
+//                        Log.d(myTAG, e.message!!)
+//                    }catch (e: FirebaseAuthEmailException){
+//                        Log.d(myTAG, e.message!!+"FirebaseAuthEmailException")
+//                        Toasty.error(getApplication(), "Invalid Email", Toasty.LENGTH_SHORT, true).show()
+//                    } catch (e: FirebaseAuthInvalidUserException){
+//                        Log.d(myTAG, e.message!!+"FirebaseAuthInvalidUserException")
+//                        Toasty.error(getApplication(), "Invalid User", Toasty.LENGTH_SHORT, true).show()
+//                    }
                 }
 
             }
@@ -194,6 +349,11 @@ class LoginViewModel(application: Application) : AndroidViewModel(application) {
     @JvmName("getUserLiveData1")
     fun getUserLiveData(): MutableLiveData<FirebaseUser> {
         return userLiveData
+    }
+
+    @JvmName("getUserProfileImage")
+    fun getUserProfileImage(): MutableLiveData<String> {
+        return profileImage
     }
 
 

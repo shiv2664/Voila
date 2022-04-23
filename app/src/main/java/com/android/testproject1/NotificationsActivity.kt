@@ -6,24 +6,30 @@ import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
+import android.widget.ImageView
 import android.widget.LinearLayout
 import androidx.appcompat.widget.Toolbar
 import androidx.databinding.DataBindingUtil
+import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.afollestad.materialdialogs.MaterialDialog
 import com.android.testproject1.databinding.ActivityNotificationsBinding
+import com.android.testproject1.fragments.ProfileOpened
 import com.android.testproject1.interfaces.IMainActivity
 import com.android.testproject1.room.enteties.NotificationsRoomEntity
 import com.android.testproject1.model.Users
 import com.android.testproject1.room.enteties.OfferRoomEntity
+import com.android.testproject1.room.enteties.OffersSavedRoomEntity
 import com.android.testproject1.room.enteties.UsersChatListEntity
 import com.android.testproject1.viewmodels.NotificationsActivityViewModel
 import com.google.android.material.button.MaterialButton
 import com.google.firebase.firestore.FirebaseFirestore
 import es.dmoral.toasty.Toasty
+import kotlinx.android.synthetic.main.activity_notifications.*
 
 
 class NotificationsActivity : AppCompatActivity(),IMainActivity {
@@ -33,6 +39,10 @@ class NotificationsActivity : AppCompatActivity(),IMainActivity {
     private val refreshLayout: SwipeRefreshLayout? = null
     private lateinit var binding:ActivityNotificationsBinding
     private lateinit var mViewModel:NotificationsActivityViewModel
+
+    private var clear: MenuItem? = null
+
+    private var fragmentmanager: FragmentManager?=null
 
     private lateinit var firebaseFirestore:FirebaseFirestore
 
@@ -143,6 +153,7 @@ class NotificationsActivity : AppCompatActivity(),IMainActivity {
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         val menuInflater = menuInflater
         menuInflater.inflate(R.menu.menu_notifications, menu)
+        clear = menu?.findItem(R.id.action_clear)
         return super.onCreateOptionsMenu(menu)
     }
 
@@ -216,6 +227,25 @@ class NotificationsActivity : AppCompatActivity(),IMainActivity {
         TODO("Not yet implemented")
     }
 
+    override fun onUserNamePicClick(userId: String?, orderTo: String?) {
+        binding.recyclerViewContainer.visibility=View.GONE
+        val bundle= Bundle()
+        bundle.putString("userId",userId)
+        clear?.isVisible = false
+        toolbar.title = "Profile"
+
+        val fragment: Fragment =ProfileOpened()
+        fragment.arguments=bundle
+
+        fragmentmanager= supportFragmentManager
+        fragmentmanager!!
+            .beginTransaction()
+            .setCustomAnimations(R.anim.right_enter,R.anim.left_out)
+            .add(R.id.fragment_container2, fragment)
+            .commit()
+
+    }
+
     override fun onAcceptClick(
         notificationsRoomEntityItem: NotificationsRoomEntity,
         reject: MaterialButton,
@@ -225,7 +255,9 @@ class NotificationsActivity : AppCompatActivity(),IMainActivity {
         linearLayout: LinearLayout,
         linearlayout2: LinearLayout,
         linearLayout3: LinearLayout,
-        linearlayout4: LinearLayout
+        linearlayout4: LinearLayout,
+        CancelLayout: LinearLayout,
+        RejectedLayout: LinearLayout
     ) {
 
         linearLayout.visibility=View.GONE
@@ -234,20 +266,23 @@ class NotificationsActivity : AppCompatActivity(),IMainActivity {
         linearlayout4.visibility=View.GONE
 
         val notificationRef = notificationsRoomEntityItem.orderTo?.let {
-                firebaseFirestore.collection("Users").document(it)
-                    .collection("Info_Notifications").document(notificationsRoomEntityItem.idOrder)
-            }
+            firebaseFirestore.collection("Users").document(it)
+                .collection("Info_Notifications").document(notificationsRoomEntityItem.idOrder)
+        }
 
+        //order history of user who received notification
         val orderRef = notificationsRoomEntityItem.orderTo?.let {
             firebaseFirestore.collection("Users").document(it)
                 .collection("Orders").document(notificationsRoomEntityItem.idOrder)
         }
 
+        //order history of user who sent order
         val orderRef2 = notificationsRoomEntityItem.orderFrom?.let {
             firebaseFirestore.collection("Users").document(it)
                 .collection("Orders").document(notificationsRoomEntityItem.idOrder)
         }
 
+        //update recent notification of user who received notification
         notificationsRoomEntityItem.orderTo?.let {
             firebaseFirestore.collection("Users").document(it)
                 .collection("Info_Notifications").document("recentOrder")
@@ -260,21 +295,21 @@ class NotificationsActivity : AppCompatActivity(),IMainActivity {
                     }
                 }
         }?.continueWith {
+            //update recent order of user who sent order
             notificationsRoomEntityItem.orderFrom?.let {
                 firebaseFirestore.collection("Users").document(it)
                     .collection("Orders").document("recentOrder")
                     .get().addOnSuccessListener {
                         val recentOrder=it.toObject(NotificationsRoomEntity::class.java)
                         if (recentOrder?.idOrder==notificationsRoomEntityItem.idOrder){
-                            firebaseFirestore.collection("Users").document(notificationsRoomEntityItem.orderTo!!)
-                                .collection("Info_Notifications").document("recentOrder")
+                            firebaseFirestore.collection("Users").document(notificationsRoomEntityItem.orderFrom!!)
+                                .collection("Orders").document("recentOrder")
                                 .update("status","Accepted")
                         }
                     }
-
             }
-
         }?.continueWith {
+            //update recent order of user who received order
             notificationsRoomEntityItem.orderTo?.let {
                 firebaseFirestore.collection("Users").document(it)
                     .collection("Orders").document("recentOrder")
@@ -282,23 +317,21 @@ class NotificationsActivity : AppCompatActivity(),IMainActivity {
                         val recentOrder=it.toObject(NotificationsRoomEntity::class.java)
                         if (recentOrder?.idOrder==notificationsRoomEntityItem.idOrder){
                             firebaseFirestore.collection("Users").document(notificationsRoomEntityItem.orderTo!!)
-                                .collection("Info_Notifications").document("recentOrder")
+                                .collection("Orders").document("recentOrder")
                                 .update("status","Accepted")
                         }
                     }
             }
-
         }?.continueWith {
-
-            orderRef2?.update("status","Accepted")?.continueWith {
-                notificationRef?.update("status","Accepted")?.continueWith {
-                    orderRef?.update("status","Accepted") } }?.addOnSuccessListener {
-//                Toasty.success(this,"Order Accepted",Toasty.LENGTH_SHORT).show()
+            orderRef2?.update("status", "Accepted")?.continueWith {
+                notificationRef?.update("status", "Accepted")?.continueWith {
+                    orderRef?.update("status", "Accepted") }
+            }?.addOnSuccessListener {
+//                Toasty.success(this, "Order Ready Sent", Toasty.LENGTH_SHORT).show()
             }
         }?.addOnSuccessListener {
-            Toasty.success(this,"Order Accepted",Toasty.LENGTH_SHORT).show()
+            Toasty.normal(this, "Accepted", Toasty.LENGTH_SHORT).show()
         }
-
 
     }
 
@@ -310,13 +343,277 @@ class NotificationsActivity : AppCompatActivity(),IMainActivity {
         linearLayout: LinearLayout,
         linearLayout2: LinearLayout,
         linearLayout3: LinearLayout,
-        linearLayout4: LinearLayout
+        linearLayout4: LinearLayout,
+        CancelLayout: LinearLayout,
+        RejectedLayout: LinearLayout
     ) {
 
         linearLayout.visibility=View.GONE
         linearLayout2.visibility=View.GONE
         linearLayout3.visibility=View.VISIBLE
         linearLayout4.visibility=View.GONE
+
+        //notifications of user who received order
+        val notificationRef = notificationsRoomEntityItem.orderTo?.let {
+            firebaseFirestore.collection("Users").document(it)
+                .collection("Info_Notifications").document(notificationsRoomEntityItem.idOrder)
+        }
+
+        //order history of user who received notification
+        val orderRef = notificationsRoomEntityItem.orderTo?.let {
+            firebaseFirestore.collection("Users").document(it)
+                .collection("Orders").document(notificationsRoomEntityItem.idOrder)
+        }
+
+        //order history of user who sent order
+        val orderRef2 = notificationsRoomEntityItem.orderFrom?.let {
+            firebaseFirestore.collection("Users").document(it)
+                .collection("Orders").document(notificationsRoomEntityItem.idOrder)
+        }
+
+        //update recent notification of user who received notification
+        notificationsRoomEntityItem.orderTo?.let {
+            firebaseFirestore.collection("Users").document(it)
+                .collection("Info_Notifications").document("recentOrder")
+                .get().addOnSuccessListener {
+                    val recentOrder=it.toObject(NotificationsRoomEntity::class.java)
+                    if (recentOrder?.idOrder==notificationsRoomEntityItem.idOrder){
+                        firebaseFirestore.collection("Users").document(notificationsRoomEntityItem.orderTo!!)
+                            .collection("Info_Notifications").document("recentOrder")
+                            .update("status","Order Ready")
+                    }
+                }
+        }?.continueWith {
+            //update recent order of user who sent order
+            notificationsRoomEntityItem.orderFrom?.let {
+                firebaseFirestore.collection("Users").document(it)
+                    .collection("Orders").document("recentOrder")
+                    .get().addOnSuccessListener {
+                        val recentOrder=it.toObject(NotificationsRoomEntity::class.java)
+                        if (recentOrder?.idOrder==notificationsRoomEntityItem.idOrder){
+                            firebaseFirestore.collection("Users").document(notificationsRoomEntityItem.orderFrom!!)
+                                .collection("Orders").document("recentOrder")
+                                .update("status","Order Ready")
+                        }
+                    }
+            }
+        }?.continueWith {
+            //update recent order of user who received order
+            notificationsRoomEntityItem.orderTo?.let {
+                firebaseFirestore.collection("Users").document(it)
+                    .collection("Orders").document("recentOrder")
+                    .get().addOnSuccessListener {
+                        val recentOrder=it.toObject(NotificationsRoomEntity::class.java)
+                        if (recentOrder?.idOrder==notificationsRoomEntityItem.idOrder){
+                            firebaseFirestore.collection("Users").document(notificationsRoomEntityItem.orderTo!!)
+                                .collection("Orders").document("recentOrder")
+                                .update("status","Order Ready")
+                        }
+                    }
+            }
+        }?.continueWith {
+            orderRef2?.update("status", "Order Ready")?.continueWith {
+                notificationRef?.update("status", "Order Ready")?.continueWith {
+                    orderRef?.update("status", "Order Ready") }
+            }?.addOnSuccessListener {
+//                Toasty.success(this, "Order Ready Sent", Toasty.LENGTH_SHORT).show()
+            }
+        }?.addOnSuccessListener {
+            Toasty.normal(this, "Order Ready", Toasty.LENGTH_SHORT).show()
+        }
+
+    }
+
+    override fun onWaitingClicked(
+        notificationsRoomEntityItem: NotificationsRoomEntity,
+        linearLayout: LinearLayout,
+        linearLayout2: LinearLayout,
+        linearLayout3: LinearLayout,
+        linearLayout4: LinearLayout,
+        CancelLayout: LinearLayout,
+        RejectedLayout: LinearLayout
+    ) {
+        linearLayout.visibility=View.GONE
+        linearLayout2.visibility=View.GONE
+        linearLayout3.visibility=View.GONE
+        linearLayout4.visibility=View.VISIBLE
+
+        //notifications of user who received order
+        val notificationRef = notificationsRoomEntityItem.orderTo?.let {
+            firebaseFirestore.collection("Users").document(it)
+                .collection("Info_Notifications").document(notificationsRoomEntityItem.idOrder)
+        }
+
+        //order history of user who received notification
+        val orderRef = notificationsRoomEntityItem.orderTo?.let {
+            firebaseFirestore.collection("Users").document(it)
+                .collection("Orders").document(notificationsRoomEntityItem.idOrder)
+        }
+
+        //order history of user who sent order
+        val orderRef2 = notificationsRoomEntityItem.orderFrom?.let {
+            firebaseFirestore.collection("Users").document(it)
+                .collection("Orders").document(notificationsRoomEntityItem.idOrder)
+        }
+
+        //update recent notification of user who received notification
+        notificationsRoomEntityItem.orderTo?.let {
+            firebaseFirestore.collection("Users").document(it)
+                .collection("Info_Notifications").document("recentOrder")
+                .get().addOnSuccessListener {
+                    val recentOrder=it.toObject(NotificationsRoomEntity::class.java)
+                    if (recentOrder?.idOrder==notificationsRoomEntityItem.idOrder){
+                        firebaseFirestore.collection("Users").document(notificationsRoomEntityItem.orderTo!!)
+                            .collection("Info_Notifications").document("recentOrder")
+                            .update("status","Delivered")
+                    }
+                }
+        }?.continueWith {
+            //update recent order of user who sent order
+            notificationsRoomEntityItem.orderFrom?.let {
+                firebaseFirestore.collection("Users").document(it)
+                    .collection("Orders").document("recentOrder")
+                    .get().addOnSuccessListener {
+                        val recentOrder=it.toObject(NotificationsRoomEntity::class.java)
+                        if (recentOrder?.idOrder==notificationsRoomEntityItem.idOrder){
+                            firebaseFirestore.collection("Users").document(notificationsRoomEntityItem.orderFrom!!)
+                                .collection("Orders").document("recentOrder")
+                                .update("status","Delivered")
+                        }
+                    }
+            }
+        }?.continueWith {
+            //update recent order of user who received order
+            notificationsRoomEntityItem.orderTo?.let {
+                firebaseFirestore.collection("Users").document(it)
+                    .collection("Orders").document("recentOrder")
+                    .get().addOnSuccessListener {
+                        val recentOrder=it.toObject(NotificationsRoomEntity::class.java)
+                        if (recentOrder?.idOrder==notificationsRoomEntityItem.idOrder){
+                            firebaseFirestore.collection("Users").document(notificationsRoomEntityItem.orderTo!!)
+                                .collection("Orders").document("recentOrder")
+                                .update("status","Delivered")
+                        }
+                    }
+            }
+        }?.continueWith {
+            orderRef2?.update("status", "Delivered")?.continueWith {
+                notificationRef?.update("status", "Delivered")?.continueWith {
+                    orderRef?.update("status", "Delivered") }
+            }?.addOnSuccessListener {
+//                Toasty.success(this, "Order Ready Sent", Toasty.LENGTH_SHORT).show()
+            }
+        }?.addOnSuccessListener {
+            Toasty.normal(this, "Delivered", Toasty.LENGTH_SHORT).show()
+        }
+
+
+    }
+
+    override fun onRejectClick(
+        notificationsRoomEntityItem: NotificationsRoomEntity,
+        linearLayout: LinearLayout,
+        linearlayout2: LinearLayout,
+        linearLayout3: LinearLayout,
+        linearlayout4: LinearLayout,
+        CancelLayout: LinearLayout,
+        RejectedLayout: LinearLayout
+    ) {
+
+        linearLayout.visibility=View.GONE
+        linearlayout2.visibility=View.GONE
+        linearLayout3.visibility=View.GONE
+        linearlayout4.visibility=View.GONE
+        CancelLayout.visibility=View.GONE
+        RejectedLayout.visibility=View.VISIBLE
+
+        //notifications of user who received order
+        val notificationRef = notificationsRoomEntityItem.orderTo?.let {
+            firebaseFirestore.collection("Users").document(it)
+                .collection("Info_Notifications").document(notificationsRoomEntityItem.idOrder)
+        }
+
+        //order history of user who received notification
+        val orderRef = notificationsRoomEntityItem.orderTo?.let {
+            firebaseFirestore.collection("Users").document(it)
+                .collection("Orders").document(notificationsRoomEntityItem.idOrder)
+        }
+
+        //order history of user who sent order
+        val orderRef2 = notificationsRoomEntityItem.orderFrom?.let {
+            firebaseFirestore.collection("Users").document(it)
+                .collection("Orders").document(notificationsRoomEntityItem.idOrder)
+        }
+
+        //update recent notification of user who received notification
+        notificationsRoomEntityItem.orderTo?.let {
+            firebaseFirestore.collection("Users").document(it)
+                .collection("Info_Notifications").document("recentOrder")
+                .get().addOnSuccessListener {
+                    val recentOrder=it.toObject(NotificationsRoomEntity::class.java)
+                    if (recentOrder?.idOrder==notificationsRoomEntityItem.idOrder){
+                        firebaseFirestore.collection("Users").document(notificationsRoomEntityItem.orderTo!!)
+                            .collection("Info_Notifications").document("recentOrder")
+                            .update("status","Order Rejected")
+                    }
+                }
+        }?.continueWith {
+            //update recent order of user who sent order
+            notificationsRoomEntityItem.orderFrom?.let {
+                firebaseFirestore.collection("Users").document(it)
+                    .collection("Orders").document("recentOrder")
+                    .get().addOnSuccessListener {
+                        val recentOrder=it.toObject(NotificationsRoomEntity::class.java)
+                        if (recentOrder?.idOrder==notificationsRoomEntityItem.idOrder){
+                            firebaseFirestore.collection("Users").document(notificationsRoomEntityItem.orderFrom!!)
+                                .collection("Orders").document("recentOrder")
+                                .update("status","Order Rejected")
+                        }
+                    }
+            }
+        }?.continueWith {
+            //update recent order of user who received order
+            notificationsRoomEntityItem.orderTo?.let {
+                firebaseFirestore.collection("Users").document(it)
+                    .collection("Orders").document("recentOrder")
+                    .get().addOnSuccessListener {
+                        val recentOrder=it.toObject(NotificationsRoomEntity::class.java)
+                        if (recentOrder?.idOrder==notificationsRoomEntityItem.idOrder){
+                            firebaseFirestore.collection("Users").document(notificationsRoomEntityItem.orderTo!!)
+                                .collection("Orders").document("recentOrder")
+                                .update("status","Order Rejected")
+                        }
+                    }
+            }
+        }?.continueWith {
+            orderRef2?.update("status", "Order Rejected")?.continueWith {
+                notificationRef?.update("status", "Order Rejected")?.continueWith {
+                    orderRef?.update("status", "Order Rejected") }
+            }?.addOnSuccessListener {
+//                Toasty.success(this, "Order Ready Sent", Toasty.LENGTH_SHORT).show()
+            }
+        }?.addOnSuccessListener {
+            Toasty.normal(this, "Order Rejected", Toasty.LENGTH_SHORT).show()
+        }
+
+    }
+
+    override fun onCancelClick(
+        notificationsRoomEntityItem: NotificationsRoomEntity,
+        linearLayout: LinearLayout,
+        linearlayout2: LinearLayout,
+        linearLayout3: LinearLayout,
+        linearlayout4: LinearLayout,
+        CancelLayout: LinearLayout,
+        RejectedLayout: LinearLayout
+    ) {
+        linearLayout.visibility=View.GONE
+        linearlayout2.visibility=View.GONE
+        linearLayout3.visibility=View.GONE
+        linearlayout4.visibility=View.GONE
+        CancelLayout.visibility=View.GONE
+        RejectedLayout.visibility=View.GONE
+        CancelLayout.visibility=View.VISIBLE
 
         val notificationRef = notificationsRoomEntityItem.orderTo?.let {
             firebaseFirestore.collection("Users").document(it)
@@ -341,7 +638,7 @@ class NotificationsActivity : AppCompatActivity(),IMainActivity {
                     if (recentOrder?.idOrder==notificationsRoomEntityItem.idOrder){
                         firebaseFirestore.collection("Users").document(notificationsRoomEntityItem.orderTo!!)
                             .collection("Info_Notifications").document("recentOrder")
-                            .update("status","Order Ready")
+                            .update("status","Order Cancelled")
                     }
                 }
         }?.continueWith {
@@ -353,7 +650,7 @@ class NotificationsActivity : AppCompatActivity(),IMainActivity {
                         if (recentOrder?.idOrder==notificationsRoomEntityItem.idOrder){
                             firebaseFirestore.collection("Users").document(notificationsRoomEntityItem.orderTo!!)
                                 .collection("Info_Notifications").document("recentOrder")
-                                .update("status","Order Ready")
+                                .update("status","Order Cancelled")
                         }
                     }
             }
@@ -366,99 +663,24 @@ class NotificationsActivity : AppCompatActivity(),IMainActivity {
                         if (recentOrder?.idOrder==notificationsRoomEntityItem.idOrder){
                             firebaseFirestore.collection("Users").document(notificationsRoomEntityItem.orderTo!!)
                                 .collection("Info_Notifications").document("recentOrder")
-                                .update("status","Order Ready")
+                                .update("status","Order Cancelled")
                         }
                     }
             }
         }?.continueWith {
             orderRef2?.update("status", "Order Ready")?.continueWith {
-                notificationRef?.update("status", "Order Ready")?.continueWith {
-                    orderRef?.update("status", "Order Ready") }
+                notificationRef?.update("status", "Order Cancelled")?.continueWith {
+                    orderRef?.update("status", "Order Cancelled") }
             }?.addOnSuccessListener {
 //                Toasty.success(this, "Order Ready Sent", Toasty.LENGTH_SHORT).show()
             }
         }?.addOnSuccessListener {
-            Toasty.success(this, "Order Ready Sent", Toasty.LENGTH_SHORT).show()
+            Toasty.normal(this, "Order Cancelled", Toasty.LENGTH_SHORT).show()
         }
-
     }
 
-    override fun onWaitingClicked(
-        notificationItem: NotificationsRoomEntity,
-        linearLayout: LinearLayout,
-        linearLayout2: LinearLayout,
-        linearLayout3: LinearLayout,
-        linearLayout4: LinearLayout
-    ) {
-        linearLayout.visibility=View.GONE
-        linearLayout2.visibility=View.GONE
-        linearLayout3.visibility=View.GONE
-        linearLayout4.visibility=View.VISIBLE
-
-        val notificationRef = notificationItem.orderTo?.let {
-            firebaseFirestore.collection("Users").document(it)
-                .collection("Info_Notifications").document(notificationItem.idOrder)
-        }
-
-        val orderRef = notificationItem.orderTo?.let {
-            firebaseFirestore.collection("Users").document(it)
-                .collection("Orders").document(notificationItem.idOrder)
-        }
-
-        val orderRef2 = notificationItem.orderFrom?.let {
-            firebaseFirestore.collection("Users").document(it)
-                .collection("Orders").document(notificationItem.idOrder)
-        }
-
-        notificationItem.orderTo?.let {
-            firebaseFirestore.collection("Users").document(it)
-                .collection("Info_Notifications").document("recentOrder")
-                .get().addOnSuccessListener {
-                    val recentOrder=it.toObject(NotificationsRoomEntity::class.java)
-                    if (recentOrder?.idOrder==notificationItem.idOrder){
-                        firebaseFirestore.collection("Users").document(notificationItem.orderTo!!)
-                            .collection("Info_Notifications").document("recentOrder")
-                            .update("status","Delivered")
-                    }
-                }
-        }?.continueWith {
-            notificationItem.orderFrom?.let {
-                firebaseFirestore.collection("Users").document(it)
-                    .collection("Orders").document("recentOrder")
-                    .get().addOnSuccessListener {
-                        val recentOrder=it.toObject(NotificationsRoomEntity::class.java)
-                        if (recentOrder?.idOrder==notificationItem.idOrder){
-                            firebaseFirestore.collection("Users").document(notificationItem.orderTo!!)
-                                .collection("Info_Notifications").document("recentOrder")
-                                .update("status","Delivered")
-                        }
-                    }
-            }
-        }?.continueWith {
-            notificationItem.orderTo?.let {
-                firebaseFirestore.collection("Users").document(it)
-                    .collection("Orders").document("recentOrder")
-                    .get().addOnSuccessListener {
-                        val recentOrder = it.toObject(NotificationsRoomEntity::class.java)
-                        if (recentOrder?.idOrder == notificationItem.idOrder) {
-                            firebaseFirestore.collection("Users")
-                                .document(notificationItem.orderTo!!)
-                                .collection("Info_Notifications").document("recentOrder")
-                                .update("status", "Delivered")
-                        }
-                    }
-            }
-        }?.continueWith {
-            orderRef2?.update("status","Delivered")?.continueWith {
-                notificationRef?.update("status","Delivered")?.continueWith {
-                    orderRef?.update("status","Delivered") } }?.addOnSuccessListener {
-//                Toasty.success(this,"Order Delivered",Toasty.LENGTH_SHORT).show() }
-            }
-        }?.addOnSuccessListener {
-            Toasty.success(this,"Order Delivered",Toasty.LENGTH_SHORT).show()
-        }
-
-
+    override fun onProfilePostItemCLick(offerItem: OfferRoomEntity) {
+        TODO("Not yet implemented")
     }
 
     override fun onCurrentUserOfferClick(offerItem: OfferRoomEntity) {
@@ -500,7 +722,14 @@ class NotificationsActivity : AppCompatActivity(),IMainActivity {
         TODO("Not yet implemented")
     }
 
-    override fun onBookMarkItemClick(offerItem: OfferRoomEntity) {
+    override fun onBookMarkItemClick(offerItem: OfferRoomEntity, bookmarkImageView: ImageView) {
+        TODO("Not yet implemented")
+    }
+
+    override fun onBookMarkClickedSavedOffers(
+        offerItem: OffersSavedRoomEntity,
+        bookmarkImageView: ImageView
+    ) {
         TODO("Not yet implemented")
     }
 

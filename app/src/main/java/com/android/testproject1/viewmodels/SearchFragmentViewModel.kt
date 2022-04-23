@@ -10,7 +10,7 @@ import com.android.testproject1.Repository
 import com.android.testproject1.model.Offer
 import com.android.testproject1.room.enteties.AppDatabase
 import com.android.testproject1.room.enteties.OfferRoomEntity
-import com.android.testproject1.room.enteties.UserImagesRoomEntity
+import com.android.testproject1.room.enteties.OffersSavedRoomEntity
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.FirebaseFirestore
@@ -98,12 +98,27 @@ class SearchFragmentViewModel(application: Application) : AndroidViewModel(appli
 
                     }
 
-
-//                    Log.d(myTAG,"Last Result is : "+lastResult?.toObject(ChatRoomEntity::class.java)?.timestamp)
-
-
-
                 }
         }
+    }
+
+    fun loadSavedPosts(){
+
+        val query: Query = db.collection("Users").document(currentUserID!!).collection("Saved")
+                .orderBy("timestamp", Query.Direction.DESCENDING)
+
+        query.get()
+            .addOnSuccessListener { queryDocumentSnapshots ->
+                for (documentSnapshot in queryDocumentSnapshots) {
+                    val offerSaved: OffersSavedRoomEntity = documentSnapshot.toObject(
+                        OffersSavedRoomEntity::class.java)
+                    viewModelScope.launch(Dispatchers.IO) {
+                        localDatabase.appDao()?.saveOffer(offerSaved)
+                    }
+                }
+            }.addOnFailureListener {
+                Log.d(myTAG,"Exception is : "+it.localizedMessage)
+            }
+
     }
 }

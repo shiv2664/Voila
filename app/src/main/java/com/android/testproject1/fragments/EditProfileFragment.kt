@@ -6,6 +6,7 @@ import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import android.graphics.ImageDecoder
+import android.graphics.drawable.Drawable
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
@@ -15,37 +16,33 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
-import androidx.annotation.NonNull
-import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
+import com.airbnb.lottie.LottieAnimationView
 import com.android.testproject1.R
 import com.android.testproject1.databinding.FragmentEditProfileBinding
-import com.android.testproject1.databindingadapters.bind
 import com.android.testproject1.model.Users
 import com.android.testproject1.services.UploadServiceOffers
 import com.bumptech.glide.Glide
+import com.bumptech.glide.load.DataSource
+import com.bumptech.glide.load.engine.GlideException
+import com.bumptech.glide.request.RequestListener
 import com.google.firebase.auth.EmailAuthProvider
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
-import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.SetOptions
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
 import com.google.firebase.storage.StorageTask
-import com.google.firebase.storage.UploadTask
 import com.nguyenhoanglam.imagepicker.model.Config
 import com.nguyenhoanglam.imagepicker.model.Image
 import com.nguyenhoanglam.imagepicker.ui.imagepicker.ImagePicker
 import com.theartofdev.edmodo.cropper.CropImage
 import com.theartofdev.edmodo.cropper.CropImageView
-import kotlinx.android.synthetic.main.fragment_edit_profile.*
-import java.io.ByteArrayOutputStream
-import java.io.File
 import java.io.IOException
 import java.util.*
 import kotlin.collections.HashMap
@@ -93,8 +90,38 @@ class EditProfileFragment : Fragment() {
             } else {
                 requestStoragePermission()
             }
-
         }
+
+        val reference = FirebaseFirestore.getInstance()
+        val fuser = FirebaseAuth.getInstance().currentUser?.uid
+        reference.collection("Users").document(fuser.toString()).get().addOnSuccessListener {
+            if (it.exists()) {
+                // convert document to POJO
+                val notifPojo: Users? = it.toObject(Users::class.java)
+
+                if (notifPojo != null) {
+                    if (notifPojo.profileimage.isNotEmpty()) {
+                        activity?.let { it1 ->
+                            Glide.with(it1)
+                                .load(notifPojo.profileimage)
+                                .addListener(imageLoadingListener(binding.lottiViewProfile))
+                                .into(binding.profileImage)
+                        }
+//                            binding.name.setText( notifPojo.name)
+//                            map["name"]=notifPojo.name
+//                            map["name"]=notifPojo.username
+//                            map["bio"]=notifPojo.bio
+                    }
+                    binding.name.setText(notifPojo.username)
+                    binding.Bio.setText(notifPojo.bio)
+                    Log.d("MyTag", " Image Url is " + notifPojo.profileimage)
+                }
+            }
+
+        }.addOnFailureListener {
+            Log.d("MyTag", " Exception is : "+it.localizedMessage)
+        }
+
         binding.saveButton.setOnClickListener {
 
             if (resultUri != null) {
@@ -110,9 +137,9 @@ class EditProfileFragment : Fragment() {
                 }
             }
 
-            val name=binding.name.text.toString().trim()
+            val username=binding.name.text.toString().trim()
             val bio=binding.Bio.text.toString().trim()
-            map["username"]=name
+            map["username"]=username
             map["bio"]=bio
             firebaseAuth.currentUser?.let { it1 -> firestore.collection("Users").document(it1.uid)
                 .set(map, SetOptions.merge()) }
@@ -121,35 +148,6 @@ class EditProfileFragment : Fragment() {
 
         binding.changePassword.setOnClickListener {
             findNavController().navigate(R.id.action_editProfileFragment_to_changePasswordFragment)
-        }
-
-        val reference = FirebaseFirestore.getInstance()
-        val fuser = FirebaseAuth.getInstance().currentUser?.uid
-        reference.collection("Users").document(fuser.toString()).get().addOnSuccessListener {
-            if (it != null) {
-
-                if (it.exists()) {
-                    // convert document to POJO
-                    val notifPojo: Users? = it.toObject(Users::class.java)
-
-                    if (notifPojo != null) {
-                        if (notifPojo.profileimage.isNotEmpty()) {
-                            activity?.let { it1 ->
-                                Glide.with(it1).load(notifPojo.profileimage)
-                                    .into(binding.profileImage)
-                            }
-                            binding.name.setText(notifPojo.name)
-//                            binding.name.setText( notifPojo.name)
-                            binding.Bio.setText(notifPojo.bio)
-//                            map["name"]=notifPojo.name
-//                            map["name"]=notifPojo.username
-//                            map["bio"]=notifPojo.bio
-                        }
-                        Log.d("MyTag", " Image Url is " + notifPojo.profileimage)
-                    }
-                }
-            }
-
         }
 
         return binding.root
@@ -235,6 +233,26 @@ class EditProfileFragment : Fragment() {
 
         super.onActivityResult(requestCode, resultCode, data)
 
+    }
+
+    private fun imageLoadingListener(pendingImage: LottieAnimationView): RequestListener<Drawable?>? {
+        return object : RequestListener<Drawable?> {
+            override fun onLoadFailed(e: GlideException?, model: Any?, target: com.bumptech.glide.request.target.Target<Drawable?>?, isFirstResource: Boolean): Boolean {
+                return false
+            }
+
+            override fun onResourceReady(
+                resource: Drawable?,
+                model: Any?,
+                target: com.bumptech.glide.request.target.Target<Drawable?>?,
+                dataSource: DataSource?,
+                isFirstResource: Boolean
+            ): Boolean {
+                pendingImage.pauseAnimation()
+                pendingImage.visibility = View.GONE
+                return false
+            }
+        }
     }
 
     private fun addPic() {

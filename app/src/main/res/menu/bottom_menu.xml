@@ -19,12 +19,12 @@
             />
 
 
-        <!--        <item-->
-        <!--            android:id="@+id/home"-->
-        <!--            android:title=""-->
-        <!--            android:visible="false"-->
-        <!--            android:icon="@drawable/home2"-->
-        <!--            />-->
+<!--        <item-->
+<!--            android:id="@+id/home"-->
+<!--            android:title=""-->
+<!--            android:visible="false"-->
+<!--            android:icon="@drawable/home2"-->
+<!--            />-->
 
 <!--        <item-->
 <!--            android:id="@+id/NewPost"-->

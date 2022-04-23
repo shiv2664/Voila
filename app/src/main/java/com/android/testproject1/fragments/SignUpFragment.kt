@@ -22,10 +22,7 @@ import kotlinx.android.synthetic.main.fragment_sign_up.*
 class SignUpFragment : Fragment() {
 
     private lateinit var mViewModel: SignUpViewModel
-
-    //    var imageUri: Uri? = null
     private lateinit var binding:FragmentSignUpBinding
-    private val myTAG:String="MyTag"
 
 
     override fun onCreateView(
@@ -40,8 +37,19 @@ class SignUpFragment : Fragment() {
 
         mViewModel.getUserLiveData().observe(viewLifecycleOwner, Observer {
             if (it != null) {
-                val intent = Intent(activity, MainActivity2::class.java)
-                startActivity(intent)
+//                val intent = Intent(activity, MainActivity2::class.java)
+//                startActivity(intent)
+                val fragment:Fragment=UploadProfilePicFragment()
+//                fragment.arguments=bundle
+
+                val fragmentmanager= activity?.supportFragmentManager
+                fragmentmanager!!
+                    .beginTransaction()
+                    .setCustomAnimations(R.anim.right_enter, R.anim.left_out)
+                    .addToBackStack("Login Fragment")
+                    .add(R.id.fragmentcontainer,fragment)
+                    .commit();
+                RegisterActivity.isUploadPicFragmentActive=true
             }
         })
 
@@ -65,9 +73,6 @@ class SignUpFragment : Fragment() {
                 Toasty.error(requireActivity(),"All Fields are required",Toasty.LENGTH_SHORT,true).show()
             }
 
-
-
-
         }
 
         return binding.root
@@ -86,24 +91,25 @@ class SignUpFragment : Fragment() {
         val email = signUpEmailID!!.text.toString().trim()
         val phoneNumber=signUpMobileNumber.text.toString().trim()
         val password1 = signUpPassword!!.text.toString().trim()
+        mViewModel.register(email,password1,username,phoneNumber)
 
-        val bundle =Bundle()
-        bundle.putString("fullName",username)
-        bundle.putString("email",email)
-        bundle.putString("password1",password1)
-        bundle.putString("phoneNumber",phoneNumber)
-
-        val fragment:Fragment=UploadProfilePicFragment()
-        fragment.arguments=bundle
-
-        val fragmentmanager= activity?.supportFragmentManager
-        fragmentmanager!!
-            .beginTransaction()
-            .setCustomAnimations(R.anim.right_enter, R.anim.left_out)
-            .addToBackStack("Login Fragment")
-            .add(R.id.fragmentcontainer,fragment)
-            .commit();
-        RegisterActivity.isUploadPicFragmentActive=true
+//        val bundle =Bundle()
+//        bundle.putString("fullName",username)
+//        bundle.putString("email",email)
+//        bundle.putString("password1",password1)
+//        bundle.putString("phoneNumber",phoneNumber)
+//
+//        val fragment:Fragment=UploadProfilePicFragment()
+//        fragment.arguments=bundle
+//
+//        val fragmentmanager= activity?.supportFragmentManager
+//        fragmentmanager!!
+//            .beginTransaction()
+//            .setCustomAnimations(R.anim.right_enter, R.anim.left_out)
+//            .addToBackStack("Login Fragment")
+//            .add(R.id.fragmentcontainer,fragment)
+//            .commit();
+//        RegisterActivity.isUploadPicFragmentActive=true
 
 //        val funName:String=signUpFullName.text.toString().trim()
 //        val email = signUpEmailID!!.text.toString().trim()

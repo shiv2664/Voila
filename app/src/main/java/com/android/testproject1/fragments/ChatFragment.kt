@@ -178,14 +178,19 @@ class ChatFragment : Fragment() {
                     currentItems = messageRecyclerview.layoutManager?.childCount!!
                     totalItems = messageRecyclerview.layoutManager?.itemCount!!
                     scrollOutItems = (messageRecyclerview.layoutManager as LinearLayoutManager).findFirstVisibleItemPosition()
-//                    scrollOutItemsDOWN = (messageRecyclerview.layoutManager as LinearLayoutManager).findLastVisibleItemPosition()
+                    scrollOutItemsDOWN = (messageRecyclerview.layoutManager as LinearLayoutManager).findLastVisibleItemPosition()
 
-                    Log.d("MyTag", " currentItems : $currentItems  totalItems : $totalItems scrollOutItems :$scrollOutItemsDOWN")
+                    Log.d("MyTag", " currentItems : $currentItems scrollOutItems :$scrollOutItems totalItems : $totalItems")
+//                    Log.d("MyTag", " currentItems : $currentItems  totalItems : $totalItems scrollOutItemsDown :$scrollOutItemsDOWN")
 
-                    if (isScrolling &&currentItems + scrollOutItemsDOWN == totalItems) {
+                    if (isScrolling &&currentItems + scrollOutItems == totalItems) {
                         isScrolling = false
                         chatKey?.let { mViewModel.queryLoad(it) }
                     }
+//                    if (isScrolling &&currentItems + scrollOutItemsDOWN == totalItems) {
+//                        isScrolling = false
+//                        chatKey?.let { mViewModel.queryLoad(it) }
+//                    }
 
 
                 }

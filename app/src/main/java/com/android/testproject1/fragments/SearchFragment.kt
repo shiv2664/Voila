@@ -1,5 +1,6 @@
 package com.android.testproject1.fragments
 
+import android.content.Context
 import android.os.Bundle
 import android.util.Log
 import android.view.*
@@ -14,6 +15,10 @@ import com.android.testproject1.model.DataProvider
 import com.android.testproject1.viewmodels.SearchFragmentViewModel
 import kotlinx.android.synthetic.main.fragment_home.*
 import kotlinx.android.synthetic.main.fragment_search.*
+import android.content.SharedPreferences
+
+
+
 
 class SearchFragment : Fragment() {
 
@@ -41,6 +46,21 @@ class SearchFragment : Fragment() {
         mViewModel.getPostList()?.observe(viewLifecycleOwner, {
             binding.offerList = it
         })
+
+
+
+        val sharedPref = activity!!.getPreferences(Context.MODE_PRIVATE)
+        var firstTime = sharedPref.getInt("firstTime",0)
+        firstTime++
+        val editor = sharedPref.edit()
+        editor.putInt("firstTime", firstTime)
+        editor.apply()
+
+        if (firstTime==1){
+            mViewModel.loadSavedPosts()
+            Log.d(myTag,"First Time")
+        }
+
 
         binding.productExploreList = DataProvider.productExploreList
 

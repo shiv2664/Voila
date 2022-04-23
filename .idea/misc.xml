@@ -4,6 +4,7 @@
     <option name="filePathToZoomLevelMap">
       <map>
         <entry key="..\:/Users/Shiv/.gradle/caches/transforms-3/8d30bf76f84d4efeb3abf9af8735407e/transformed/jetified-commons-0.8.6.1/res/layout/md_preference_custom.xml" value="0.25416666666666665" />
+        <entry key="..\:/Users/Shiv/AndroidStudioProjects/TestProject1/app/src/main/res/drawable-v24/ic_bubble_chart_black_24dp.xml" value="0.2703125" />
         <entry key="..\:/Users/Shiv/AndroidStudioProjects/TestProject1/app/src/main/res/drawable-v24/ic_send_black_2dp.xml" value="0.2703125" />
         <entry key="..\:/Users/Shiv/AndroidStudioProjects/TestProject1/app/src/main/res/drawable-v24/message_textview_background.xml" value="0.2703125" />
         <entry key="..\:/Users/Shiv/AndroidStudioProjects/TestProject1/app/src/main/res/drawable/background_gradient.xml" value="0.2703125" />
@@ -12,6 +13,7 @@
         <entry key="..\:/Users/Shiv/AndroidStudioProjects/TestProject1/app/src/main/res/drawable/backgroundblue.xml" value="0.2703125" />
         <entry key="..\:/Users/Shiv/AndroidStudioProjects/TestProject1/app/src/main/res/drawable/backgroundgreen.xml" value="0.2703125" />
         <entry key="..\:/Users/Shiv/AndroidStudioProjects/TestProject1/app/src/main/res/drawable/backgroundred.xml" value="0.2703125" />
+        <entry key="..\:/Users/Shiv/AndroidStudioProjects/TestProject1/app/src/main/res/drawable/bg_like_circle_background.xml" value="0.2703125" />
         <entry key="..\:/Users/Shiv/AndroidStudioProjects/TestProject1/app/src/main/res/drawable/blue_rounded_shape.xml" value="0.2703125" />
         <entry key="..\:/Users/Shiv/AndroidStudioProjects/TestProject1/app/src/main/res/drawable/bottom_nav_background.xml" value="0.2703125" />
         <entry key="..\:/Users/Shiv/AndroidStudioProjects/TestProject1/app/src/main/res/drawable/button_background.xml" value="0.2703125" />
@@ -21,7 +23,9 @@
         <entry key="..\:/Users/Shiv/AndroidStudioProjects/TestProject1/app/src/main/res/drawable/fab_gradient.xml" value="0.2703125" />
         <entry key="..\:/Users/Shiv/AndroidStudioProjects/TestProject1/app/src/main/res/drawable/fab_gradient2.xml" value="0.2703125" />
         <entry key="..\:/Users/Shiv/AndroidStudioProjects/TestProject1/app/src/main/res/drawable/ic_add_black.xml" value="0.2703125" />
+        <entry key="..\:/Users/Shiv/AndroidStudioProjects/TestProject1/app/src/main/res/drawable/ic_baseline_bookmark_border_24.xml" value="0.2703125" />
         <entry key="..\:/Users/Shiv/AndroidStudioProjects/TestProject1/app/src/main/res/drawable/ic_baseline_person_add_24.xml" value="0.2703125" />
+        <entry key="..\:/Users/Shiv/AndroidStudioProjects/TestProject1/app/src/main/res/drawable/ic_bookmark_black_24dp.xml" value="0.2703125" />
         <entry key="..\:/Users/Shiv/AndroidStudioProjects/TestProject1/app/src/main/res/drawable/ic_camera_alt_black_24dp.xml" value="0.2703125" />
         <entry key="..\:/Users/Shiv/AndroidStudioProjects/TestProject1/app/src/main/res/drawable/ic_clear_all_black_24dp.xml" value="0.2703125" />
         <entry key="..\:/Users/Shiv/AndroidStudioProjects/TestProject1/app/src/main/res/drawable/ic_flash_on_black_24dp.xml" value="0.2703125" />
@@ -34,6 +38,7 @@
         <entry key="..\:/Users/Shiv/AndroidStudioProjects/TestProject1/app/src/main/res/drawable/image_text_shadow.xml" value="0.2703125" />
         <entry key="..\:/Users/Shiv/AndroidStudioProjects/TestProject1/app/src/main/res/drawable/image_text_shadow_bottom.xml" value="0.2703125" />
         <entry key="..\:/Users/Shiv/AndroidStudioProjects/TestProject1/app/src/main/res/drawable/item_background.xml" value="0.2703125" />
+        <entry key="..\:/Users/Shiv/AndroidStudioProjects/TestProject1/app/src/main/res/drawable/round_white.xml" value="0.2703125" />
         <entry key="..\:/Users/Shiv/AndroidStudioProjects/TestProject1/app/src/main/res/drawable/user_action_button_idle_bg_state_released.xml" value="0.14635416666666667" />
         <entry key="..\:/Users/Shiv/AndroidStudioProjects/TestProject1/app/src/main/res/layout/activity_chat.xml" value="0.25416666666666665" />
         <entry key="..\:/Users/Shiv/AndroidStudioProjects/TestProject1/app/src/main/res/layout/activity_create_offer.xml" value="0.264" />
@@ -47,6 +52,7 @@
         <entry key="..\:/Users/Shiv/AndroidStudioProjects/TestProject1/app/src/main/res/layout/activity_register.xml" value="0.25416666666666665" />
         <entry key="..\:/Users/Shiv/AndroidStudioProjects/TestProject1/app/src/main/res/layout/activity_splash.xml" value="0.25416666666666665" />
         <entry key="..\:/Users/Shiv/AndroidStudioProjects/TestProject1/app/src/main/res/layout/bottom_sheet_dialog.xml" value="0.264" />
+        <entry key="..\:/Users/Shiv/AndroidStudioProjects/TestProject1/app/src/main/res/layout/bottom_sheet_dialogue_offerprofile.xml" value="0.25416666666666665" />
         <entry key="..\:/Users/Shiv/AndroidStudioProjects/TestProject1/app/src/main/res/layout/chat_item_left.xml" value="0.25416666666666665" />
         <entry key="..\:/Users/Shiv/AndroidStudioProjects/TestProject1/app/src/main/res/layout/chat_item_right.xml" value="0.18659420289855072" />
         <entry key="..\:/Users/Shiv/AndroidStudioProjects/TestProject1/app/src/main/res/layout/details_recyclerview.xml" value="0.264" />
@@ -77,6 +83,7 @@
         <entry key="..\:/Users/Shiv/AndroidStudioProjects/TestProject1/app/src/main/res/layout/fragment_view_pager_current_user_posts.xml" value="0.25416666666666665" />
         <entry key="..\:/Users/Shiv/AndroidStudioProjects/TestProject1/app/src/main/res/layout/fragment_view_pager_message_chats.xml" value="0.16394927536231885" />
         <entry key="..\:/Users/Shiv/AndroidStudioProjects/TestProject1/app/src/main/res/layout/fragment_viewpager_posts.xml" value="0.151268115942029" />
+        <entry key="..\:/Users/Shiv/AndroidStudioProjects/TestProject1/app/src/main/res/layout/fragment_viewpager_saved.xml" value="0.25416666666666665" />
         <entry key="..\:/Users/Shiv/AndroidStudioProjects/TestProject1/app/src/main/res/layout/frragment_viewpager_userinfo.xml" value="0.151268115942029" />
         <entry key="..\:/Users/Shiv/AndroidStudioProjects/TestProject1/app/src/main/res/layout/group_recyclerview_layout.xml" value="0.264" />
         <entry key="..\:/Users/Shiv/AndroidStudioProjects/TestProject1/app/src/main/res/layout/home_recyclerview.xml" value="0.15443840579710144" />
@@ -94,6 +101,7 @@
         <entry key="..\:/Users/Shiv/AndroidStudioProjects/TestProject1/app/src/main/res/layout/user_chatlist_group.xml" value="0.25416666666666665" />
         <entry key="..\:/Users/Shiv/AndroidStudioProjects/TestProject1/app/src/main/res/layout/user_chatlist_recyclerview_layout.xml" value="0.264" />
         <entry key="..\:/Users/Shiv/AndroidStudioProjects/TestProject1/app/src/main/res/menu/bottom_menu.xml" value="0.25416666666666665" />
+        <entry key="..\:/Users/Shiv/AndroidStudioProjects/TestProject1/app/src/main/res/menu/mainactivity2_menu.xml" value="0.25416666666666665" />
         <entry key="..\:/Users/Shiv/AndroidStudioProjects/TestProject1/app/src/main/res/menu/menu_dashboard.xml" value="0.25416666666666665" />
         <entry key="..\:/Users/Shiv/AndroidStudioProjects/TestProject1/app/src/main/res/menu/menu_main.xml" value="0.25416666666666665" />
         <entry key="..\:/Users/Shiv/AndroidStudioProjects/TestProject1/app/src/main/res/menu/menu_main_bottom.xml" value="0.25416666666666665" />

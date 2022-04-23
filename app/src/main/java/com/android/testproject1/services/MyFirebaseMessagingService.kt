@@ -9,8 +9,13 @@ import com.android.testproject1.services.App.Companion.FCM_CHANNEL_ID
 import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
 import android.graphics.BitmapFactory
+import com.google.android.gms.tasks.OnFailureListener
+import com.google.android.gms.tasks.OnSuccessListener
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.FirebaseFirestore
 import java.io.IOException
 import java.net.URL
+import java.util.HashMap
 
 
 class MyFirebaseMessagingService: FirebaseMessagingService() {
@@ -49,6 +54,45 @@ class MyFirebaseMessagingService: FirebaseMessagingService() {
     override fun onNewToken(p0: String) {
         super.onNewToken(p0)
         Log.d("MyTag","onNewToken")
+
+        val firebaseAuth=FirebaseAuth.getInstance()
+        val firebaseFirestore=FirebaseFirestore.getInstance()
+        val myTAG="MyTAg"
+        val currentId = firebaseAuth.currentUser?.uid.toString()
+        firebaseFirestore.collection("Tokens").document(currentId).get().addOnSuccessListener {
+            if (it.exists()){
+
+                val tokenMap2: MutableMap<String, Any> = HashMap()
+                tokenMap2["id"] = p0
+                firebaseFirestore.collection("Tokens")
+                    .document(currentId)
+                    .update(tokenMap2)
+                    .addOnSuccessListener(OnSuccessListener<Void?> {
+                        Log.d(myTAG, "token Updated")
+
+                    }).addOnFailureListener(OnFailureListener {
+                        Log.d(myTAG, "token NotUpdated")
+                        Log.d(myTAG, ""+it.localizedMessage?.toString())
+                    })
+            }else if (!it.exists()){
+
+                val tokenMap2: MutableMap<String, Any> = HashMap()
+                tokenMap2["id"] = p0
+                firebaseFirestore.collection("Tokens")
+                    .document(currentId)
+                    .set(tokenMap2)
+                    .addOnSuccessListener(OnSuccessListener<Void?> {
+                        Log.d(myTAG, "token Updated")
+
+                    }).addOnFailureListener(OnFailureListener {
+                        Log.d(myTAG, "token NotUpdated")
+                        Log.d(myTAG, ""+it.localizedMessage?.toString())
+                    })
+
+            }
+
+        }
+
     }
 
     override fun onDeletedMessages() {

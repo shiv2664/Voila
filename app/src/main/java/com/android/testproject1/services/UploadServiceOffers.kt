@@ -5,6 +5,7 @@ import android.app.PendingIntent
 import android.app.Service
 import android.content.Context
 import android.content.Intent
+import android.content.SharedPreferences
 import android.graphics.Bitmap
 import android.net.Uri
 import android.os.IBinder
@@ -211,7 +212,7 @@ class UploadServiceOffers : Service() {
             val compressedImageFile= imageList.let {
                 Compressor.compress(application, imageList){
 //                    default(150,150,Bitmap.CompressFormat.WEBP,80)
-                    default(280,280,format = Bitmap.CompressFormat.WEBP, quality = 80)
+                    default(100,100,format = Bitmap.CompressFormat.WEBP, quality = 80)
 
                 }
             }
@@ -246,7 +247,12 @@ class UploadServiceOffers : Service() {
 
                 firestore.collection("Users")
                     .document(currentUser_id).update(postMap).addOnSuccessListener {
-//                        Toasty.success(applicationContext, "Offer added", Toasty.LENGTH_SHORT, true).show()
+                        Toasty.success(applicationContext, "Profile Pic Uploaded", Toasty.LENGTH_SHORT, true).show()
+                        val sharedPrefDynamic: SharedPreferences = getSharedPreferences(currentUser_id, Context.MODE_PRIVATE)!!
+                        val dynamicEditor= sharedPrefDynamic.edit()
+                        val profileImage= sharedPrefDynamic.getString("profileimage","")
+                            dynamicEditor?.putString("profileimage",uploadedImagesUrl?.get(0).toString())
+                            dynamicEditor?.apply()
 
 //                        val batch: WriteBatch =firestore.batch()
 //
@@ -634,7 +640,7 @@ class UploadServiceOffers : Service() {
 
                     postMap["userId"] = documentSnapshot.getString("userId")
                     postMap["username"] = documentSnapshot.getString("username")
-                    postMap["name"] = documentSnapshot.getString("name")
+                    postMap["name"] = documentSnapshot.getString("username")
                     postMap["thumbnailImage"] = documentSnapshot.getString("thumbnailImage")
                     postMap["timestamp"] = FieldValue.serverTimestamp()
                     postMap["image_count"] = uploadedImagesUrl.size
@@ -698,9 +704,9 @@ class UploadServiceOffers : Service() {
 
                                     val recentMap: MutableMap<String, Any?> = HashMap()
 
-                                    recentMap["userId"] = documentSnapshot.getString("id")
+                                    recentMap["userId"] = documentSnapshot.getString("userId")
                                     recentMap["username"] = documentSnapshot.getString("username")
-                                    recentMap["name"] = documentSnapshot.getString("name")
+                                    recentMap["name"] = documentSnapshot.getString("username")
                                     recentMap["thumbnailImage"] = documentSnapshot.getString("thumbnailImage")
                                     if (offerRoomEntity != null) {
                                         recentMap["timestamp"] = offerRoomEntity.timestamp

@@ -53,7 +53,7 @@ class SavedFragmentViewModel(application: Application) :AndroidViewModel(applica
                     val offerSaved: OffersSavedRoomEntity = documentSnapshot.toObject(OffersSavedRoomEntity::class.java)
 
                     viewModelScope.launch(Dispatchers.IO) {
-                        localDatabase.appDao()?.addOffer(offerSaved)
+                        localDatabase.appDao()?.saveOffer(offerSaved)
                     }
 
 //                    savedOfferList.postValue(list2)

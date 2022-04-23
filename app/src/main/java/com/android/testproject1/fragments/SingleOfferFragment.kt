@@ -19,12 +19,17 @@ import android.transition.Transition
 import android.transition.TransitionManager
 import com.afollestad.materialdialogs.MaterialDialog
 import com.android.testproject1.CreateOffer
+import com.android.testproject1.room.enteties.AppDatabase
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.SetOptions
 import com.google.firebase.storage.FirebaseStorage
 import com.nguyenhoanglam.imagepicker.model.Config
 import com.nguyenhoanglam.imagepicker.ui.imagepicker.ImagePicker
 import es.dmoral.toasty.Toasty
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.DisposableHandle
+import kotlinx.coroutines.launch
 
 
 class SingleOfferFragment : Fragment() {
@@ -71,7 +76,6 @@ class SingleOfferFragment : Fragment() {
 //        binding.OriginalPrice.setText(offerItem?.originalPrice)
 
         binding.DeleteOffer.setOnClickListener {
-
 
             MaterialDialog.Builder(requireActivity())
                 .title("Confirmation")
@@ -135,6 +139,8 @@ class SingleOfferFragment : Fragment() {
 
         }
 
+        val localDatabase: AppDatabase = AppDatabase.getInstance(requireActivity())!!
+
         binding.SaveOffer.setOnClickListener {
 
             val map=HashMap<String,Any>()
@@ -159,7 +165,26 @@ class SingleOfferFragment : Fragment() {
                     }
                 }
             }.addOnSuccessListener {
-                updateFields()
+                    firestore.collection("Offers").document(offerItem.postId).get().addOnSuccessListener {
+                        if (it.exists()){
+                            val offer:OfferRoomEntity?=it.toObject(OfferRoomEntity::class.java)
+                            CoroutineScope(Dispatchers.IO).launch {
+                                if (offer != null) {
+                                    localDatabase.appDao()?.addOfferUser(offer)
+                                }
+                            }
+                            if (offer != null) {
+                                updateFieldsRecent(offer)
+                            }
+
+                        }
+                    }.addOnFailureListener {
+                        Log.d("MyTag",""+it.localizedMessage)
+                    }
+                    Toasty.success(requireActivity(),"Updated Successfully",Toasty.LENGTH_SHORT).show()
+//                    activity?.onBackPressed()
+
+
 
                 val transition: Transition = Fade()
                 transition.duration = 600
@@ -177,7 +202,7 @@ class SingleOfferFragment : Fragment() {
                 TransitionManager.beginDelayedTransition(view!!.parent as ViewGroup,transition)
                 binding.SaveOffer.visibility=View.GONE
 
-                Toasty.success(requireActivity(),"Updated Successfully",Toasty.LENGTH_SHORT).show()
+
             }.addOnFailureListener {
                 Toasty.error(requireActivity(),"Error ",Toasty.LENGTH_SHORT).show()
             }
@@ -200,7 +225,48 @@ class SingleOfferFragment : Fragment() {
                 .load(offerItem.thumbnailImage)
                 .into(binding.profileImage)
         }
-        binding.DiscountedPrice.text="₹"+offerItem?.discountPrice
+        if (offerItem.originalPrice.isNotBlank()&&offerItem.discountPrice.isNotBlank()){
+
+            binding.DiscountedPrice.text="₹"+offerItem?.discountPrice
+        }else if (offerItem.originalPrice.isBlank()){
+            binding.DiscountedPrice.text="₹"+offerItem?.discountPrice
+        }else if (offerItem.discountPrice.isBlank()){
+            binding.DiscountedPrice.text="₹"+offerItem?.originalPrice
+        }
+
+        binding.DiscountedPriceEditText.setText(offerItem?.discountPrice)
+
+        binding.username.text=offerItem?.username
+
+        binding.offer.text=offerItem?.title
+        binding.descriptionTextTitle.setText(offerItem?.title)
+
+        binding.desc.text=offerItem?.description
+        binding.descriptionTextMain.setText(offerItem?.description)
+
+        binding.OriginalPrice.setText(offerItem?.originalPrice)
+
+    }
+
+    private fun updateFieldsRecent(offerItem:OfferRoomEntity){
+
+        if (offerItem != null) {
+            Glide.with(requireActivity())
+                .load(offerItem.image_url_0)
+                .into(binding.img)
+            Glide.with(requireActivity())
+                .load(offerItem.thumbnailImage)
+                .into(binding.profileImage)
+        }
+        if (offerItem.originalPrice.isNotBlank()&&offerItem.discountPrice.isNotBlank()){
+
+            binding.DiscountedPrice.text="₹"+offerItem?.discountPrice
+        }else if (offerItem.originalPrice.isBlank()){
+            binding.DiscountedPrice.text="₹"+offerItem?.discountPrice
+        }else if (offerItem.discountPrice.isBlank()){
+            binding.DiscountedPrice.text="₹"+offerItem?.originalPrice
+        }
+
         binding.DiscountedPriceEditText.setText(offerItem?.discountPrice)
 
         binding.username.text=offerItem?.username

@@ -12,7 +12,11 @@
         android:label="Search">
         <action
             android:id="@+id/action_searchFragment2_to_profileFragment"
-            app:destination="@id/profileFragment" />
+            app:destination="@id/profileFragment"
+            app:enterAnim="@anim/right_enter"
+            app:exitAnim="@anim/left_out"
+            app:popEnterAnim="@anim/left_enter"
+            app:popExitAnim="@anim/right_out" />
     </fragment>
     <fragment
         android:id="@+id/profileFragment"
@@ -22,7 +26,9 @@
             android:id="@+id/action_profileFragment_to_editProfileFragment"
             app:destination="@id/editProfileFragment"
             app:enterAnim="@anim/right_enter"
-            app:exitAnim="@anim/left_out" />
+            app:exitAnim="@anim/left_out"
+            app:popEnterAnim="@anim/left_enter"
+            app:popExitAnim="@anim/right_out" />
     </fragment>
     <fragment
         android:id="@+id/messagesFragment"
@@ -34,7 +40,11 @@
         android:label="Edit Profile" >
         <action
             android:id="@+id/action_editProfileFragment_to_changePasswordFragment"
-            app:destination="@id/changePasswordFragment" />
+            app:destination="@id/changePasswordFragment"
+            app:enterAnim="@anim/right_enter"
+            app:exitAnim="@anim/left_out"
+            app:popEnterAnim="@anim/left_enter"
+            app:popExitAnim="@anim/right_out" />
     </fragment>
     <fragment
         android:id="@+id/orderHistoryFragment"
@@ -47,13 +57,25 @@
         android:label="Profile">
         <action
             android:id="@+id/action_profileOpened_to_editProfileFragment"
-            app:destination="@id/editProfileFragment" />
+            app:destination="@id/editProfileFragment"
+            app:enterAnim="@anim/right_enter"
+            app:exitAnim="@anim/left_out"
+            app:popEnterAnim="@anim/left_enter"
+            app:popExitAnim="@anim/right_out" />
         <action
             android:id="@+id/action_profileOpened_to_viewPagerFragmentSaved"
-            app:destination="@id/viewPagerFragmentSaved" />
+            app:destination="@id/viewPagerFragmentSaved"
+            app:enterAnim="@anim/right_enter"
+            app:exitAnim="@anim/left_out"
+            app:popEnterAnim="@anim/left_enter"
+            app:popExitAnim="@anim/right_out" />
         <action
             android:id="@+id/action_profileOpened_to_viewPagerFragmentCurrentUserPosts"
-            app:destination="@id/viewPagerFragmentCurrentUserPosts" />
+            app:destination="@id/viewPagerFragmentCurrentUserPosts"
+            app:enterAnim="@anim/right_enter"
+            app:exitAnim="@anim/left_out"
+            app:popEnterAnim="@anim/right_out"
+            app:popExitAnim="@anim/left_enter" />
     </fragment>
     <fragment
         android:id="@+id/viewPagerFragmentSaved"
@@ -65,7 +87,11 @@
         android:label="Offers" >
         <action
             android:id="@+id/action_viewPagerFragmentCurrentUserPosts_to_singleOfferFragment"
-            app:destination="@id/singleOfferFragment" />
+            app:destination="@id/singleOfferFragment"
+            app:enterAnim="@anim/right_enter"
+            app:exitAnim="@anim/left_out"
+            app:popEnterAnim="@anim/left_enter"
+            app:popExitAnim="@anim/right_out" />
     </fragment>
     <fragment
         android:id="@+id/changePasswordFragment"

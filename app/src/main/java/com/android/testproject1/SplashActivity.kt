@@ -1,6 +1,8 @@
 package com.android.testproject1
 
+import android.content.Context
 import android.content.Intent
+import android.content.SharedPreferences
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
@@ -16,31 +18,55 @@ import kotlinx.android.synthetic.main.activity_splash.*
 class SplashActivity : AppCompatActivity() {
 
 //    private val firebaseAuth2: FirebaseAuth = FirebaseAuth.getInstance()
-    private lateinit var firebaseAuth:FirebaseAuth
 //    private val firebaseAuth: FirebaseAuth?=null
     var myTag:String="MyTag"
+
+    private lateinit var sharedPrefDynamic: SharedPreferences
+    private lateinit var firebaseAuth: FirebaseAuth
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_splash)
 
         firebaseAuth=FirebaseAuth.getInstance()
-
         firebaseAuth.currentUser?.toString()?.let { Log.d(myTag, it) }
+
+        firebaseAuth= FirebaseAuth.getInstance()
+        val currentUserID=firebaseAuth.currentUser?.uid.toString()
+        sharedPrefDynamic= getSharedPreferences(currentUserID, Context.MODE_PRIVATE)!!
+        val profileImage= sharedPrefDynamic.getString("profileimage","")
 
         Handler(Looper.getMainLooper()).postDelayed({
             run {
-
                 if (firebaseAuth.currentUser !=null){
                     val intent=Intent(this,MainActivity2::class.java)
-//                    Log.d(myTag,firebaseAuth.currentUser!!.toString())
-                    startActivity(intent)
-                    finish()
+                            startActivity(intent)
+                            finish()
                 }else{
                     val intent=Intent(this,RegisterActivity::class.java)
                     startActivity(intent)
                     finish()
                 }
+
+
+//                if (firebaseAuth.currentUser !=null){
+//                    if (profileImage != null) {
+//                        if (profileImage.isNotBlank()){
+//                            val intent=Intent(this,MainActivity2::class.java)
+//                            startActivity(intent)
+//                            finish()
+//                        }else{
+//                            val intent=Intent(this,RegisterActivity::class.java)
+//                            startActivity(intent)
+//                            finish()
+//                        }
+//                    }
+//
+//                }else{
+//                    val intent=Intent(this,RegisterActivity::class.java)
+//                    startActivity(intent)
+//                    finish()
+//                }
 
             }
         }, 2500); // Millisecond 1000 = 1 sec

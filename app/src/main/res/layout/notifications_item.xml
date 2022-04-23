@@ -33,6 +33,17 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
+            <TextView
+                android:id="@+id/orderplacedtimestamp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="end"
+                android:textSize="15sp"
+                android:layout_marginEnd="15dp"
+                android:textStyle="bold"
+                android:text="@{notificationItem.timestamp.toLocaleString()}" />
+
+
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -41,14 +52,38 @@
             android:foreground="?attr/selectableItemBackground"
             android:focusable="true">
 
-            <de.hdodenhof.circleimageview.CircleImageView
-                android:id="@+id/image"
-                android:layout_width="45dp"
-                android:layout_height="45dp"
-                android:layout_alignParentStart="true"
+            <FrameLayout
+                android:id="@+id/imageFrame"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:layout_marginStart="15dp"
                 android:layout_marginTop="15dp"
-                android:layout_marginBottom="15dp"/>
+                android:onClick="@{()->listener.onUserNamePicClick(notificationItem.orderFrom,``)}"
+                android:layout_marginBottom="15dp"
+                android:layout_alignParentStart="true">
+                <TextView
+                    android:visibility="gone"
+                    android:id="@+id/orderFromTextView"
+                    android:onClick="@{()->listener.onUserNamePicClick(notificationItem.orderFrom,``)}"
+                    android:text="@{notificationItem.orderFrom.toString()}"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"/>
+
+                <de.hdodenhof.circleimageview.CircleImageView
+                    android:id="@+id/image"
+                    android:layout_width="45dp"
+                    android:layout_height="45dp" />
+
+                <com.airbnb.lottie.LottieAnimationView
+                    android:id="@+id/lottiViewProfile"
+                    android:layout_width="45dp"
+                    android:layout_height="45dp"
+                    app:lottie_autoPlay="true"
+                    app:lottie_rawRes="@raw/loading_circle"
+                    app:lottie_loop="true"
+                    />
+
+            </FrameLayout>
 
 <!--            android:onClick="@{()->listener.onNotificationItemClick(notificationItem)}"-->
             <LinearLayout
@@ -61,7 +96,7 @@
                 android:layout_marginEnd="15dp"
                 android:layout_marginBottom="10dp"
                 android:layout_toStartOf="@+id/type_image"
-                android:layout_toEndOf="@+id/image"
+                android:layout_toEndOf="@+id/imageFrame"
                 android:orientation="vertical">
 
                 <RelativeLayout
@@ -74,7 +109,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_alignParentStart="true"
-                        android:textSize="17sp"
+                        android:textSize="16sp"
                         android:textStyle="bold" />
 
                     <TextView
@@ -100,7 +135,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@{notificationItem.orderName}"
-                    android:textSize="17sp"
+                    android:textSize="16sp"
                     android:textStyle="bold" />
 
                 <TextView
@@ -108,7 +143,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="end"
-                    android:text="@{notificationItem.timestamp.toLocaleString()}" />
+                    android:textSize="15sp"
+                    app:setDate="@{notificationItem.deliveryTime}" />
 
             </LinearLayout>
 
@@ -233,6 +269,7 @@
                         android:layout_width="0dp"
                         android:layout_height="59dp"
                         android:text="Reject"
+                        android:onClick="@{()->listener.onRejectClick(notificationItem,AcceptLayout,ReadyLayout,WaitingLayout,DeliveredLayout,CancelLayout,RejectedLayout)}"
                         android:textColor="@color/selected_icon"
                         android:textSize="15sp"
                         app:cornerRadius="10dp" />
@@ -248,7 +285,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginTop="5dp"
                         android:text="Accept"
-                        android:onClick="@{(button)->listener.onAcceptClick(notificationItem,Reject,Accept,Cancelled,Ready,AcceptLayout,ReadyLayout,WaitingLayout,DeliveredLayout)}"
+                        android:onClick="@{(button)->listener.onAcceptClick(notificationItem,Reject,Accept,Cancelled,Ready,AcceptLayout,ReadyLayout,WaitingLayout,DeliveredLayout,CancelLayout,RejectedLayout)}"
                         android:textSize="15sp"
                         android:background="@drawable/backgroundgreen"
                         app:backgroundTint="@null"
@@ -277,6 +314,7 @@
                         android:layout_width="0dp"
                         android:layout_height="59dp"
                         android:text="Cancel"
+                        android:onClick="@{()->listener.onCancelClick(notificationItem,AcceptLayout,ReadyLayout,WaitingLayout,DeliveredLayout,CancelLayout,RejectedLayout)}"
                         android:textColor="@color/selected_icon"
                         android:textSize="15sp"
                         app:cornerRadius="10dp" />
@@ -291,7 +329,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginTop="5dp"
                         android:text="Order Ready"
-                        android:onClick="@{(button)->listener.onOrderReadyClick(notificationItem,Cancelled,Ready,WaitingList,AcceptLayout,ReadyLayout,WaitingLayout,DeliveredLayout)}"
+                        android:onClick="@{(button)->listener.onOrderReadyClick(notificationItem,Cancelled,Ready,WaitingList,AcceptLayout,ReadyLayout,WaitingLayout,DeliveredLayout,CancelLayout,RejectedLayout)}"
                         android:textSize="15sp"
                         android:background="@drawable/backgroundgreen"
                         app:backgroundTint="@null"
@@ -320,6 +358,7 @@
                         android:layout_width="0dp"
                         android:layout_height="59dp"
                         android:text="Cancel"
+                        android:onClick="@{()->listener.onCancelClick(notificationItem,AcceptLayout,ReadyLayout,WaitingLayout,DeliveredLayout,CancelLayout,RejectedLayout)}"
                         android:textColor="@color/selected_icon"
                         android:textSize="15sp"
                         app:cornerRadius="10dp" />
@@ -335,7 +374,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginTop="5dp"
                         android:text="Waiting"
-                        android:onClick="@{(button)->listener.onWaitingClicked(notificationItem,AcceptLayout,ReadyLayout,WaitingLayout,DeliveredLayout)}"
+                        android:onClick="@{(button)->listener.onWaitingClicked(notificationItem,AcceptLayout,ReadyLayout,WaitingLayout,DeliveredLayout,CancelLayout,RejectedLayout)}"
                         android:textSize="15sp"
                         android:background="@drawable/backgroundblue"
                         app:backgroundTint="@null"
@@ -366,6 +405,56 @@
                         android:background="@drawable/backgroundgreen"
                         app:backgroundTint="@null"
                         android:textColor="@color/colorWhite"
+                        app:cornerRadius="10dp" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:visibility="gone"
+                    android:id="@+id/CancelLayout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:weightSum="1">
+
+                    <com.google.android.material.button.MaterialButton
+                        android:layout_weight="1"
+                        android:layout_marginStart="15dp"
+                        android:layout_marginEnd="15dp"
+                        android:layout_marginTop="5dp"
+                        android:layout_marginBottom="12dp"
+                        android:id="@+id/CancelledShow"
+                        style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                        android:layout_width="0dp"
+                        android:layout_height="59dp"
+                        android:text="Cancelled"
+                        android:textColor="@color/selected_icon"
+                        android:textSize="15sp"
+                        app:cornerRadius="10dp" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:visibility="gone"
+                    android:id="@+id/RejectedLayout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:weightSum="1">
+
+                    <com.google.android.material.button.MaterialButton
+                        android:layout_weight="1"
+                        android:layout_marginStart="15dp"
+                        android:layout_marginEnd="15dp"
+                        android:layout_marginTop="5dp"
+                        android:layout_marginBottom="12dp"
+                        android:id="@+id/RejectedShow"
+                        style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                        android:layout_width="0dp"
+                        android:layout_height="59dp"
+                        android:text="Rejected"
+                        android:textColor="@color/selected_icon"
+                        android:textSize="15sp"
                         app:cornerRadius="10dp" />
 
                 </LinearLayout>

@@ -20,13 +20,12 @@
         <item name="colorPrimary">@color/colorAccent</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
-        <item name="colorPrimaryVariant">@color/colorWhite</item>
+        <item name="colorPrimaryVariant">@color/colorPrimaryNight</item>
         <item name="colorSecondary">@color/colorWhite</item>
         <item name="android:windowContentTransitions">true</item>
         <item name="android:statusBarColor">@color/colorAccent</item>
 <!--        <item name="android:windowLightStatusBar">true</item>-->
         <item name="colorControlNormal">@color/colorWhite</item>
-
     </style>
 
     <style name="ShapeAppearanceOverlay.App.CornerSize50Percent" parent="">
@@ -36,6 +35,14 @@
     <style name="ToolbarColoredBackArrow" parent="AppTheme">
         <item name="android:textColorPrimary">@android:color/white</item>
 <!--        <item name="android:textColorSecondary">@color/black</item>-->
+    </style>
+
+    <style name="BottomSheetDialog" parent="Theme.Design.Light.BottomSheetDialog">
+        <item name="bottomSheetStyle">@style/bottomSheetStyleWrapper</item>
+    </style>
+
+    <style name="bottomSheetStyleWrapper" parent="Widget.Design.BottomSheet.Modal">
+        <item name="android:background">@android:color/transparent</item>
     </style>
 
 <!--    <style name="ToolBarTheme.ToolBarStyle"    parent="ThemeOverlay.AppCompat.Dark.ActionBar">-->

@@ -27,22 +27,36 @@
                     android:id="@+id/view"
                     android:layout_width="match_parent"
                     android:layout_height="100dp"
-                    android:layout_below="@+id/imageView"
+                    android:layout_below="@+id/imageViewFrame"
                     android:layout_marginTop="-50dp"
                     android:background="@drawable/cardbackground" />
 
+                <FrameLayout
+                    android:id="@+id/imageViewFrame"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerHorizontal="true">
 
-                <com.google.android.material.imageview.ShapeableImageView
-                    android:id="@+id/imageView"
-                    android:layout_width="120dp"
-                    android:layout_height="120dp"
-                    android:scaleType="centerCrop"
-                    android:layout_centerHorizontal="true"
-                    android:layout_marginTop="5dp"
-                    android:transitionName="img"
-                    android:visibility="visible"
-                    app:shapeAppearanceOverlay="@style/ShapeAppearanceOverlay.App.CornerSize50Percent" />
+                    <com.google.android.material.imageview.ShapeableImageView
+                        android:id="@+id/imageView"
+                        android:layout_width="120dp"
+                        android:layout_height="120dp"
+                        android:layout_marginTop="5dp"
+                        android:scaleType="centerCrop"
+                        android:transitionName="img"
+                        android:visibility="visible"
+                        app:shapeAppearanceOverlay="@style/ShapeAppearanceOverlay.App.CornerSize50Percent" />
 
+                    <com.airbnb.lottie.LottieAnimationView
+                        android:id="@+id/lottiViewProfile"
+                        android:layout_width="120dp"
+                        android:layout_height="120dp"
+                        app:lottie_autoPlay="true"
+                        app:lottie_rawRes="@raw/loading_circle"
+                        app:lottie_loop="true" />
+
+
+                </FrameLayout>
 
                 <!--                <de.hdodenhof.circleimageview.CircleImageView-->
 <!--                    android:id="@+id/imageView"-->
@@ -55,27 +69,29 @@
                     android:id="@+id/name"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_below="@+id/imageView"
+                    android:layout_below="@+id/imageViewFrame"
                     android:layout_centerHorizontal="true"
                     android:layout_marginStart="8dp"
                     android:layout_marginTop="4dp"
                     android:layout_marginEnd="8dp"
-                    android:text=" "
                     android:textAlignment="center"
                     android:textColor="@android:color/white"
                     android:textSize="18sp"
                     android:textStyle="bold" />
 
                 <LinearLayout
+                    android:id="@+id/ln1"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_above="@+id/view"
-                    android:layout_alignTop="@+id/imageView"
+                    android:layout_alignTop="@+id/imageViewFrame"
                     android:layout_marginStart="16dp"
                     android:layout_marginEnd="16dp"
                     android:layout_marginBottom="-30dp"
-                    android:layout_toStartOf="@+id/imageView"
+                    android:layout_toStartOf="@+id/imageViewFrame"
                     android:orientation="vertical">
+
+
 
                     <ImageButton
                         android:id="@+id/editImageButton"
@@ -101,13 +117,52 @@
 
 
                 <LinearLayout
+                    android:visibility="gone"
+                    android:id="@+id/ln1_Opened"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_above="@+id/view"
-                    android:layout_alignTop="@+id/imageView"
+                    android:layout_alignTop="@+id/imageViewFrame"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginEnd="16dp"
+                    android:layout_marginBottom="-30dp"
+                    android:layout_toStartOf="@+id/imageViewFrame"
+                    android:orientation="vertical">
+
+
+
+                    <ImageButton
+                        android:id="@+id/editImageButton_Opened"
+                        android:layout_width="50dp"
+                        android:layout_height="50dp"
+                        android:layout_gravity="center_horizontal"
+                        android:layout_marginTop="72dp"
+                        android:background="@android:color/transparent"
+                        app:srcCompat="@drawable/ic_baseline_block_24" />
+
+                    <TextView
+                        android:id="@+id/BlockOpened"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:text="Block"
+                        android:textAlignment="center"
+                        android:textColor="@android:color/white"
+                        android:textSize="14sp" />
+
+
+                </LinearLayout>
+
+
+                <LinearLayout
+                    android:id="@+id/ln2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_above="@+id/view"
+                    android:layout_alignTop="@+id/imageViewFrame"
                     android:layout_marginStart="16dp"
                     android:layout_marginBottom="-30dp"
-                    android:layout_toEndOf="@+id/imageView"
+                    android:layout_toEndOf="@+id/imageViewFrame"
                     android:orientation="vertical">
 
                     <ImageButton
@@ -129,6 +184,43 @@
                         android:layout_gravity="center"
                         android:gravity="center"
                         android:text="Saved"
+                        android:textColor="@android:color/white"
+                        android:textSize="14sp" />
+
+                </LinearLayout>
+
+
+                <LinearLayout
+                    android:visibility="gone"
+                    android:id="@+id/ln2Opened"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_above="@+id/view"
+                    android:layout_alignTop="@+id/imageViewFrame"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginBottom="-30dp"
+                    android:layout_toEndOf="@+id/imageViewFrame"
+                    android:orientation="vertical">
+
+                    <ImageButton
+                        android:id="@+id/CallImageOpened"
+                        android:layout_width="50dp"
+                        android:layout_height="50dp"
+                        android:layout_gravity="center_horizontal"
+                        android:layout_marginTop="72dp"
+                        android:background="@android:color/transparent"
+                        app:layout_constraintStart_toEndOf="@+id/imageView"
+                        app:layout_constraintTop_toTopOf="@+id/imageView"
+                        app:srcCompat="@drawable/ic_baseline_call_24"
+                        tools:ignore="VectorDrawableCompat" />
+
+                    <TextView
+                        android:id="@+id/CallOpened"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:gravity="center"
+                        android:text="Call"
                         android:textColor="@android:color/white"
                         android:textSize="14sp" />
 

@@ -1,27 +1,25 @@
 package com.android.testproject1.adapter
 
 import android.content.Context
-import android.util.Log
+import android.graphics.drawable.Drawable
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.ViewDataBinding
 import androidx.recyclerview.widget.RecyclerView
 import com.android.testproject1.BR
 import com.android.testproject1.interfaces.IMainActivity
 import com.android.testproject1.databinding.ItemDiscoverBinding
-import com.android.testproject1.model.Offer
 import kotlinx.android.synthetic.main.item_discover.view.*
-import android.widget.Toast
 import androidx.recyclerview.widget.DiffUtil
-
-import com.android.testproject1.MainActivity
-import com.android.testproject1.room.enteties.AppDatabase
-import com.android.testproject1.room.enteties.ChatRoomEntity
-import com.android.testproject1.room.enteties.OfferRoomEntity
-import com.android.testproject1.room.enteties.UserImagesRoomEntity
+import com.airbnb.lottie.LottieAnimationView
+import com.android.testproject1.R
+import com.android.testproject1.room.enteties.*
 import com.bumptech.glide.Glide
+import com.bumptech.glide.load.DataSource
+import com.bumptech.glide.load.engine.GlideException
+import com.bumptech.glide.request.RequestListener
 import com.google.firebase.firestore.FirebaseFirestore
-
 import com.shalan.mohamed.itemcounterview.CounterListener
 import es.dmoral.toasty.Toasty
 import kotlinx.coroutines.CoroutineScope
@@ -59,6 +57,8 @@ class SearchAdapter2(private val context: Context,
 
         var thumbnailImage:String?=null
         var userName:String?=null
+        var isSavedOffer=false
+        var savedOffer:String
         CoroutineScope(Dispatchers.IO).launch {
             thumbnailImage = offerList[position].userId.let { localDatabase.appDao()?.getUserImage(it) }
             if (thumbnailImage==null){
@@ -82,11 +82,9 @@ class SearchAdapter2(private val context: Context,
                                             if (thumbnailImage!=null) {
                                                 Glide.with(context)
                                                     .load(thumbnailImage)
+                                                    .addListener(imageLoadingListener(holder.itemBinding.root.lottiViewProfile))
                                                     .into(holder.itemBinding.root.profileImage)
                                             }
-
-
-//                    Log.d("MyTag"," thumbnail image is "+thumbnailImage)
                                         }
                                     }
                                 }
@@ -94,23 +92,6 @@ class SearchAdapter2(private val context: Context,
                         }
                     }
                 }
-
-//                thumbnailImage = offerList[position].userId?.let {
-//                    localDatabase.appDao()?.getUserImage(it) }
-//
-//                userName = offerList[position].userId?.let {
-//                    localDatabase.appDao()?.getUserName(it) }
-//
-//                withContext(Dispatchers.Main){
-//                    if (thumbnailImage!=null) {
-//                        Glide.with(context)
-//                            .load(thumbnailImage)
-//                            .into(holder.itemBinding.root.profileImage)
-//                    }
-//                    holder.itemBinding.root.title.text=userName.toString()
-//
-////                    Log.d("MyTag"," thumbnail image is "+thumbnailImage)
-//                }
 
             }else{
 
@@ -122,45 +103,64 @@ class SearchAdapter2(private val context: Context,
                     if (thumbnailImage!=null) {
                         Glide.with(context)
                             .load(thumbnailImage)
+                            .addListener(imageLoadingListener(holder.itemBinding.root.lottiViewProfile))
                             .into(holder.itemBinding.root.profileImage)
                     }
 
-//                    Log.d("MyTag"," thumbnail image is "+thumbnailImage)
                 }
             }
 
         }
 
+        CoroutineScope(Dispatchers.IO).launch {
+            val isOfferSaved =localDatabase.appDao()?.getSavedOffer(offerList[position].postId)
+            withContext(Dispatchers.Main) {
+                if (isOfferSaved != null) {
+                    holder.itemBinding.root.bookMark.setBackgroundResource(R.drawable.ic_bookmark_black_24dp)
+                }else{
+                    holder.itemBinding.root.bookMark.setBackgroundResource(R.drawable.ic_baseline_bookmark_border_24)
+                }
+            }
+        }
 
-//        if (thumbnailImage!=null) {
-//            Glide.with(context)
-//                .load(thumbnailImage)
-//                .into(holder.itemBinding.root.profileImage)
-//        }
         val discountedPrice=offerList[position].discountPrice
+        val originalPrice=offerList[position].originalPrice
 
-        holder.itemBinding.root.price_total.text = offerList[position].discountPrice
+        if(discountedPrice.isNotBlank()&&originalPrice.isNotBlank()){
+            holder.itemBinding.root.price_total.text = offerList[position].discountPrice
+        }else if (originalPrice.isBlank()){
+            holder.itemBinding.root.price_total.text = offerList[position].discountPrice
+        }else if (discountedPrice.isBlank()){
+            holder.itemBinding.root.price_total.text = offerList[position].originalPrice
+        }
         holder.itemBinding.root.profileImage
 
-//        if (offerList[position].userimage.isNotEmpty()) {
-//                Glide.with(context)
-//                    .load(offerList[position].userimage)
-//                    .into(holder.itemBinding.root.profileImage)
-//
-//        }
-
-
-//        holder.itemBinding.root.order_quantity_total.text=(total.toInt()/discountedPrice.toInt()).toString()
         holder.itemBinding.root.order_quantity_total.text="1"
 
         holder.itemBinding.root.itemCounter.setCounterListener(object :CounterListener{
             override fun onIncClick(value: String?) {
                 if (value != null) {
 //                    " ₹"+
-                       total= ((value.toInt() * discountedPrice.toInt()).toString())
-                    holder.itemBinding.root.DiscountedPrice.text=" ₹$total "
-                    holder.itemBinding.root.price_total.text = total
-                    holder.itemBinding.root.order_quantity_total.text=(total.toInt()/discountedPrice.toInt()).toString()
+    if(discountedPrice.isNotBlank()&&originalPrice.isNotBlank()){
+        total= ((value.toInt() * discountedPrice.toInt()).toString())
+        holder.itemBinding.root.DiscountedPrice.text=" ₹$total "
+        holder.itemBinding.root.price_total.text = total
+        holder.itemBinding.root.order_quantity_total.text=(total.toInt()/discountedPrice.toInt()).toString()
+
+    }else if(originalPrice.isBlank()){
+        total= ((value.toInt() * discountedPrice.toInt()).toString())
+        holder.itemBinding.root.DiscountedPrice.text=" ₹$total "
+        holder.itemBinding.root.price_total.text = total
+        holder.itemBinding.root.order_quantity_total.text=(total.toInt()/discountedPrice.toInt()).toString()
+
+    }else if (discountedPrice.isBlank()){
+        total= ((value.toInt() * originalPrice.toInt()).toString())
+        holder.itemBinding.root.DiscountedPrice.text=" ₹$total "
+        holder.itemBinding.root.price_total.text = total
+        holder.itemBinding.root.order_quantity_total.text=(total.toInt()/originalPrice.toInt()).toString()
+    }
+
+
                 }
 //                holder.itemBinding.root.DiscountedPrice.text = (counterValue.toInt() * (offerList[position].discountPrice).toInt()).toString()
             }
@@ -168,15 +168,48 @@ class SearchAdapter2(private val context: Context,
 
             override fun onDecClick(value: String?) {
                 if (value != null) {
-                      total=  ((value.toInt() * discountedPrice.toInt()).toString())
-                    holder.itemBinding.root.DiscountedPrice.text=" ₹$total "
-                    holder.itemBinding.root.price_total.text = total
-                    holder.itemBinding.root.order_quantity_total.text=(total.toInt()/discountedPrice.toInt()).toString()
+                    if (discountedPrice.isNotBlank()&&originalPrice.isNotBlank()){
+                        total=  ((value.toInt() * discountedPrice.toInt()).toString())
+                        holder.itemBinding.root.DiscountedPrice.text=" ₹$total "
+                        holder.itemBinding.root.price_total.text = total
+                        holder.itemBinding.root.order_quantity_total.text=(total.toInt()/discountedPrice.toInt()).toString()
+                    }else if (originalPrice.isBlank()){
+                        total=  ((value.toInt() * discountedPrice.toInt()).toString())
+                        holder.itemBinding.root.DiscountedPrice.text=" ₹$total "
+                        holder.itemBinding.root.price_total.text = total
+                        holder.itemBinding.root.order_quantity_total.text=(total.toInt()/discountedPrice.toInt()).toString()
+                    }else if (discountedPrice.isBlank()){
+                        total=  ((value.toInt() * originalPrice.toInt()).toString())
+                        holder.itemBinding.root.DiscountedPrice.text=" ₹$total "
+                        holder.itemBinding.root.price_total.text = total
+                        holder.itemBinding.root.order_quantity_total.text=(total.toInt()/originalPrice.toInt()).toString()
+                    }
+
                 }
             }
         })
     }
 
+
+    fun imageLoadingListener(pendingImage: LottieAnimationView): RequestListener<Drawable?>? {
+        return object : RequestListener<Drawable?> {
+            override fun onLoadFailed(e: GlideException?, model: Any?, target: com.bumptech.glide.request.target.Target<Drawable?>?, isFirstResource: Boolean): Boolean {
+                return false
+            }
+
+            override fun onResourceReady(
+                resource: Drawable?,
+                model: Any?,
+                target: com.bumptech.glide.request.target.Target<Drawable?>?,
+                dataSource: DataSource?,
+                isFirstResource: Boolean
+            ): Boolean {
+                pendingImage.pauseAnimation()
+                pendingImage.visibility = View.GONE
+                return false
+            }
+        }
+    }
 
 
     override fun getItemCount(): Int {

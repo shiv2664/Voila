@@ -35,13 +35,19 @@ interface AppDao {
 
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun addOffer(OfferEntity: OffersSavedRoomEntity)
+    fun saveOffer(OfferEntity: OffersSavedRoomEntity)
 
     @Query("Select * from OffersSavedRoomEntity")
     fun getSavedOffers():LiveData<MutableList<OffersSavedRoomEntity>>
 
+    @Query("Select * from OffersSavedRoomEntity WHERE postId = :postId")
+    fun getSavedOffer(postId: String) : OffersSavedRoomEntity
+
     @Query("DELETE FROM OffersSavedRoomEntity WHERE postId = :postId")
     fun deleteOfferById(postId: String)
+
+    @Query("DELETE FROM OffersSavedRoomEntity ")
+    fun deleteTableOfferSavedRoomEntity()
 
 
 
@@ -76,6 +82,9 @@ interface AppDao {
     @Query("Select * From ChatRoomEntity where chatKey= :chatKey order by timestamp ")
     fun getMessages(chatKey: String): LiveData<List<ChatRoomEntity>>
 
+    @Query("Delete from ChatRoomEntity")
+    fun deleteAllChatMessages()
+
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insertImage(imageRoomEntity: UserImagesRoomEntity)
@@ -86,6 +95,8 @@ interface AppDao {
     @Query("Select username From UserImagesRoomEntity where userId= :userId")
     fun getUserName(userId: String) :String
 
+    @Query("DELETE FROM UserImagesRoomEntity ")
+    fun deleteTableUserImagesRoomEntity()
 
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
@@ -103,6 +114,9 @@ interface AppDao {
 
     @Query("Select * From OrdersRoomEntity order by timestamp desc")
     fun getOrders(): LiveData<List<OrdersRoomEntity>>
+
+    @Query("DELETE FROM OrdersRoomEntity ")
+    fun deleteTableOrdersRoomEntity()
 
 
 

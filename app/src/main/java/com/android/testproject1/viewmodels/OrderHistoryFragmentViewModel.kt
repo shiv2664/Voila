@@ -94,7 +94,7 @@ class OrderHistoryFragmentViewModel(application: Application) :AndroidViewModel(
                         }
                     }
 
-                    Log.d(myTAG,"Last Result is : "+lastResult?.toObject(ChatRoomEntity::class.java)?.timestamp)
+                    Log.d(myTAG,"Last Result is : "+lastResult?.toObject(OrdersRoomEntity::class.java)?.timestamp)
 
 
 

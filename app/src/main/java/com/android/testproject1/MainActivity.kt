@@ -4,6 +4,7 @@ import android.Manifest
 import android.content.pm.PackageManager
 import android.os.Bundle
 import android.view.View
+import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
@@ -16,6 +17,7 @@ import com.android.testproject1.interfaces.IMainActivity
 import com.android.testproject1.room.enteties.NotificationsRoomEntity
 import com.android.testproject1.model.Users
 import com.android.testproject1.room.enteties.OfferRoomEntity
+import com.android.testproject1.room.enteties.OffersSavedRoomEntity
 import com.android.testproject1.room.enteties.UsersChatListEntity
 import com.android.testproject1.viewmodels.MainActivity2ViewModel
 import com.google.android.material.button.MaterialButton
@@ -151,6 +153,10 @@ class MainActivity : AppCompatActivity() , IMainActivity {
         TODO("Not yet implemented")
     }
 
+    override fun onUserNamePicClick(userId: String?, orderTo: String?) {
+        TODO("Not yet implemented")
+    }
+
     override fun onAcceptClick(
         notificationsRoomEntityItem: NotificationsRoomEntity,
         reject: MaterialButton,
@@ -160,7 +166,9 @@ class MainActivity : AppCompatActivity() , IMainActivity {
         linearLayout: LinearLayout,
         linearlayout2: LinearLayout,
         linearLayout3: LinearLayout,
-        linearlayout4: LinearLayout
+        linearlayout4: LinearLayout,
+        CancelLayout: LinearLayout,
+        RejectedLayout: LinearLayout
     ) {
         TODO("Not yet implemented")
     }
@@ -173,18 +181,50 @@ class MainActivity : AppCompatActivity() , IMainActivity {
         linearLayout: LinearLayout,
         linearLayout2: LinearLayout,
         linearLayout3: LinearLayout,
-        linearLayout4: LinearLayout
+        linearLayout4: LinearLayout,
+        CancelLayout: LinearLayout,
+        RejectedLayout: LinearLayout
     ) {
         TODO("Not yet implemented")
     }
 
     override fun onWaitingClicked(
-        notificationItem: NotificationsRoomEntity,
+        notificationsRoomEntityItem: NotificationsRoomEntity,
         linearLayout: LinearLayout,
         linearLayout2: LinearLayout,
         linearLayout3: LinearLayout,
-        linearLayout4: LinearLayout
+        linearLayout4: LinearLayout,
+        CancelLayout: LinearLayout,
+        RejectedLayout: LinearLayout
     ) {
+        TODO("Not yet implemented")
+    }
+
+    override fun onRejectClick(
+        notificationsRoomEntityItem: NotificationsRoomEntity,
+        linearLayout: LinearLayout,
+        linearlayout2: LinearLayout,
+        linearLayout3: LinearLayout,
+        linearlayout4: LinearLayout,
+        CancelLayout: LinearLayout,
+        RejectedLayout: LinearLayout
+    ) {
+        TODO("Not yet implemented")
+    }
+
+    override fun onCancelClick(
+        notificationsRoomEntityItem: NotificationsRoomEntity,
+        linearLayout: LinearLayout,
+        linearlayout2: LinearLayout,
+        linearLayout3: LinearLayout,
+        linearlayout4: LinearLayout,
+        CancelLayout: LinearLayout,
+        RejectedLayout: LinearLayout
+    ) {
+        TODO("Not yet implemented")
+    }
+
+    override fun onProfilePostItemCLick(offerItem: OfferRoomEntity) {
         TODO("Not yet implemented")
     }
 
@@ -265,7 +305,14 @@ class MainActivity : AppCompatActivity() , IMainActivity {
         TODO("Not yet implemented")
     }
 
-    override fun onBookMarkItemClick(offerItem: OfferRoomEntity) {
+    override fun onBookMarkItemClick(offerItem: OfferRoomEntity, bookmarkImageView: ImageView) {
+        TODO("Not yet implemented")
+    }
+
+    override fun onBookMarkClickedSavedOffers(
+        offerItem: OffersSavedRoomEntity,
+        bookmarkImageView: ImageView
+    ) {
         TODO("Not yet implemented")
     }
 

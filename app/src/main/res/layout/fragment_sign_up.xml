@@ -13,8 +13,7 @@
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context=".fragments.SignUpFragment"
-        android:background="@color/colorPrimary">
+        tools:context=".fragments.SignUpFragment">
 
         <RelativeLayout
             android:id="@+id/rl_footer"
@@ -34,12 +33,14 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="40dp"
                     android:layout_marginEnd="40dp"
-                    android:hint="Name"
-                    app:boxStrokeColor="?attr/colorAccent"
-                    app:hintTextColor="?attr/colorAccent">
+                    app:boxStrokeColor="@color/colorAccent"
+                    app:hintTextColor="@color/colorAccent"
+                    android:textColorHint="@color/colorAccent"
+                    android:hint="Name">
 
                     <EditText
                         android:id="@+id/username"
+                        android:textColor="@color/colorLoginCardBackground"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:inputType="textEmailAddress"
@@ -77,11 +78,13 @@
                     android:layout_marginStart="40dp"
                     android:layout_marginEnd="40dp"
                     android:hint="Email"
-                    app:boxStrokeColor="?attr/colorAccent"
-                    app:hintTextColor="?attr/colorAccent">
+                    app:boxStrokeColor="@color/colorAccent"
+                    app:hintTextColor="@color/colorAccent"
+                    android:textColorHint="@color/colorAccent">
 
                     <EditText
                         android:id="@+id/signUpEmailID"
+                        android:textColor="@color/colorLoginCardBackground"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:inputType="textEmailAddress"
@@ -117,10 +120,12 @@
                     android:layout_marginStart="40dp"
                     android:layout_marginEnd="40dp"
                     android:hint="Phone Number"
-                    app:boxStrokeColor="?attr/colorAccent"
-                    app:hintTextColor="?attr/colorAccent">
+                    app:boxStrokeColor="@color/colorAccent"
+                    app:hintTextColor="@color/colorAccent"
+                    android:textColorHint="@color/colorAccent">
 
                     <EditText
+                        android:textColor="@color/colorLoginCardBackground"
                         android:id="@+id/signUpMobileNumber"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -161,10 +166,12 @@
                     android:layout_marginEnd="40dp"
                     android:hint="Password"
                     app:passwordToggleEnabled="true"
-                    app:boxStrokeColor="?attr/colorAccent"
-                    app:hintTextColor="?attr/colorAccent">
+                    app:boxStrokeColor="@color/colorAccent"
+                    app:hintTextColor="@color/colorAccent"
+                    android:textColorHint="@color/colorAccent">
 
                     <EditText
+                        android:textColor="@color/colorLoginCardBackground"
                         android:id="@+id/signUpPassword"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -205,10 +212,12 @@
                     app:passwordToggleEnabled="true"
                     android:layout_marginEnd="40dp"
                     android:hint="Confirm Password"
-                    app:boxStrokeColor="?attr/colorAccent"
-                    app:hintTextColor="?attr/colorAccent">
+                    app:boxStrokeColor="@color/colorAccent"
+                    app:hintTextColor="@color/colorAccent"
+                    android:textColorHint="@color/colorAccent">
 
                     <EditText
+                        android:textColor="@color/colorLoginCardBackground"
                         android:id="@+id/signUpConfirmPassword"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -269,7 +278,7 @@
                         android:layout_weight="2"
                         android:background="@drawable/button_background2"
                         android:fontFamily="@font/seg_ui_semibold"
-                        android:text="Next"
+                        android:text="Sign Up"
                         android:textAllCaps="false"
                         android:textColor="@color/colorTextWhite"
                         android:textSize="16dp"

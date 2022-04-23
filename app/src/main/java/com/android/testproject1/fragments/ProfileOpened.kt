@@ -3,6 +3,8 @@ package com.android.testproject1.fragments
 import android.animation.Animator
 import android.animation.AnimatorListenerAdapter
 import android.content.Context
+import android.content.SharedPreferences
+import android.graphics.drawable.Drawable
 import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
@@ -14,12 +16,18 @@ import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.navigation.fragment.findNavController
 import com.afollestad.materialdialogs.MaterialDialog
+import com.airbnb.lottie.LottieAnimationView
 import com.android.testproject1.R
 import com.android.testproject1.databinding.FragmentProfileOpenedBinding
 import com.android.testproject1.model.Users
 import com.android.testproject1.room.enteties.AppDatabase
+import com.android.testproject1.room.enteties.OfferRoomEntity
 import com.android.testproject1.room.enteties.UserImagesRoomEntity
 import com.bumptech.glide.Glide
+import com.bumptech.glide.load.DataSource
+import com.bumptech.glide.load.engine.GlideException
+import com.bumptech.glide.request.RequestListener
+import com.bumptech.glide.request.RequestOptions
 import com.google.android.gms.tasks.OnFailureListener
 import com.google.android.gms.tasks.OnSuccessListener
 import com.google.firebase.auth.FirebaseAuth
@@ -34,6 +42,13 @@ import kotlinx.coroutines.launch
 import java.lang.Exception
 import java.util.*
 import kotlin.collections.HashMap
+import android.content.Intent
+import android.net.Uri
+import android.app.Activity
+
+
+
+
 
 class ProfileOpened : Fragment() {
 
@@ -52,6 +67,9 @@ class ProfileOpened : Fragment() {
     private var friend_email:String? = null
     private var friend_image:String? = null
     private var friend_token:String? = null
+    private lateinit var sharedPrefDynamic:SharedPreferences
+    private lateinit var userId:String
+
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -59,9 +77,52 @@ class ProfileOpened : Fragment() {
     ): View {
         binding= FragmentProfileOpenedBinding.inflate(inflater,container,false)
 
+        mFirestore= FirebaseFirestore.getInstance()
+        mFirebaseAuth= FirebaseAuth.getInstance()
+        currentUserID=mFirebaseAuth.currentUser?.uid
+
         val localDatabase: AppDatabase? = AppDatabase.getInstance(requireActivity())
-        val sharedPref= activity?.getSharedPreferences("currentUserDetails", Context.MODE_PRIVATE)
-        val editor = sharedPref?.edit()
+//        val sharedPref= activity?.getSharedPreferences("currentUserDetails", Context.MODE_PRIVATE)
+//        val editor = sharedPref?.edit()
+
+
+//        if (currentUserID!=null){
+//            sharedPrefDynamic= activity?.getSharedPreferences(currentUserID,Context.MODE_PRIVATE)!!
+//        }
+
+//        val offerItem=arguments?.getParcelable<OfferRoomEntity>("offerItem")
+        val userIdBundle=arguments?.getString("userId")
+        userId = userIdBundle ?: currentUserID.toString()
+
+        if(currentUserID!=userId){
+            binding.ln1.visibility=View.GONE
+            binding.ln2.visibility=View.GONE
+
+            binding.ln1Opened.visibility=View.VISIBLE
+            binding.ln2Opened.visibility=View.VISIBLE
+        }
+
+        sharedPrefDynamic= activity?.getSharedPreferences(userId,Context.MODE_PRIVATE)!!
+        Log.d("MyTag", "profile image is: "+sharedPrefDynamic.getString("profileimage",""))
+        Log.d("MyTag","name is : "+sharedPrefDynamic?.getString("username",""))
+        val dynamicEditor= sharedPrefDynamic?.edit()
+        var firstTimeCheck= sharedPrefDynamic?.getInt("firstTimeCheck",0)
+        firstTimeCheck++
+        dynamicEditor?.putInt("firstTimeCheck",firstTimeCheck)
+        dynamicEditor?.apply()
+
+        binding.CallOpened.setOnClickListener {
+            val number: Uri = Uri.parse("tel:"+sharedPrefDynamic.getString("profilenumber",""))
+            val callIntent = Intent(Intent.ACTION_DIAL, number)
+            startActivity(callIntent)
+        }
+
+//        var firstTimeCheck= sharedPref?.getInt("firstTimeCheck",0)
+//        if (firstTimeCheck!=null){
+//            firstTimeCheck++
+//            editor?.putInt("firstTimeCheck",firstTimeCheck)
+//            editor?.apply()
+//        }
 
 //        val bundle2 = this.arguments
 //        if (bundle2 != null) {
@@ -73,43 +134,37 @@ class ProfileOpened : Fragment() {
 //        }
 //        Log.d("MyTag", "id Profile Opened  is : $id")
 
-        mFirestore= FirebaseFirestore.getInstance()
-        mFirebaseAuth= FirebaseAuth.getInstance()
-        currentUserID=mFirebaseAuth.currentUser?.uid
 
-        id=currentUserID
+
+        id=userId
 
         req_sent= binding.friendSent
         remove_friend= binding.friendYes
         add_friend=binding.friendNo
         req_layout=binding.friendReq
 
-        val reference=FirebaseFirestore.getInstance()
-        val fUser=FirebaseAuth.getInstance().currentUser?.uid
-        reference.collection("Users").document(fUser.toString()).get().addOnSuccessListener {
-            if (it != null) {
-
-                if (it.exists()) {
-                    // convert document to POJO
-                    val notifPojo: Users? = it.toObject(Users::class.java)
-
-                    if (notifPojo != null) {
-                        if (notifPojo.profileimage.isNotEmpty()) {
-                            activity?.let { it1 -> Glide.with(it1).load(notifPojo.profileimage).into(binding.imageView) }
-                        }
-//                        Log.d("MyTag"," Image Url is "+notifPojo.profileimage)
-                    }
-
-                    val userImageRoomEntity: UserImagesRoomEntity? = it.toObject(UserImagesRoomEntity::class.java)
-                    CoroutineScope(Dispatchers.IO).launch {
-                        if (userImageRoomEntity != null) {
-                            localDatabase?.appDao()?.insertImage(userImageRoomEntity)
-                        }
-                    }
-                }
-            }
-
-        }
+//        val reference=FirebaseFirestore.getInstance()
+//        val fUser=FirebaseAuth.getInstance().currentUser?.uid
+//        reference.collection("Users").document(fUser.toString()).get().addOnSuccessListener {
+//            if (it != null) {
+//                if (it.exists()) {
+//                    // convert document to POJO
+//                    val notifPojo: Users? = it.toObject(Users::class.java)
+//
+//                    if (notifPojo != null) {
+//                        if (notifPojo.profileimage.isNotEmpty()) {
+//                            activity?.let { it1 ->
+//                                Glide.with(it1)
+//                                    .load(notifPojo.profileimage)
+//                                    .into(binding.imageView)
+//                            }
+//                        }
+////                        Log.d("MyTag"," Image Url is "+notifPojo.profileimage)
+//                    }
+//                }
+//            }
+//
+//        }
 
         binding.sendMessage.setOnClickListener {
 
@@ -138,39 +193,62 @@ class ProfileOpened : Fragment() {
                 findNavController().navigate(R.id.action_profileOpened_to_viewPagerFragmentCurrentUserPosts)
             }
 
+        if (firstTimeCheck!=1){
+
+//            binding.name.text = sharedPref?.getString("userName","")
+//            binding.email.text = sharedPref?.getString("userEmail","")
+//            binding.bio.text = sharedPref?.getString("userBio","")
+//            Glide.with(requireActivity())
+//                .load(sharedPref?.getString("profileimage",""))
+//                .into(binding.imageView)
+            binding.name.text = sharedPrefDynamic?.getString("username","")
+            binding.email.text = sharedPrefDynamic?.getString("userEmail","")
+            binding.bio.text = sharedPrefDynamic?.getString("userBio","")
+            Glide.with(requireActivity())
+                .load(sharedPrefDynamic?.getString("profileimage",""))
+                .addListener(imageLoadingListener(binding.lottiViewProfile))
+                .into(binding.imageView)
+        }
 
         mFirestore.collection("Users")
             .document(id!!)
             .get()
             .addOnSuccessListener { documentSnapshot ->
-                editor?.putString("userName",documentSnapshot.getString("name"))
-                editor?.putString("userEmail",documentSnapshot.getString("email"))
-                editor?.putString("userImage",documentSnapshot.getString("image"))
-                editor?.putString("userBio",documentSnapshot.getString("bio"))
-                editor?.apply()
-//                friend_name = documentSnapshot.getString("name")
-//                friend_email = documentSnapshot.getString("email")
-//                friend_image = documentSnapshot.getString("image")
-//                friend_tokens = documentSnapshot["tokens"] as List<String?>?
 
-            //                binding.username.text = String.format(Locale.ENGLISH, "@%s",documentSnapshot.getString("username"))
+                if (firstTimeCheck==1){
 
-//                binding.name.text = friend_name
+                    binding.name.text = documentSnapshot.getString("username")
+                    binding.email.text = documentSnapshot.getString("email")
+                    binding.bio.text = documentSnapshot.getString("bio")
+                    val activity: Activity? = activity
+                    Glide.with(requireActivity())
+                        .load(documentSnapshot.getString("profileimage"))
+                        .addListener(imageLoadingListener(binding.lottiViewProfile))
+                        .into(binding.imageView)
+                }
 
-//                binding.email.text = friend_email
-//                location.setText(documentSnapshot.getString("location"))
+                val userImageRoomEntity: UserImagesRoomEntity? = documentSnapshot
+                    .toObject(UserImagesRoomEntity::class.java)
+                CoroutineScope(Dispatchers.IO).launch {
+                    if (userImageRoomEntity != null) {
+                        localDatabase?.appDao()?.insertImage(userImageRoomEntity)
+                    }
+                }
 
-//                binding.bio.text = documentSnapshot.getString("bio")
+//                    editor?.putString("userName",documentSnapshot.getString("name"))
+//                    editor?.putString("userEmail",documentSnapshot.getString("email"))
+//                    editor?.putString("profileimage",documentSnapshot.getString("profileimage"))
+//                    editor?.putString("userBio",documentSnapshot.getString("bio"))
+//                    editor?.apply()
+                dynamicEditor?.putString("username",documentSnapshot.getString("username"))
+                dynamicEditor?.putString("userEmail",documentSnapshot.getString("email"))
+                dynamicEditor?.putString("profileimage",documentSnapshot.getString("profileimage"))
+                dynamicEditor?.putString("profilenumber",documentSnapshot.getString("phoneNumber"))
+                dynamicEditor?.putString("userBio",documentSnapshot.getString("bio"))
+                dynamicEditor?.apply()
 
-            //                Glide.with(rootView.getContext())
-//                    .setDefaultRequestOptions(RequestOptions().placeholder(R.drawable.default_profile_picture))
-//                    .load(friend_image)
-//                    .into(profile_pic)
+
             }
-
-        binding.name.text = sharedPref?.getString("userName","")
-        binding.email.text = sharedPref?.getString("userEmail","Error")
-        binding.bio.text = sharedPref?.getString("userBio","Error")
 
 
 //        currentUserID?.let {
@@ -231,6 +309,26 @@ class ProfileOpened : Fragment() {
 //        }
 
         return binding.root
+    }
+
+    fun imageLoadingListener(pendingImage: LottieAnimationView): RequestListener<Drawable?>? {
+        return object : RequestListener<Drawable?> {
+            override fun onLoadFailed(e: GlideException?, model: Any?, target: com.bumptech.glide.request.target.Target<Drawable?>?, isFirstResource: Boolean): Boolean {
+                return false
+            }
+
+            override fun onResourceReady(
+                resource: Drawable?,
+                model: Any?,
+                target: com.bumptech.glide.request.target.Target<Drawable?>?,
+                dataSource: DataSource?,
+                isFirstResource: Boolean
+            ): Boolean {
+                pendingImage.pauseAnimation()
+                pendingImage.visibility = View.GONE
+                return false
+            }
+        }
     }
 
 

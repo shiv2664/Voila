@@ -47,18 +47,18 @@
 
                 <com.google.android.material.imageview.ShapeableImageView
                     android:id="@+id/img"
-                    app:backgroundImage="@{offerItem.image_url_0}"
-                    android:transitionName="img"
                     android:layout_width="match_parent"
-                    android:layout_height="280dp"
-                    android:scaleType="fitXY"/>
+                    android:layout_height="300dp"
+                    android:scaleType="centerCrop"
+                    android:transitionName="img"
+                    app:backgroundImage="@{offerItem.image_url_0}" />
 
                 <ImageView
                     android:id="@+id/shadow_bottom"
-                    android:background="@drawable/bottom_shadow"
-                    android:layout_alignBottom="@id/img"
                     android:layout_width="match_parent"
-                    android:layout_height="80dp" />
+                    android:layout_height="80dp"
+                    android:layout_alignBottom="@id/img"
+                    android:background="@drawable/bottom_shadow" />
 
                 <ProgressBar
                     android:visibility="gone"
@@ -87,96 +87,142 @@
 
 
                 <RelativeLayout
-                    android:paddingBottom="5dp"
-                    android:layout_alignStart="@+id/detailsLayout"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_alignBottom="@id/img">
+                    android:layout_alignStart="@+id/detailsLayout"
+                    android:layout_alignBottom="@id/img"
+                    android:paddingBottom="5dp">
 
-                    <de.hdodenhof.circleimageview.CircleImageView
+                    <!--                    <de.hdodenhof.circleimageview.CircleImageView-->
+                    <!--                        android:id="@+id/profileImage"-->
+                    <!--                        android:layout_width="50dp"-->
+                    <!--                        android:layout_height="50dp"-->
+                    <!--                        android:onClick="@{()->listener.onProfileOpenedDiscover(offerItem)}"-->
+                    <!--                        android:src="@{offerItem.userimage}"-->
+                    <!--                        android:transitionName="img" />-->
+
+                    <com.google.android.material.imageview.ShapeableImageView
                         android:id="@+id/profileImage"
                         android:layout_width="50dp"
                         android:layout_height="50dp"
-                        android:src="@drawable/person3" />
+                        android:scaleType="centerCrop"
+                        android:transitionName="img"
+                        app:shapeAppearanceOverlay="@style/ShapeAppearanceOverlay.App.CornerSize50Percent" />
 
                     <!--                    android:layout_toStartOf="@+id/locationLayout"-->
                     <RelativeLayout
-                        android:layout_toStartOf="@+id/priceLayout"
-                        android:layout_toEndOf="@+id/profileImage"
-                        android:layout_centerVertical="true"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:layout_toStartOf="@+id/priceLayout"
+                        android:layout_toEndOf="@+id/profileImage"
                         android:paddingStart="1dp"
                         android:paddingEnd="1dp">
-                        <LinearLayout
-                            android:id="@+id/ratingsLayout"
+
+                        <!--android:text="@{offerItem.name}"-->
+                        <!--                        android:fontFamily="sans-serif-light"-->
+                        <TextView
+                            android:id="@+id/title"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_alignParentStart="true"
                             android:layout_marginStart="10dp"
                             android:layout_marginEnd="10dp"
-                            android:orientation="horizontal">
-                            <ImageView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:background="@drawable/ic_baseline_star_24"/>
-                            <ImageView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:background="@drawable/ic_baseline_star_24"/>
-                            <ImageView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:background="@drawable/ic_baseline_star_24"/>
-                            <ImageView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:background="@drawable/ic_baseline_star_24"/>
-                            <ImageView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:background="@drawable/ic_baseline_star_24"/>
-                            <RelativeLayout
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content">
-                                <TextView
-                                    android:id="@+id/Ratings"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:layout_centerHorizontal="true"
-                                    android:text="32"
-                                    android:textColor="@color/colorTextWhite"
-                                    android:textSize="16sp"/>
+                            android:maxLines="2"
+                            android:textColor="@color/colorWhite"
+                            android:textSize="18sp"
+                            android:textStyle="bold" />
+<!--                        android:onClick="@{()->listener.onProfileOpenedDiscover(offerItem)}"-->
 
-                            </RelativeLayout>
+                        <!--                        <LinearLayout-->
+                        <!--                            android:id="@+id/ratingsLayout"-->
+                        <!--                            android:layout_width="match_parent"-->
+                        <!--                            android:layout_height="wrap_content"-->
+                        <!--                            android:layout_alignParentStart="true"-->
+                        <!--                            android:layout_marginStart="10dp"-->
+                        <!--                            android:layout_marginEnd="10dp"-->
+                        <!--                            android:orientation="horizontal">-->
 
-                        </LinearLayout>
+                        <!--                            <ImageView-->
+                        <!--                                android:layout_width="wrap_content"-->
+                        <!--                                android:layout_height="wrap_content"-->
+                        <!--                                android:background="@drawable/ic_baseline_star_24" />-->
+
+                        <!--                            <ImageView-->
+                        <!--                                android:layout_width="wrap_content"-->
+                        <!--                                android:layout_height="wrap_content"-->
+                        <!--                                android:background="@drawable/ic_baseline_star_24" />-->
+
+                        <!--                            <ImageView-->
+                        <!--                                android:layout_width="wrap_content"-->
+                        <!--                                android:layout_height="wrap_content"-->
+                        <!--                                android:background="@drawable/ic_baseline_star_24" />-->
+
+                        <!--                            <ImageView-->
+                        <!--                                android:layout_width="wrap_content"-->
+                        <!--                                android:layout_height="wrap_content"-->
+                        <!--                                android:background="@drawable/ic_baseline_star_24" />-->
+
+                        <!--                            <ImageView-->
+                        <!--                                android:layout_width="wrap_content"-->
+                        <!--                                android:layout_height="wrap_content"-->
+                        <!--                                android:background="@drawable/ic_baseline_star_24" />-->
+
+                        <!--                            <RelativeLayout-->
+                        <!--                                android:layout_width="match_parent"-->
+                        <!--                                android:layout_height="wrap_content">-->
+
+                        <!--                                <TextView-->
+                        <!--                                    android:id="@+id/Ratings"-->
+                        <!--                                    android:layout_width="wrap_content"-->
+                        <!--                                    android:layout_height="wrap_content"-->
+                        <!--                                    android:layout_centerHorizontal="true"-->
+                        <!--                                    android:text="32"-->
+                        <!--                                    android:textColor="@color/colorTextWhite"-->
+                        <!--                                    android:textSize="16sp" />-->
+
+                        <!--                            </RelativeLayout>-->
+
+                        <!--                        </LinearLayout>-->
 
                     </RelativeLayout>
 
 
                     <RelativeLayout
                         android:id="@+id/priceLayout"
-                        android:layout_centerVertical="true"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:background="@drawable/round_white"
-                        android:padding="5dp"
+                        android:layout_alignParentEnd="true"
+                        android:layout_centerVertical="true"
                         android:layout_marginEnd="20dp"
-                        android:layout_alignParentEnd="true">
+                        android:background="@drawable/round_white"
+                        android:padding="5dp">
 
+                        <!--                        android:text="@{` `+`₹`+offerItem.discountPrice+` `}"-->
                         <TextView
                             android:id="@+id/DiscountedPrice"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:fontFamily="sans-serif-light"
-                            android:textSize="18sp"
-                            android:padding="2dp"
-                            android:hint="₹1999"
-                            android:textStyle="bold"
                             android:maxLines="1"
+                            android:padding="2dp"
                             android:singleLine="true"
-                            android:text="@{`₹`+offerItem.discountPrice}" />
+                            android:textSize="18sp"
+                            android:textStyle="bold"
+                            app:discountedPrice="@{offerItem.discountPrice}"
+                            app:originalPrice="@{offerItem.originalPrice}" />
+
+                        <TextView
+                            android:id="@+id/price_total"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:visibility="gone" />
+
+                        <TextView
+                            android:id="@+id/order_quantity_total"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:visibility="gone" />
 
                     </RelativeLayout>
 
@@ -210,7 +256,6 @@
                     <!--                    </RelativeLayout>-->
 
 
-
                 </RelativeLayout>
 
 
@@ -229,6 +274,8 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content">
 
+                        <!--                        android:text="@{`Eligibility : `+offerItem.minPeople+`+ People`}"-->
+                        <!--                        android:text="@{`Quantity : `+offerItem.minPeople+` `}"-->
                         <TextView
                             android:layout_centerVertical="true"
                             android:layout_alignParentStart="true"
@@ -237,37 +284,52 @@
                             android:fontFamily="sans-serif-light"
                             android:textStyle="bold"
                             android:layout_marginEnd="10dp"
-                            android:text="@{`Eligibility : `+offerItem.minPeople+`+ People`}"
+                            android:text="Quantity"
                             android:maxLines="1"
                             android:textSize="16sp"
-                            android:id="@+id/eligiblity" />
+                            android:id="@+id/eligibility" />
+
+                        <com.shalan.mohamed.itemcounterview.IncDecView
+                            android:id="@+id/itemCounter"
+                            android:layout_width="120dp"
+                            android:layout_height="wrap_content"
+                            android:layout_toEndOf="@+id/eligibility"
+                            app:border_color="?attr/colorAccent"
+                            app:border_width="5dp"
+                            app:counterValueColor="@android:color/holo_orange_dark"
+                            app:dec_icon="@drawable/ic_remove"
+                            app:inc_dec_button_color="@color/blue"
+                            app:inc_icon="@drawable/ic_add"
+                            app:startCounterValue="1" />
+
 
                         <RelativeLayout
+                            android:visibility="gone"
                             android:id="@+id/locationLayout"
-                            android:layout_toEndOf="@id/eligiblity"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:layout_marginEnd="20dp"
+                            android:layout_toEndOf="@id/eligibility"
                             android:background="@drawable/round_white"
-                            android:padding="5dp"
-                            android:layout_marginEnd="20dp">
+                            android:padding="5dp">
 
                             <ImageView
-                                android:src="@drawable/ic_location_24dp"
-                                android:onClick="@{()->listener.onLocationClick()}"
                                 android:layout_width="18dp"
                                 android:layout_height="18dp"
                                 android:layout_marginLeft="5dp"
-                                android:layout_marginRight="5dp" />
+                                android:layout_marginRight="5dp"
+                                android:onClick="@{()->listener.onLocationClick()}"
+                                android:src="@drawable/ic_location_24dp" />
 
                             <TextView
-                                android:textColor="#606060"
-                                android:onClick="@{()->listener.onLocationClick()}"
                                 android:id="@+id/publishedAt"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
                                 android:layout_marginStart="27dp"
                                 android:layout_marginEnd="10dp"
+                                android:onClick="@{()->listener.onLocationClick()}"
                                 android:text="@{offerItem.city}"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content" />
+                                android:textColor="#606060" />
                         </RelativeLayout>
 
                         <!--                        <com.github.ivbaranov.mfb.MaterialFavoriteButton-->
@@ -284,30 +346,33 @@
                         <!--                            app:mfb_favorite_image="@drawable/ic_baseline_bookmark_24" />-->
 
 
-                        <!--                        android:onClick="@{()->listener.onBookMarkItemClick(offerItem)}"-->
+                        <!--                        android:src="@drawable/ic_bookmark_border_black_24dp"-->
                         <ImageView
                             android:id="@+id/bookMark"
                             android:layout_width="30dp"
                             android:layout_height="30dp"
                             android:layout_alignParentEnd="true"
-                            android:src="@drawable/ic_bookmark_border_black_24dp" />
+                            android:src="@drawable/ic_bookmark_border_black_24dp"
+                            android:onClick="@{()->listener.onBookMarkClickedSavedOffers(offerItem,bookMark)}"/>
+
 
 
 
                     </RelativeLayout>
 
 
-                    <TextView
-                        android:layout_marginTop="10dp"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:fontFamily="sans-serif-light"
-                        android:textStyle="bold"
-                        android:layout_marginEnd="10dp"
-                        android:text="@{offerItem.name}"
-                        android:maxLines="2"
-                        android:textSize="18sp"
-                        android:id="@+id/title" />
+                    <!--                    android:text="@{offerItem.name}"-->
+                    <!--                        <TextView-->
+                    <!--                            android:layout_marginTop="10dp"-->
+                    <!--                            android:layout_width="match_parent"-->
+                    <!--                            android:layout_height="wrap_content"-->
+                    <!--                            android:fontFamily="sans-serif-light"-->
+                    <!--                            android:textStyle="bold"-->
+                    <!--                            android:layout_marginEnd="10dp"-->
+                    <!--                            android:text="Tipsy"-->
+                    <!--                            android:maxLines="2"-->
+                    <!--                            android:textSize="18sp"-->
+                    <!--                            android:id="@+id/title" />-->
 
 
                     <RelativeLayout
@@ -316,28 +381,29 @@
                         android:padding="1dp">
 
                         <TextView
-                            android:layout_marginEnd="10dp"
+                            android:id="@+id/offer"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:fontFamily="sans-serif-light"
-                            android:textStyle="bold"
-                            android:text="@{offerItem.title}"
-                            android:maxLines="3"
-                            android:textSize="17sp"
                             android:layout_marginTop="10dp"
+                            android:layout_marginEnd="10dp"
                             android:layout_toStartOf="@+id/priceCardView"
-                            android:id="@+id/offer" />
+                            android:fontFamily="sans-serif-light"
+                            android:maxLines="3"
+                            android:text="@{offerItem.title}"
+                            android:textSize="17sp"
+                            android:textStyle="bold" />
                         <!--                        android:layout_toStartOf="@+id/DiscountedPrice"-->
 
                         <androidx.cardview.widget.CardView
+                            android:visibility="gone"
                             android:id="@+id/priceCardView"
-                            android:layout_marginTop="10dp"
-                            android:layout_marginEnd="4dp"
-                            android:layout_alignParentEnd="true"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            app:contentPadding="5dp"
-                            app:cardCornerRadius="10dp">
+                            android:layout_alignParentEnd="true"
+                            android:layout_marginTop="10dp"
+                            android:layout_marginEnd="4dp"
+                            app:cardCornerRadius="10dp"
+                            app:contentPadding="5dp">
 
                             <!--                            <TextView-->
                             <!--                                android:id="@+id/DiscountedPrice"-->
@@ -362,7 +428,8 @@
                         android:layout_marginTop="5dp"
                         app:trimMode="trimModeLine"
                         app:trimLines="5"
-                        android:text="@{offerItem.description}"/>
+                        android:text="@{offerItem.description}"
+                        android:layout_marginBottom="20dp"/>
 
                     <!--                    <TextView-->
                     <!--                        android:id="@+id/DiscountedPrice"-->
@@ -393,20 +460,35 @@
                         <!--                            style="@style/Widget.MaterialComponents.Button.OutlinedButton"/>-->
 
                         <!--                        android:onClick="@{()->listener.onRecyclerViewItemClick()}"-->
-
-                        <!--                        android:onClick="@{()->listener.onRecyclerViewItemClick(offerItem)}"-->
                         <com.google.android.material.button.MaterialButton
+                            android:visibility="gone"
                             android:id="@+id/Groups"
+                            style="@style/Widget.MaterialComponents.Button.OutlinedButton"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:text="Groups"
-
-                            app:backgroundTint="?attr/colorAccent"
-                            app:cornerRadius="10dp"
                             android:layout_alignParentEnd="true"
                             android:layout_marginTop="10dp"
                             android:layout_marginBottom="20dp"
-                            style="@style/Widget.MaterialComponents.Button.OutlinedButton"/>
+                            android:text="Groups"
+                            app:backgroundTint="?attr/colorAccent"
+                            app:cornerRadius="10dp" />
+<!--                        android:onClick="@{()->listener.onRecyclerViewGroupsItemClick(offerItem)}"-->
+
+                        <!--                        android:onClick="@={()->listener.onPlaceOrderClick(offerItem,((Integer.parseInt(offerItem.discountPrice)) * (Integer.parseInt(itemCounter.counterValue))))}"-->
+                        <!--&lt;!&ndash;                        &ndash;&gt;(Integer.parseInt(DiscountedPrice.text.toString()))-->
+                        <com.google.android.material.button.MaterialButton
+                            android:id="@+id/order_product"
+                            style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentEnd="true"
+                            android:layout_marginTop="10dp"
+                            android:layout_marginBottom="20dp"
+                            android:text="Place Order"
+                            android:textColor="@color/colorWhite"
+                            app:backgroundTint="?attr/colorAccent"
+                            app:cornerRadius="10dp" />
+<!--                        android:onClick="@{()->listener.onPlaceOrderClick(offerItem,priceTotal.getText().toString(),orderQuantityTotal.getText().toString())}"-->
 
                         <!--                        <TextView-->
                         <!--                            android:id="@+id/source"-->
@@ -447,12 +529,10 @@
 
                 </LinearLayout>
 
-
-
-
             </RelativeLayout>
 
         </androidx.cardview.widget.CardView>
 
     </FrameLayout>
+
 </layout>

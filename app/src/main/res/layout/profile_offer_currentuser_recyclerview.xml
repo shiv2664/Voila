@@ -20,16 +20,34 @@
         android:layout_height="120dp"
         android:layout_margin="4dp">
 
-        <com.google.android.material.imageview.ShapeableImageView
-            android:id="@+id/imageView"
+        <FrameLayout
+            android:id="@+id/imageViewFrame"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:layout_centerInParent="true"
-            android:adjustViewBounds="true"
-            android:onClick="@{()->listener.onCurrentUserOfferClick(offerItem)}"
-            android:scaleType="fitXY"
-            app:backgroundImage="@{offerItem.image_url_0.toString()}"
-            app:shapeAppearanceOverlay="@style/roundimageview" />
+            android:layout_centerInParent="true">
+
+            <com.google.android.material.imageview.ShapeableImageView
+                android:id="@+id/imageView"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:adjustViewBounds="true"
+                android:onClick="@{()->listener.onCurrentUserOfferClick(offerItem)}"
+                android:scaleType="fitXY"
+                app:lottieView="@{lottiView}"
+                app:imageUrl="@{offerItem.image_url_0}"
+                app:shapeAppearanceOverlay="@style/roundimageview" />
+
+            <com.airbnb.lottie.LottieAnimationView
+                android:id="@+id/lottiView"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                app:lottie_autoPlay="true"
+                app:lottie_rawRes="@raw/loading_dots"
+                app:lottie_loop="true"
+                />
+
+        </FrameLayout>
+
 
         <TextView
             android:id="@+id/textView"
@@ -37,7 +55,7 @@
             android:layout_height="wrap_content"
             android:layout_centerHorizontal="true"
             android:textColor="@android:color/white"
-            android:layout_below="@+id/imageView" />
+            android:layout_below="@+id/imageViewFrame" />
 
     </RelativeLayout>
 </layout>

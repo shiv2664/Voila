@@ -46,7 +46,14 @@
 <!--            android:layout_width="match_parent"-->
 <!--            android:layout_height="match_parent">-->
 
+        <FrameLayout
+            android:layout_below="@+id/top"
+            android:id="@+id/fragment_container2"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"/>
+
             <FrameLayout
+                android:id="@+id/recyclerViewContainer"
                 android:layout_below="@+id/top"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">

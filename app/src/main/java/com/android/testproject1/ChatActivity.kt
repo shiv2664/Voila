@@ -3,6 +3,7 @@ package com.android.testproject1
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import android.widget.ImageView
 import android.widget.LinearLayout
 import androidx.fragment.app.Fragment
 import com.android.testproject1.fragments.ChatFragment
@@ -13,6 +14,7 @@ import com.android.testproject1.interfaces.IMainActivity
 import com.android.testproject1.room.enteties.NotificationsRoomEntity
 import com.android.testproject1.model.Users
 import com.android.testproject1.room.enteties.OfferRoomEntity
+import com.android.testproject1.room.enteties.OffersSavedRoomEntity
 import com.android.testproject1.room.enteties.UsersChatListEntity
 import com.google.android.material.button.MaterialButton
 import kotlinx.android.synthetic.main.activity_chat.*
@@ -198,6 +200,10 @@ class ChatActivity : AppCompatActivity() ,IMainActivity {
         TODO("Not yet implemented")
     }
 
+    override fun onUserNamePicClick(userId: String?, orderTo: String?) {
+        TODO("Not yet implemented")
+    }
+
     override fun onAcceptClick(
         notificationsRoomEntityItem: NotificationsRoomEntity,
         reject: MaterialButton,
@@ -207,7 +213,9 @@ class ChatActivity : AppCompatActivity() ,IMainActivity {
         linearLayout: LinearLayout,
         linearlayout2: LinearLayout,
         linearLayout3: LinearLayout,
-        linearlayout4: LinearLayout
+        linearlayout4: LinearLayout,
+        CancelLayout: LinearLayout,
+        RejectedLayout: LinearLayout
     ) {
         TODO("Not yet implemented")
     }
@@ -220,18 +228,50 @@ class ChatActivity : AppCompatActivity() ,IMainActivity {
         linearLayout: LinearLayout,
         linearLayout2: LinearLayout,
         linearLayout3: LinearLayout,
-        linearLayout4: LinearLayout
+        linearLayout4: LinearLayout,
+        CancelLayout: LinearLayout,
+        RejectedLayout: LinearLayout
     ) {
         TODO("Not yet implemented")
     }
 
     override fun onWaitingClicked(
-        notificationItem: NotificationsRoomEntity,
+        notificationsRoomEntityItem: NotificationsRoomEntity,
         linearLayout: LinearLayout,
         linearLayout2: LinearLayout,
         linearLayout3: LinearLayout,
-        linearLayout4: LinearLayout
+        linearLayout4: LinearLayout,
+        CancelLayout: LinearLayout,
+        RejectedLayout: LinearLayout
     ) {
+        TODO("Not yet implemented")
+    }
+
+    override fun onRejectClick(
+        notificationsRoomEntityItem: NotificationsRoomEntity,
+        linearLayout: LinearLayout,
+        linearlayout2: LinearLayout,
+        linearLayout3: LinearLayout,
+        linearlayout4: LinearLayout,
+        CancelLayout: LinearLayout,
+        RejectedLayout: LinearLayout
+    ) {
+        TODO("Not yet implemented")
+    }
+
+    override fun onCancelClick(
+        notificationsRoomEntityItem: NotificationsRoomEntity,
+        linearLayout: LinearLayout,
+        linearlayout2: LinearLayout,
+        linearLayout3: LinearLayout,
+        linearlayout4: LinearLayout,
+        CancelLayout: LinearLayout,
+        RejectedLayout: LinearLayout
+    ) {
+        TODO("Not yet implemented")
+    }
+
+    override fun onProfilePostItemCLick(offerItem: OfferRoomEntity) {
         TODO("Not yet implemented")
     }
 
@@ -297,7 +337,14 @@ class ChatActivity : AppCompatActivity() ,IMainActivity {
         TODO("Not yet implemented")
     }
 
-    override fun onBookMarkItemClick(offerItem: OfferRoomEntity) {
+    override fun onBookMarkItemClick(offerItem: OfferRoomEntity, bookmarkImageView: ImageView) {
+        TODO("Not yet implemented")
+    }
+
+    override fun onBookMarkClickedSavedOffers(
+        offerItem: OffersSavedRoomEntity,
+        bookmarkImageView: ImageView
+    ) {
         TODO("Not yet implemented")
     }
 

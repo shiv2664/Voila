@@ -9,8 +9,7 @@
     <androidx.coordinatorlayout.widget.CoordinatorLayout
         android:id="@+id/htab_maincontent"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="@color/colorWhite">
+        android:layout_height="match_parent">
 
         <!--        android:background="?attr/colorPrimary"-->
         <com.google.android.material.appbar.AppBarLayout
@@ -48,7 +47,7 @@
                         android:layout_height="wrap_content"
                         android:gravity="start"
                         android:orientation="vertical"
-                        android:background="@color/white"
+                        android:background="?attr/colorSecondary"
                         android:padding="16dp">
                         <!--                    android:background="@drawable/circularbordersolid"-->
 
@@ -58,18 +57,33 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content">
 
-                            <de.hdodenhof.circleimageview.CircleImageView
-                                android:id="@+id/profilepic"
-                                android:layout_width="120dp"
-                                android:layout_height="120dp"
-                                android:scaleType="centerCrop"/>
+                            <FrameLayout
+                                android:id="@+id/profilePicFrame"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content">
+
+                                <de.hdodenhof.circleimageview.CircleImageView
+                                    android:id="@+id/profilepic"
+                                    android:layout_width="120dp"
+                                    android:layout_height="120dp"
+                                    android:scaleType="centerCrop" />
+
+                                <com.airbnb.lottie.LottieAnimationView
+                                    android:id="@+id/lottiViewProfile"
+                                    android:layout_width="120dp"
+                                    android:layout_height="120dp"
+                                    app:lottie_autoPlay="true"
+                                    app:lottie_rawRes="@raw/loading_circle"
+                                    app:lottie_loop="true" />
+
+                            </FrameLayout>
 
                             <LinearLayout
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:layout_centerVertical="true"
                                 android:layout_marginStart="20dp"
-                                android:layout_toEndOf="@+id/profilepic"
+                                android:layout_toEndOf="@+id/profilePicFrame"
                                 android:gravity="start"
                                 android:orientation="vertical">
 
@@ -77,21 +91,21 @@
                                     android:id="@+id/name"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
+                                    android:textColor="?attr/colorPrimaryVariant"
                                     android:layout_marginTop="10dp"
                                     android:fontFamily="@font/proximanovaregular"
                                     android:gravity="center"
-                                    android:textColor="#424242"
                                     android:textSize="21sp"
                                     android:textStyle="bold" />
 
 
                                 <TextView
                                     android:id="@+id/email"
+                                    android:textColor="?attr/colorPrimaryVariant"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:fontFamily="@font/proximanovaregular"
                                     android:gravity="center"
-                                    android:textColor="#424242"
                                     android:textSize="14sp" />
 
                             </LinearLayout>

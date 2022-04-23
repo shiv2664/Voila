@@ -30,7 +30,8 @@ data class OrdersRoomEntity(
     var userId:String?="",
     var orderTo:String?="",
     @ServerTimestamp
-    var timestamp: Date? = null
+    var timestamp: Date? = null,
+    var deliveryTime:Date?=null
 ):Parcelable{
 
     override fun equals(other: Any?): Boolean {

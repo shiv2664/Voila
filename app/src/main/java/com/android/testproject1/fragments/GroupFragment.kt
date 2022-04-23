@@ -53,9 +53,9 @@ class GroupFragment : Fragment() {
 
         groupItem.postId.let { mViewModel.loadGroupMembers(groupItem.createdBy, it) }
 
-        mViewModel.getGroupList().observe(viewLifecycleOwner, {
-            binding.userList=it
-        })
+        mViewModel.getGroupList().observe(viewLifecycleOwner) {
+            binding.userList = it
+        }
 
         binding.extendedFabGroup.setOnClickListener {
 

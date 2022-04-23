@@ -1,14 +1,19 @@
 package com.android.testproject1
 
 import android.Manifest
+import android.annotation.SuppressLint
+import android.app.Dialog
+import android.content.Context
 import android.content.Intent
 import android.content.Intent.*
+import android.content.SharedPreferences
 import android.content.pm.PackageManager
 import android.net.Uri
 import android.os.Bundle
 import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
+import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
@@ -50,11 +55,16 @@ import androidx.navigation.ui.setupWithNavController
 import com.android.testproject1.model.Users
 import com.android.testproject1.room.enteties.*
 import com.android.testproject1.viewmodels.MainActivity2ViewModel
+import com.bumptech.glide.Glide
 import com.google.android.material.button.MaterialButton
+import com.noowenz.customdatetimepicker.CustomDateTimePicker
+import com.shalan.mohamed.itemcounterview.CounterListener
+import kotlinx.android.synthetic.main.bottom_sheet_dialogue_offerprofile.*
 import kotlinx.android.synthetic.main.fragment_profile_opened.*
-import kotlinx.android.synthetic.main.notifications_item.*
+import java.text.SimpleDateFormat
 
-class MainActivity2 : AppCompatActivity(), IMainActivity {
+class MainActivity2 : AppCompatActivity(), IMainActivity,
+    CustomDateTimePicker.ICustomDateTimeListener {
 
     companion object {
         private const val READ_PERMISSION_CODE = 100
@@ -80,7 +90,9 @@ class MainActivity2 : AppCompatActivity(), IMainActivity {
     private var mTitles: ArrayList<String> = ArrayList()
     private lateinit var mMenuAdapter: MenuAdapter
 
+
     private lateinit var mBottomSheetDialog: BottomSheetDialog
+    private lateinit var mBottomSheetDialogOfferProfile: BottomSheetDialog
 
     var stringCheck: String? = null
 
@@ -93,6 +105,10 @@ class MainActivity2 : AppCompatActivity(), IMainActivity {
     var active = fragment1
     private lateinit var navigation: BottomNavigationView
     var idOrder: String? = null
+
+    private lateinit var offerItemProfileOpened:OfferRoomEntity
+    private lateinit var sharedPrefDynamic: SharedPreferences
+    var firstTimeCheck=0
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -132,6 +148,18 @@ class MainActivity2 : AppCompatActivity(), IMainActivity {
         firebaseAuth = FirebaseAuth.getInstance()
         firebaseFirestore = FirebaseFirestore.getInstance()
 
+        val currentUserEmail=firebaseAuth.currentUser?.email
+        if (currentUserEmail!=null) {
+            sharedPrefDynamic= getSharedPreferences("UserEmail", Context.MODE_PRIVATE)!!
+
+        }
+
+        val dynamicEditor= sharedPrefDynamic?.edit()
+        firstTimeCheck= sharedPrefDynamic?.getInt("firstTimeCheck",0)
+        firstTimeCheck++
+        dynamicEditor?.putInt("firstTimeCheck",firstTimeCheck)
+        dynamicEditor?.putString("userEmail",currentUserEmail)
+        dynamicEditor?.apply()
 
 //        checkPermission(
 //            Manifest.permission.WRITE_EXTERNAL_STORAGE,
@@ -147,6 +175,20 @@ class MainActivity2 : AppCompatActivity(), IMainActivity {
         mBottomSheetDialog = BottomSheetDialog(this)
         val sheetView = layoutInflater.inflate(R.layout.bottom_sheet_dialog, null)
         mBottomSheetDialog.setContentView(sheetView)
+
+        mBottomSheetDialogOfferProfile = BottomSheetDialog(this,R.style.BottomSheetDialog)
+        val sheetView2 = layoutInflater.inflate(R.layout.bottom_sheet_dialogue_offerprofile, null)
+        mBottomSheetDialogOfferProfile.setContentView(sheetView2)
+
+        mBottomSheetDialogOfferProfile.order_product.setOnClickListener {
+            onPlaceOrderClick(offerItemProfileOpened,mBottomSheetDialogOfferProfile.price_total.text.toString()
+                ,mBottomSheetDialogOfferProfile.order_quantity_total.text.toString())
+//            Toast.makeText(this,"Button Clicked",Toast.LENGTH_LONG).show()
+        }
+
+        mBottomSheetDialogOfferProfile.bookMark.setOnClickListener {
+            onBookMarkItemClick(offerItemProfileOpened, it as ImageView)
+        }
 
 //        val bottomNavigationView = bottomNav
 //        bottomNavigationView.background = null
@@ -198,7 +240,6 @@ class MainActivity2 : AppCompatActivity(), IMainActivity {
         navController = navHost.navController
         NavigationUI.setupWithNavController(toolbar, navController)
         bottomNavigation.setupWithNavController(navController)
-
 
         checkTabDashboard = true
 
@@ -381,6 +422,15 @@ class MainActivity2 : AppCompatActivity(), IMainActivity {
         menuInflater.inflate(R.menu.menu_main, menu)
         addPost = menu?.findItem(R.id.Post)
 
+        val currentUserEmail:String
+         if (firstTimeCheck==1){
+             currentUserEmail= firebaseAuth.currentUser?.email.toString()
+         }else {
+             currentUserEmail= sharedPrefDynamic.getString("userEmail","").toString()
+         }
+
+        addPost?.isVisible = currentUserEmail=="abc@gmail.com"||currentUserEmail=="abc2@gmail.com"||currentUserEmail=="abc3@gmail.com"
+
         return super.onCreateOptionsMenu(menu)
 
     }
@@ -396,10 +446,55 @@ class MainActivity2 : AppCompatActivity(), IMainActivity {
             startActivity(intent)
             return true
         } else if (id==R.id.SignOut){
-            firebaseAuth.signOut()
-            val intent = Intent(this@MainActivity2, RegisterActivity::class.java)
-            startActivity(intent)
-            finish()
+            val localDatabase:AppDatabase= AppDatabase.getInstance(this)!!
+            val currentUserId=firebaseAuth.currentUser?.uid
+            Log.d(myTag,"sign out "+currentUserId.toString())
+            if (currentUserId != null) {
+                firebaseFirestore.collection("Tokens").document(currentUserId).get().addOnSuccessListener {
+                    if (it.exists()){
+                        Log.d(myTag,"document exists $currentUserId")
+                        firebaseFirestore.collection("Tokens").document(currentUserId).delete().addOnSuccessListener {
+                            firebaseAuth.signOut()
+                            CoroutineScope(Dispatchers.IO).launch {
+                                localDatabase.appDao()?.deleteAllChatList()
+                                localDatabase.appDao()?.deleteTableOfferSavedRoomEntity()
+                                localDatabase.appDao()?.deleteTableOfferRoomEntity()
+                                localDatabase.appDao()?.deleteAllChatMessages()
+                                localDatabase.appDao()?.deleteTableUserImagesRoomEntity()
+                                localDatabase.appDao()?.deleteAllNotifications()
+                                localDatabase.appDao()?.deleteTableOrdersRoomEntity()
+                                localDatabase.appDao()?.deleteAllMessages()
+
+                            }
+                            val intent = Intent(this@MainActivity2, RegisterActivity::class.java)
+                            startActivity(intent)
+                            finish()
+                            Log.d(myTag,"Deleted Successfully $currentUserId")
+                        }.addOnFailureListener {
+                            Log.d(myTag,"Delete Failed ${it.localizedMessage}")
+                        }
+                    }else{
+                        firebaseAuth.signOut()
+                        CoroutineScope(Dispatchers.IO).launch {
+                            localDatabase.appDao()?.deleteAllChatList()
+                            localDatabase.appDao()?.deleteTableOfferSavedRoomEntity()
+                            localDatabase.appDao()?.deleteTableOfferRoomEntity()
+                            localDatabase.appDao()?.deleteAllChatMessages()
+                            localDatabase.appDao()?.deleteTableUserImagesRoomEntity()
+                            localDatabase.appDao()?.deleteAllNotifications()
+                            localDatabase.appDao()?.deleteTableOrdersRoomEntity()
+                            localDatabase.appDao()?.deleteAllMessages()
+
+                        }
+                        val intent = Intent(this@MainActivity2, RegisterActivity::class.java)
+                        startActivity(intent)
+                        finish()
+                        Log.d(myTag,"Logged out Successfully $currentUserId")
+                    }
+                }.addOnFailureListener {
+                    Log.d(myTag,"Get Req "+it.localizedMessage)
+                }
+            }
             return true
         }
 
@@ -439,30 +534,91 @@ class MainActivity2 : AppCompatActivity(), IMainActivity {
     override fun onPlaceOrderClick(offerItem: OfferRoomEntity, Total: String, Quantity: String) {
 
 //        mViewModel.onPlaceOrder(offerItem,Total, Quantity)
+//        CustomDateTimePicker(this,)
+//        val profileImage= sharedPrefDynamic.getString("profileimage","").toString()
+//        Log.d("MyTag", "profile image is : $profileImage")
 
-        Log.d(myTag, "Total is$Total")
-        Log.d(myTag, "Quantity is $Quantity")
+        val currentTime:Date = Calendar.getInstance().time
         val currentUserId: String = firebaseAuth.currentUser?.uid!!
 
-        MaterialDialog.Builder(this)
-            .title("Confirm")
-            .content("Confirm order request?")
-            .positiveText("Yes")
-            .negativeText("No")
-            .cancelable(true)
-            .canceledOnTouchOutside(false)
-            .neutralText("Cancel")
-            .onPositive { _, _ ->
-                addOrder(offerItem.userId, currentUserId, offerItem.title, Total, Quantity,offerItem.image_url_0,offerItem.name)
+//        val dialog = SnapTimePickerDialog.Builder().build()
+////
+//        dialog.show(supportFragmentManager, "tag")
+
+//        if (profileImage.isBlank()){
+//            Toasty.error(this,"Please upload a Profile Picture",Toasty.LENGTH_SHORT).show()
+//        }else{
+            CustomDateTimePicker(this, object : CustomDateTimePicker.ICustomDateTimeListener {
+                @SuppressLint("BinaryOperationInTimber")
+                override fun onSet(
+                    dialog: Dialog,
+                    calendarSelected: Calendar,
+                    dateSelected: Date,
+                    year: Int,
+                    monthFullName: String,
+                    monthShortName: String,
+                    monthNumber: Int,
+                    day: Int,
+                    weekDayFullName: String,
+                    weekDayShortName: String,
+                    hour24: Int,
+                    hour12: Int,
+                    min: Int,
+                    sec: Int,
+                    AM_PM: String
+                ) {
+                    //Get any time of date and time data here and process further...
+
+//                val currentTime:Date = Calendar.getInstance().time
+                    Log.d(myTag, " Time $hour12 : $min$sec $AM_PM")
+                    Log.d(myTag, "Date selected ${dateSelected}")
+                    Log.d(myTag, "current Time $currentTime")
+
+                    val dateFormat = SimpleDateFormat("hh:mm a")
+
+
+                    MaterialDialog.Builder(this@MainActivity2)
+                        .title("Confirm")
+                        .content("Confirm order request?\nDelivery Time : ${dateFormat.format(dateSelected)}")
+                        .positiveText("Yes")
+                        .negativeText("No")
+                        .cancelable(true)
+                        .canceledOnTouchOutside(false)
+                        .neutralText("Cancel")
+                        .onPositive { _, _ ->
+                            addOrder(offerItem.userId, currentUserId, offerItem.title, Total, Quantity,offerItem.image_url_0,offerItem.name,dateSelected)
 //                    binding.refreshLayout.isRefreshing=true
 //                mViewModel.deleteAll()
 //                    binding.refreshLayout.isRefreshing=false
 
 
+                        }
+                        .onNegative { dialog, _ ->
+                            dialog.dismiss()
+                        }.show()
+
+
+
+                }
+
+                override fun onCancel() {
+                }
+            }).apply {
+                set24HourFormat(false)//24hr format is off
+                setMaxMinDisplayDate(
+                    minDate = Calendar.getInstance().apply { add(Calendar.MINUTE, 10) }.timeInMillis,
+                    maxDate = Calendar.getInstance().apply { add(Calendar.DATE, 0) }.timeInMillis
+                )
+                setMaxMinDisplayedTime(5)//min time is 5 min after current time
+//            setDate(Calendar.getInstance())//date and time will show in dialog is current time and date. We can change this according to our need
+                showDialog()
             }
-            .onNegative { dialog, _ ->
-                dialog.dismiss()
-            }.show()
+//        }
+
+    }
+
+    override fun onUserNamePicClick(userId: String?, orderTo: String?) {
+
 
     }
 
@@ -475,7 +631,9 @@ class MainActivity2 : AppCompatActivity(), IMainActivity {
         linearLayout: LinearLayout,
         linearlayout2: LinearLayout,
         linearLayout3: LinearLayout,
-        linearlayout4: LinearLayout
+        linearlayout4: LinearLayout,
+        CancelLayout: LinearLayout,
+        RejectedLayout: LinearLayout
     ) {
         TODO("Not yet implemented")
     }
@@ -488,19 +646,144 @@ class MainActivity2 : AppCompatActivity(), IMainActivity {
         linearLayout: LinearLayout,
         linearLayout2: LinearLayout,
         linearLayout3: LinearLayout,
-        linearLayout4: LinearLayout
+        linearLayout4: LinearLayout,
+        CancelLayout: LinearLayout,
+        RejectedLayout: LinearLayout
     ) {
         TODO("Not yet implemented")
     }
 
     override fun onWaitingClicked(
-        notificationItem: NotificationsRoomEntity,
+        notificationsRoomEntityItem: NotificationsRoomEntity,
         linearLayout: LinearLayout,
         linearLayout2: LinearLayout,
         linearLayout3: LinearLayout,
-        linearLayout4: LinearLayout
+        linearLayout4: LinearLayout,
+        CancelLayout: LinearLayout,
+        RejectedLayout: LinearLayout
     ) {
         TODO("Not yet implemented")
+    }
+
+    override fun onRejectClick(
+        notificationsRoomEntityItem: NotificationsRoomEntity,
+        linearLayout: LinearLayout,
+        linearlayout2: LinearLayout,
+        linearLayout3: LinearLayout,
+        linearlayout4: LinearLayout,
+        CancelLayout: LinearLayout,
+        RejectedLayout: LinearLayout
+    ) {
+        TODO("Not yet implemented")
+    }
+
+    override fun onCancelClick(
+        notificationsRoomEntityItem: NotificationsRoomEntity,
+        linearLayout: LinearLayout,
+        linearlayout2: LinearLayout,
+        linearLayout3: LinearLayout,
+        linearlayout4: LinearLayout,
+        CancelLayout: LinearLayout,
+        RejectedLayout: LinearLayout
+    ) {
+        TODO("Not yet implemented")
+    }
+
+    override fun onProfilePostItemCLick(offerItem: OfferRoomEntity) {
+
+        offerItemProfileOpened=offerItem
+        var counterValue: String = "1"
+        var total="0"
+
+        counterValue=mBottomSheetDialogOfferProfile.itemCounter.counterValue
+
+        Glide.with(this)
+            .load(offerItem.image_url_0)
+            .into(mBottomSheetDialogOfferProfile.img)
+
+        mBottomSheetDialogOfferProfile.offer.text=offerItem.title
+        mBottomSheetDialogOfferProfile.desc.text=offerItem.description
+
+        val discountedPrice=offerItem.discountPrice
+        val originalPrice=offerItem.originalPrice
+
+
+        if (discountedPrice.isBlank()){
+            mBottomSheetDialogOfferProfile.DiscountedPrice.text=" ₹$originalPrice "
+        }else{
+            mBottomSheetDialogOfferProfile.DiscountedPrice.text=" ₹$discountedPrice "
+        }
+
+        if(discountedPrice.isNotBlank()&&originalPrice.isNotBlank()){
+            mBottomSheetDialogOfferProfile.price_total.text = offerItem.discountPrice
+        }else if (originalPrice.isBlank()){
+            mBottomSheetDialogOfferProfile.price_total.text = offerItem.discountPrice
+        }else if (discountedPrice.isBlank()){
+            mBottomSheetDialogOfferProfile.price_total.text = offerItem.originalPrice
+        }
+
+        mBottomSheetDialogOfferProfile.order_quantity_total.text="1"
+
+        mBottomSheetDialogOfferProfile.itemCounter.setCounterListener(object : CounterListener {
+            override fun onIncClick(value: String?) {
+                if (value != null) {
+//                    " ₹"+
+                    if(discountedPrice.isNotBlank()&&originalPrice.isNotBlank()){
+                        total= ((value.toInt() * discountedPrice.toInt()).toString())
+                        mBottomSheetDialogOfferProfile.DiscountedPrice.text=" ₹$total "
+                        mBottomSheetDialogOfferProfile.price_total.text = total
+                        mBottomSheetDialogOfferProfile.order_quantity_total.text=(total.toInt()/discountedPrice.toInt()).toString()
+
+                    }else if(originalPrice.isBlank()){
+                        total= ((value.toInt() * discountedPrice.toInt()).toString())
+                        mBottomSheetDialogOfferProfile.DiscountedPrice.text=" ₹$total "
+                        mBottomSheetDialogOfferProfile.price_total.text = total
+                        mBottomSheetDialogOfferProfile.order_quantity_total.text=(total.toInt()/discountedPrice.toInt()).toString()
+
+                    }else if (discountedPrice.isBlank()){
+                        total= ((value.toInt() * originalPrice.toInt()).toString())
+                        mBottomSheetDialogOfferProfile.DiscountedPrice.text=" ₹$total "
+                        mBottomSheetDialogOfferProfile.price_total.text = total
+                        mBottomSheetDialogOfferProfile.order_quantity_total.text=(total.toInt()/originalPrice.toInt()).toString()
+                    }
+
+
+                }
+//                holder.itemBinding.root.DiscountedPrice.text = (counterValue.toInt() * (offerList[position].discountPrice).toInt()).toString()
+            }
+
+
+            override fun onDecClick(value: String?) {
+                if (value != null) {
+                    if (discountedPrice.isNotBlank()&&originalPrice.isNotBlank()){
+                        total=  ((value.toInt() * discountedPrice.toInt()).toString())
+                        mBottomSheetDialogOfferProfile.DiscountedPrice.text=" ₹$total "
+                        mBottomSheetDialogOfferProfile.price_total.text = total
+                        mBottomSheetDialogOfferProfile.order_quantity_total.text=(total.toInt()/discountedPrice.toInt()).toString()
+                    }else if (originalPrice.isBlank()){
+                        total=  ((value.toInt() * discountedPrice.toInt()).toString())
+                        mBottomSheetDialogOfferProfile.DiscountedPrice.text=" ₹$total "
+                        mBottomSheetDialogOfferProfile.price_total.text = total
+                        mBottomSheetDialogOfferProfile.order_quantity_total.text=(total.toInt()/discountedPrice.toInt()).toString()
+                    }else if (discountedPrice.isBlank()){
+                        total=  ((value.toInt() * originalPrice.toInt()).toString())
+                        mBottomSheetDialogOfferProfile.DiscountedPrice.text=" ₹$total "
+                        mBottomSheetDialogOfferProfile.price_total.text = total
+                        mBottomSheetDialogOfferProfile.order_quantity_total.text=(total.toInt()/originalPrice.toInt()).toString()
+                    }
+
+                }
+            }
+        })
+
+
+//        mBottomSheetDialogOfferProfile.order_product.setOnClickListener {
+//            onPlaceOrderClick(offerItem,mBottomSheetDialogOfferProfile.price_total.text.toString()
+//                ,mBottomSheetDialogOfferProfile.order_quantity_total.text.toString())
+//        }
+
+
+        mBottomSheetDialogOfferProfile.show()
     }
 
     override fun onCurrentUserOfferClick(offerItem: OfferRoomEntity) {
@@ -616,12 +899,9 @@ class MainActivity2 : AppCompatActivity(), IMainActivity {
 
     }
 
-    override fun onBookMarkItemClick(offerItem: OfferRoomEntity) {
+    override fun onBookMarkItemClick(offerItem: OfferRoomEntity, bookmarkImageView: ImageView) {
 
         val localDatabase: AppDatabase = AppDatabase.getInstance(this)!!
-
-//        val mapper = ObjectMapper() // jackson's objectmapper
-//        val pojo: MyPojo = mapper.convertValue(map, MyPojo::class.java)
 
         val offerMap = HashMap<String, Any>()
         offerMap["postId"] = offerItem.postId
@@ -649,9 +929,10 @@ class MainActivity2 : AppCompatActivity(), IMainActivity {
                                         .get().addOnSuccessListener {
                                             val offerPojo: OffersSavedRoomEntity? =
                                                 it.toObject(OffersSavedRoomEntity::class.java)
+                                            bookmarkImageView.setBackgroundResource(R.drawable.ic_bookmark_black_24dp)
                                             CoroutineScope(Dispatchers.IO).launch {
                                                 if (offerPojo != null) {
-                                                    localDatabase.appDao()?.addOffer(offerPojo)
+                                                    localDatabase.appDao()?.saveOffer(offerPojo)
                                                 }
                                             }
                                         }
@@ -670,6 +951,76 @@ class MainActivity2 : AppCompatActivity(), IMainActivity {
                                 .document(offerItem.postId.trim())
                                 .delete().addOnSuccessListener {
 
+                                    bookmarkImageView.setBackgroundResource(R.drawable.ic_baseline_bookmark_border_24)
+                                    CoroutineScope(Dispatchers.IO).launch {
+                                        localDatabase.appDao()?.deleteOfferById(offerItem.postId)
+                                    }
+                                    Toasty.normal(this, "Removed", Toasty.LENGTH_SHORT).show()
+
+                                }
+                        }
+
+                    }
+
+                }
+        }
+    }
+
+    override fun onBookMarkClickedSavedOffers(
+        offerItem: OffersSavedRoomEntity,
+        bookmarkImageView: ImageView
+    ) {
+        val localDatabase: AppDatabase = AppDatabase.getInstance(this)!!
+
+        val offerMap = HashMap<String, Any>()
+        offerMap["postId"] = offerItem.postId
+        offerMap["username"] = offerItem.username
+
+
+        firebaseAuth.currentUser?.uid?.let { it1 ->
+            firebaseFirestore
+                .collection("Users")
+                .document(it1)
+                .collection("Saved")
+                .document(offerItem.postId.trim())
+                .get().addOnSuccessListener { it2 ->
+                    if (!it2.exists()) {
+                        firebaseAuth.currentUser?.uid?.let {
+                            firebaseFirestore
+                                .collection("Users")
+                                .document(it)
+                                .collection("Saved")
+                                .document(offerItem.postId.trim())
+                                .set(offerMap, SetOptions.merge()).addOnSuccessListener {
+                                    firebaseFirestore
+                                        .collection("Offers")
+                                        .document(offerItem.postId)
+                                        .get().addOnSuccessListener {
+                                            val offerPojo: OffersSavedRoomEntity? =
+                                                it.toObject(OffersSavedRoomEntity::class.java)
+                                            bookmarkImageView.setBackgroundResource(R.drawable.ic_bookmark_black_24dp)
+                                            CoroutineScope(Dispatchers.IO).launch {
+                                                if (offerPojo != null) {
+                                                    localDatabase.appDao()?.saveOffer(offerPojo)
+                                                }
+                                            }
+                                        }
+
+
+                                    Toasty.success(this, "Saved", Toasty.LENGTH_SHORT, true).show()
+                                }
+
+                        }
+                    } else {
+                        firebaseAuth.currentUser?.uid?.let {
+                            firebaseFirestore
+                                .collection("Users")
+                                .document(it)
+                                .collection("Saved")
+                                .document(offerItem.postId.trim())
+                                .delete().addOnSuccessListener {
+
+                                    bookmarkImageView.setBackgroundResource(R.drawable.ic_baseline_bookmark_border_24)
                                     CoroutineScope(Dispatchers.IO).launch {
                                         localDatabase.appDao()?.deleteOfferById(offerItem.postId)
                                     }
@@ -698,11 +1049,12 @@ class MainActivity2 : AppCompatActivity(), IMainActivity {
         price: String,
         Quantity: String,
         imageUrl0: String,
-        userNameOffer: String
+        userNameOffer: String,
+        dateSelected: Date
     ) {
 
         if (userItem != currentUserId) {
-            executeOrder(userItem, currentUserId, itemName, price, Quantity,imageUrl0,userNameOffer)
+            executeOrder(userItem, currentUserId, itemName, price, Quantity,imageUrl0,userNameOffer,dateSelected)
         } else {
             Toasty.error(this, "Error", Toasty.LENGTH_SHORT, true).show()
         }
@@ -758,7 +1110,8 @@ class MainActivity2 : AppCompatActivity(), IMainActivity {
         price: String,
         Quantity: String,
         imageUrl0: String,
-        userNameOffer: String
+        userNameOffer: String,
+        dateSelected: Date
     ) {
 
         idOrder = firebaseFirestore.collection("Users")
@@ -795,6 +1148,7 @@ class MainActivity2 : AppCompatActivity(), IMainActivity {
                 userMap["foodImage"] = imageUrl0
                 userMap["idOrder"] = idOrder
                 userMap["timestamp"] = FieldValue.serverTimestamp()
+                userMap["deliveryTime"] =dateSelected
 
                 firebaseFirestore
                     .collection("Users")
@@ -836,6 +1190,7 @@ class MainActivity2 : AppCompatActivity(), IMainActivity {
                                 recentMap["userId"] = currentUserId
                                 recentMap["orderTo"] = userItem
                                 recentMap["idOrder"] = idOrder
+                                recentMap["deliveryTime"] =dateSelected
                                 if (ordersRoomEntity != null) {
                                     recentMap["timestamp"] = ordersRoomEntity.timestamp
                                 }
@@ -856,7 +1211,7 @@ class MainActivity2 : AppCompatActivity(), IMainActivity {
                                                 userItem, currentUserId,
                                                 it1,
                                                 messageText,
-                                                type, itemName, price, Quantity, it2,imageUrl0,userNameOffer,thumbnailImage
+                                                type, itemName, price, Quantity, it2,imageUrl0,userNameOffer,thumbnailImage,dateSelected
                                             )
                                         }
                                     }
@@ -942,7 +1297,8 @@ class MainActivity2 : AppCompatActivity(), IMainActivity {
         timestamp: Date,
         imageUrl0: String,
         userNameOffer: String,
-        thumbnailImage: String?
+        thumbnailImage: String?,
+        dateSelected: Date
     ) {
         val map: MutableMap<String, Any> = java.util.HashMap()
         map["id"] = currentUserId
@@ -964,6 +1320,7 @@ class MainActivity2 : AppCompatActivity(), IMainActivity {
             map["orderTo"] = UserItemId
             map["idOrder"] = idOrder.toString()
             map["Quantity"] = Quantity
+            map["deliveryTime"]=dateSelected
         }
         if (UserItemId != currentUserId) {
 
@@ -978,8 +1335,15 @@ class MainActivity2 : AppCompatActivity(), IMainActivity {
 
                             Toasty.success(this, "Order request Sent.", Toasty.LENGTH_SHORT, true)
                                 .show()
+                            if (mBottomSheetDialogOfferProfile.isShowing){
+                                mBottomSheetDialogOfferProfile.dismiss()
+                            }
                         }
                         .addOnFailureListener(OnFailureListener { e: java.lang.Exception ->
+                            if (mBottomSheetDialogOfferProfile.isShowing){
+                                mBottomSheetDialogOfferProfile.dismiss()
+                            }
+
                             Log.e("Error",""+e.localizedMessage)
                         })
                 }
@@ -998,6 +1362,30 @@ class MainActivity2 : AppCompatActivity(), IMainActivity {
                     }
             }
         }
+    }
+
+    override fun onCancel() {
+        TODO("Not yet implemented")
+    }
+
+    override fun onSet(
+        dialog: Dialog,
+        calendarSelected: Calendar,
+        dateSelected: Date,
+        year: Int,
+        monthFullName: String,
+        monthShortName: String,
+        monthNumber: Int,
+        day: Int,
+        weekDayFullName: String,
+        weekDayShortName: String,
+        hour24: Int,
+        hour12: Int,
+        min: Int,
+        sec: Int,
+        AM_PM: String
+    ) {
+        TODO("Not yet implemented")
     }
 }
 

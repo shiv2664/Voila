@@ -4,6 +4,7 @@ import android.app.Application
 import android.util.Log
 import android.util.Patterns
 import android.widget.TextView
+import android.widget.Toast
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
 import com.android.testproject1.Repository
@@ -62,7 +63,7 @@ class SignUpViewModel(application: Application) : AndroidViewModel(application) 
         firebaseAuth.createUserWithEmailAndPassword(email, password)
             .addOnCompleteListener { task ->
                 if (task.isSuccessful) {
-                    userLiveData.postValue(firebaseAuth.currentUser)
+//                    userLiveData.postValue(firebaseAuth.currentUser)
 
                     val uid= firebaseAuth.currentUser?.uid.toString()
                     val userMap: MutableMap<String, Any> = HashMap()
@@ -114,6 +115,7 @@ class SignUpViewModel(application: Application) : AndroidViewModel(application) 
                                             .document(currentId)
                                             .set(tokenMap2)
                                             .addOnSuccessListener(OnSuccessListener<Void?> {
+                                                userLiveData.postValue(firebaseAuth.currentUser)
 //                                                Log.d(myTAG, "token Updated")
 
                                             }).addOnFailureListener(OnFailureListener {
@@ -128,29 +130,129 @@ class SignUpViewModel(application: Application) : AndroidViewModel(application) 
 
                         }.addOnFailureListener {
 
+                            Log.d("MyTag",""+it.localizedMessage)
                         }
 
                 } else if (!task.isSuccessful) {
-                    try {
-                        throw task.exception!!
-                    } catch (e: FirebaseAuthWeakPasswordException) {
-                        Log.d(myTAG, e.message!!+"FirebaseAuthWeakPasswordException")
-                        Toasty.error(getApplication(), "Weak Password", Toasty.LENGTH_SHORT, true).show()
-                    } catch (e: FirebaseAuthInvalidCredentialsException) {
-                        Log.d(myTAG, e.message!!+"FirebaseAuthInvalidCredentialsException")
-                        Toasty.error(getApplication(), "Invalid Credentials", Toasty.LENGTH_SHORT, true).show()
-                    } catch (e: FirebaseAuthUserCollisionException) {
-                        Log.d(myTAG, e.message!!+"FirebaseAuthUserCollisionException")
-                        Toasty.error(getApplication(), "User already exists", Toasty.LENGTH_SHORT, true).show()
-                    } catch (e: Exception) {
-                        Log.d(myTAG, e.message!!)
-                    }catch (e: FirebaseAuthEmailException){
-                        Log.d(myTAG, e.message!!+"FirebaseAuthEmailException")
-                        Toasty.error(getApplication(), "Invalid Email", Toasty.LENGTH_SHORT, true).show()
-                    } catch (e: FirebaseAuthInvalidUserException){
-                        Log.d(myTAG, e.message!!+"FirebaseAuthInvalidUserException")
-                        Toasty.error(getApplication(), "Invalid User", Toasty.LENGTH_SHORT, true).show()
+
+
+                    when ((task.exception as FirebaseAuthException?)!!.errorCode) {
+                        "ERROR_INVALID_CUSTOM_TOKEN" -> Toast.makeText(getApplication(),
+                            "The custom token format is incorrect. Please check the documentation."
+                            , Toast.LENGTH_LONG).show()
+                        "ERROR_CUSTOM_TOKEN_MISMATCH" -> Toast.makeText(getApplication(),
+                            "The custom token corresponds to a different audience."
+                            , Toast.LENGTH_LONG).show()
+                        "ERROR_INVALID_CREDENTIAL" -> Toast.makeText(
+                            getApplication(),
+                            "The supplied auth credential is malformed or has expired.",
+                            Toast.LENGTH_LONG
+                        ).show()
+                        "ERROR_INVALID_EMAIL" -> {
+                            Toast.makeText(
+                                getApplication(),
+                                "The email address is badly formatted.",
+                                Toast.LENGTH_LONG
+                            ).show()
+//                            etEmail.setError("The email address is badly formatted.")
+//                            etEmail.requestFocus()
+                        }
+                        "ERROR_WRONG_PASSWORD" -> {
+                            Toast.makeText(
+                                getApplication(),
+                                "The password is invalid or the user does not have a password.",
+                                Toast.LENGTH_LONG
+                            ).show()
+//                            etPassword.setError("password is incorrect ")
+//                            etPassword.requestFocus()
+//                            etPassword.setText("")
+                        }
+                        "ERROR_USER_MISMATCH" -> Toast.makeText(
+                            getApplication(),
+                            "The supplied credentials do not correspond to the previously signed in user.",
+                            Toast.LENGTH_LONG
+                        ).show()
+                        "ERROR_REQUIRES_RECENT_LOGIN" -> Toast.makeText(
+                            getApplication(),
+                            "This operation is sensitive and requires recent authentication. Log in again before retrying this request.",
+                            Toast.LENGTH_LONG
+                        ).show()
+                        "ERROR_ACCOUNT_EXISTS_WITH_DIFFERENT_CREDENTIAL" -> Toast.makeText(
+                            getApplication(),
+                            "An account already exists with the same email address but different sign-in credentials. Sign in using a provider associated with this email address.",
+                            Toast.LENGTH_LONG
+                        ).show()
+                        "ERROR_EMAIL_ALREADY_IN_USE" -> {
+                            Toast.makeText(
+                                getApplication(),
+                                "The email address is already in use by another account.   ",
+                                Toast.LENGTH_LONG
+                            ).show()
+//                            etEmail.setError("The email address is already in use by another account.")
+//                            etEmail.requestFocus()
+                        }
+                        "ERROR_CREDENTIAL_ALREADY_IN_USE" -> Toast.makeText(
+                            getApplication(),
+                            "This credential is already associated with a different user account.",
+                            Toast.LENGTH_LONG
+                        ).show()
+                        "ERROR_USER_DISABLED" -> Toast.makeText(
+                            getApplication(),
+                            "The user account has been disabled by an administrator.",
+                            Toast.LENGTH_LONG
+                        ).show()
+                        "ERROR_USER_TOKEN_EXPIRED" -> Toast.makeText(
+                            getApplication(),
+                            "The user\\'s credential is no longer valid. The user must sign in again.",
+                            Toast.LENGTH_LONG
+                        ).show()
+                        "ERROR_USER_NOT_FOUND" -> Toast.makeText(
+                            getApplication(),
+                            "There is no user record corresponding to this identifier. The user may have been deleted.",
+                            Toast.LENGTH_LONG
+                        ).show()
+                        "ERROR_INVALID_USER_TOKEN" -> Toast.makeText(
+                            getApplication(),
+                            "The user\\'s credential is no longer valid. The user must sign in again.",
+                            Toast.LENGTH_LONG
+                        ).show()
+                        "ERROR_OPERATION_NOT_ALLOWED" -> Toast.makeText(
+                            getApplication(),
+                            "This operation is not allowed. You must enable this service in the console.",
+                            Toast.LENGTH_LONG
+                        ).show()
+                        "ERROR_WEAK_PASSWORD" -> {
+                            Toast.makeText(
+                                getApplication(),
+                                "The given password is invalid.",
+                                Toast.LENGTH_LONG
+                            ).show()
+//                            etPassword.setError("The password is invalid it must 6 characters at least")
+//                            etPassword.requestFocus()
+                        }
                     }
+
+
+//                    try {
+//                        throw task.exception!!
+//                    } catch (e: FirebaseAuthWeakPasswordException) {
+//                        Log.d(myTAG, e.message!!+"FirebaseAuthWeakPasswordException")
+//                        Toasty.error(getApplication(), "Weak Password", Toasty.LENGTH_SHORT, true).show()
+//                    } catch (e: FirebaseAuthInvalidCredentialsException) {
+//                        Log.d(myTAG, e.message!!+"FirebaseAuthInvalidCredentialsException")
+//                        Toasty.error(getApplication(), "Invalid Credentials", Toasty.LENGTH_SHORT, true).show()
+//                    } catch (e: FirebaseAuthUserCollisionException) {
+//                        Log.d(myTAG, e.message!!+"FirebaseAuthUserCollisionException")
+//                        Toasty.error(getApplication(), "User already exists", Toasty.LENGTH_SHORT, true).show()
+//                    } catch (e: Exception) {
+//                        Log.d(myTAG, e.message!!)
+//                    }catch (e: FirebaseAuthEmailException){
+//                        Log.d(myTAG, e.message!!+"FirebaseAuthEmailException")
+//                        Toasty.error(getApplication(), "Invalid Email", Toasty.LENGTH_SHORT, true).show()
+//                    } catch (e: FirebaseAuthInvalidUserException){
+//                        Log.d(myTAG, e.message!!+"FirebaseAuthInvalidUserException")
+//                        Toasty.error(getApplication(), "Invalid User", Toasty.LENGTH_SHORT, true).show()
+//                    }
 
                 }
 

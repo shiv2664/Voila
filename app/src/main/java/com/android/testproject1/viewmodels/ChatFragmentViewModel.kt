@@ -24,6 +24,7 @@ class ChatFragmentViewModel(application: Application) : AndroidViewModel(applica
     //    private val chatList: MutableLiveData<MutableList<ChatRoomEntity>> = MutableLiveData()
 //    private val chatList = MutableLiveData<List<ChatRoomEntity>>()
     private val myTAG="MyTag"
+    var counter =0
 
 //    private lateinit var registration:ListenerRegistration
 
@@ -48,6 +49,13 @@ val list2 = mutableListOf<ChatRoomEntity>()
     }
 
     fun queryLoad(chatKey:String){
+        if (counter==0){
+            viewModelScope.launch (Dispatchers.IO){
+                localDatabase.appDao()?.deleteAllChatMessages()
+            }
+        }
+
+        counter++
 
         val query: Query= if (lastResult == null) {
             db.collection("Chats").document(chatKey).collection("UserChats")
@@ -70,7 +78,7 @@ val list2 = mutableListOf<ChatRoomEntity>()
                     localDatabase.appDao()?.insertMessage(chat)
                 }
 //                lastResult = d
-                Log.d(myTAG,"query 0 is : "+chat.message)
+//                Log.d(myTAG,"query 0 is : "+chat.message)
             }
 
             if (it.size() > 0) {
